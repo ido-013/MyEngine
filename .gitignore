@@ -32,6 +32,7 @@
 *.app
 
 # etc.
+/x64
 /.tmp
 /bin
 .vs/

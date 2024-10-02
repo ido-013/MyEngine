@@ -1,5 +1,13 @@
 #include "GameStateManager.h"
+
+#include <glad/glad.h>
+#include "../OpenGL/GLHelper.h"
+
 #include "../ComponentManager/ComponentManager.h"
+#include "../LogicComponent/LogicComponent.h"
+#include "../EngineComponent/EngineComponent.h"
+#include "../GraphicComponent/GraphicComponent.h"
+
 #include "../Level/BaseLevel.h"
 
 GSM::GameStateManager::GameStateManager() : previousLevel(nullptr), currentLevel(nullptr) {}
@@ -25,12 +33,15 @@ void GSM::GameStateManager::Update()
 {
     if (currentLevel)
     {
-        /*ComponentManager<LogicComponent>::GetInstance().Update();
+        ComponentManager<LogicComponent>::GetInstance().Update();
         ComponentManager<EngineComponent>::GetInstance().Update();
-        ComponentManager<AudioComp>::GetInstance().Update();*/
 
         if (currentLevel)
             currentLevel->Update();
+
+        ComponentManager<GraphicComponent>::GetInstance().Update();
+        glfwSwapBuffers(GLHelper::ptr_window);
+        glfwPollEvents();
     }
 }
 

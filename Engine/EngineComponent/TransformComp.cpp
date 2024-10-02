@@ -1,7 +1,5 @@
 #include "TransformComp.h"
-
 #include <iostream>
-
 
 void TransformComp::CalculateMatrix()
 {
@@ -83,14 +81,7 @@ void TransformComp::PrintMatrix()
 	std::cout << "Scale : " << scale.x << " " << scale.y << std::endl;
 
 	for (int i = 0; i < 3; i++)
-	{
-		std::cout << "|";
-		for (int x = 0; x < 3; x++)
-		{
-			std::cout << " " << transformMatrix.m[i][x];
-		}
-
-		std::cout << " |";
-		std::cout << std::endl;
+	{		
+		std::cout << "| " << transformMatrix[i].x << " " << transformMatrix[i].y << " " << transformMatrix[i].z << " |\n";
 	}
 }

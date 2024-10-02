@@ -32,8 +32,6 @@
 *.app
 
 # etc.
-/x64
-/.tmp
-/bin
+x64/
 .vs/
 *.user

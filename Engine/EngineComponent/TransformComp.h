@@ -32,4 +32,6 @@ public:
 
 	//Other Fn
 	void PrintMatrix();
+
+	static constexpr const char* TypeName = "TransformComp";
 };

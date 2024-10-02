@@ -133,6 +133,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -146,6 +147,7 @@
     <ClCompile Include="GraphicComponent\SpriteComp.cpp" />
     <ClCompile Include="Level\TestLevel.cpp" />
     <ClCompile Include="LogicComponent\LogicComponent.cpp" />
+    <ClCompile Include="LogicComponent\PlayerComp.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="OpenGL\GLHelper.cpp" />
     <ClCompile Include="OpenGL\GLSLShader.cpp" />
@@ -164,6 +166,7 @@
     <ClInclude Include="Level\BaseLevel.h" />
     <ClInclude Include="Level\TestLevel.h" />
     <ClInclude Include="LogicComponent\LogicComponent.h" />
+    <ClInclude Include="LogicComponent\PlayerComp.h" />
     <ClInclude Include="OpenGL\GLHelper.h" />
   </ItemGroup>
   <ItemGroup>

@@ -25,4 +25,9 @@ struct GLHelper
 	static GLdouble delta_time;
 	static std::string title;
 	static GLFWwindow* ptr_window;
+
+	static GLboolean keystateW;
+	static GLboolean keystateA;
+	static GLboolean keystateS;
+	static GLboolean keystateD;
 };

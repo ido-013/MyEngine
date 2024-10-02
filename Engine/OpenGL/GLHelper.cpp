@@ -8,6 +8,11 @@ GLdouble GLHelper::delta_time;
 std::string GLHelper::title;
 GLFWwindow* GLHelper::ptr_window;
 
+GLboolean GLHelper::keystateW;
+GLboolean GLHelper::keystateA;
+GLboolean GLHelper::keystateS;
+GLboolean GLHelper::keystateD;
+
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
 // ---------------------------------------------------------------------------------------------
 
@@ -63,23 +68,21 @@ void GLHelper::Exit()
 void GLHelper::key_cb(GLFWwindow* pwin, int key, int scancode, int action, int mod) 
 {
     if (GLFW_PRESS == action) {
-#ifdef _DEBUG
-        std::cout << "Key pressed" << std::endl;
-#endif
-    }
-    else if (GLFW_REPEAT == action) {
-#ifdef _DEBUG
-        std::cout << "Key repeatedly pressed" << std::endl;
-#endif
+        if (GLFW_KEY_ESCAPE == key) {
+            glfwSetWindowShouldClose(pwin, GLFW_TRUE);
+        }
+
+        keystateW = (key == GLFW_KEY_W) ? GL_TRUE : keystateW;
+        keystateA = (key == GLFW_KEY_A) ? GL_TRUE : keystateA;
+        keystateS = (key == GLFW_KEY_S) ? GL_TRUE : keystateS;
+        keystateD = (key == GLFW_KEY_D) ? GL_TRUE : keystateD;
     }
     else if (GLFW_RELEASE == action) {
-#ifdef _DEBUG
-        std::cout << "Key released" << std::endl;
-#endif
-    }
-
-    if (GLFW_KEY_ESCAPE == key && GLFW_PRESS == action) {
-        glfwSetWindowShouldClose(pwin, GLFW_TRUE);
+        // key start changes from pressed to released
+        keystateW = (key == GLFW_KEY_W) ? GL_FALSE : keystateW;
+        keystateA = (key == GLFW_KEY_A) ? GL_FALSE : keystateA;
+        keystateS = (key == GLFW_KEY_S) ? GL_FALSE : keystateS;
+        keystateD = (key == GLFW_KEY_D) ? GL_FALSE : keystateD;
     }
 }
 

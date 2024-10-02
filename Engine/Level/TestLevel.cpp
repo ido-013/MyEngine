@@ -9,6 +9,7 @@
 #include "../GraphicComponent/SpriteComp.h"
 #include "../EngineComponent/TransformComp.h"
 #include "../EngineComponent/RigidbodyComp.h"
+#include "../LogicComponent/PlayerComp.h"
 
 GameObject* tmp = nullptr;
 GameObject* tmp2 = nullptr;
@@ -24,7 +25,8 @@ void level::TestLevel::Init()
     s->SetColor(255, 255, 0);
 
     RigidbodyComp* r = tmp->AddComponent<RigidbodyComp>();
-    r->SetVelocity(-1, 0);
+    
+    PlayerComp* p = tmp->AddComponent<PlayerComp>();
 
     tmp2 = new GameObject;
     t = tmp2->AddComponent<TransformComp>();

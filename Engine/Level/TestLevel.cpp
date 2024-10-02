@@ -8,20 +8,35 @@
 
 #include "../GraphicComponent/SpriteComp.h"
 #include "../EngineComponent/TransformComp.h"
+#include "../EngineComponent/RigidbodyComp.h"
 
 GameObject* tmp = nullptr;
+GameObject* tmp2 = nullptr;
 
 void level::TestLevel::Init()
 {
     tmp = new GameObject;
     TransformComp* t = tmp->AddComponent<TransformComp>();
     t->SetScale({ 0.1f, 0.1f });
-    tmp->AddComponent<SpriteComp>();
+    t->SetPos({ -0.5f, -0.5f });
+
+    SpriteComp* s = tmp->AddComponent<SpriteComp>();
+    s->SetColor(255, 255, 0);
+
+    RigidbodyComp* r = tmp->AddComponent<RigidbodyComp>();
+    r->SetVelocity(-1, 0);
+
+    tmp2 = new GameObject;
+    t = tmp2->AddComponent<TransformComp>();
+    t->SetScale({ 0.1f, 0.1f });
+    t->SetPos({ 0.5f, 0.5f });
+
+    s = tmp2->AddComponent<SpriteComp>();
 }
 
 void level::TestLevel::Update()
 {
-    
+    tmp2->GetComponent<TransformComp>()->SetRot(tmp2->GetComponent<TransformComp>()->GetRot() + 1);
 }
 
 void level::TestLevel::Exit()

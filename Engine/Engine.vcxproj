@@ -137,6 +137,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="EngineComponent\EngineComponent.cpp" />
+    <ClCompile Include="EngineComponent\RigidbodyComp.cpp" />
     <ClCompile Include="EngineComponent\TransformComp.cpp" />
     <ClCompile Include="GameObject\GameObject.cpp" />
     <ClCompile Include="GameStateManager\GameStateManager.cpp" />
@@ -154,6 +155,7 @@
     <ClInclude Include="BaseComponent.h" />
     <ClInclude Include="ComponentManager\ComponentManager.h" />
     <ClInclude Include="EngineComponent\EngineComponent.h" />
+    <ClInclude Include="EngineComponent\RigidbodyComp.h" />
     <ClInclude Include="EngineComponent\TransformComp.h" />
     <ClInclude Include="GameObject\GameObject.h" />
     <ClInclude Include="GameStateManager\GameStateManager.h" />

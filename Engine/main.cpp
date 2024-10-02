@@ -14,6 +14,7 @@ int main()
 
     while (!glfwWindowShouldClose(GLHelper::ptr_window))
     {
+        GLHelper::update_time();
         gsm.Update();
     }
 

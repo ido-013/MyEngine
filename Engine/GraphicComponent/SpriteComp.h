@@ -9,17 +9,19 @@ class SpriteComp : public GraphicComponent
 public:
 	struct Color
 	{
-		unsigned char r = 0;
-		unsigned char g = 0;
-		unsigned char b = 0;
+		unsigned char r = 255;
+		unsigned char g = 255;
+		unsigned char b = 255;
 	};
 
 private:
 	Color color;
-	GLfloat alpha;
 
+	// 각각 다른 shader를 사용할 수 있도록 수정하기
 	GLuint shaderProgram;
 	GLuint VBO, VAO;
+
+	// resourceManager
 	GLuint texobj;
 
 	GLenum primitive_type;
@@ -38,7 +40,6 @@ public:
 	Color& GetColor() { return color; }
 
 	void SetColor(const unsigned char& r, const unsigned char& g, const unsigned char& b);
-	void SetAlpha(float _alpha);
 	void SetTexture(std::string s);
 
 	void SetupShdrpgm();

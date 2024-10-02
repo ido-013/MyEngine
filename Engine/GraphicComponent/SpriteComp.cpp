@@ -15,15 +15,20 @@ const char* my_fs = {
   #include "../OpenGL/my.frag"
 };
 
-SpriteComp::SpriteComp(GameObject* _owner) : GraphicComponent(_owner), color(), textureName("../Assets/duck-rgba-256.tex"), alpha(1.f)
+SpriteComp::SpriteComp(GameObject* _owner) : GraphicComponent(_owner), color(), textureName("../Assets/duck-rgba-256.tex")
 {
     SetupShdrpgm();
     SetupVAO();
     SetupTexobj();
+
+    glUseProgram(shaderProgram);
 }
 
 SpriteComp::~SpriteComp()
 {
+    glUseProgram(0);
+    glBindVertexArray(0);
+
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
     glDeleteProgram(shaderProgram);
@@ -34,13 +39,14 @@ void SpriteComp::Update()
     TransformComp* t = owner->GetComponent<TransformComp>();
     if (!t) return;
 
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    glUseProgram(shaderProgram);
-
     GLint loc = glGetUniformLocation(shaderProgram, "uTex2d");
     if (loc >= 0) {
         glUniform1i(loc, 6);
+    }
+
+    loc = glGetUniformLocation(shaderProgram, "uColor");
+    if (loc >= 0) {
+        glUniform3f(loc, color.r / 255.f, color.g / 255.f, color.b / 255.f);
     }
 
     loc = glGetUniformLocation(shaderProgram, "uModel_to_NDC");
@@ -55,9 +61,6 @@ void SpriteComp::Update()
     glBindTexture(GL_TEXTURE_2D, 0);
 
     glDrawArrays(primitive_type, 0, draw_cnt);
-
-    glBindVertexArray(0);
-    glUseProgram(0);
 }
 
 void SpriteComp::SetColor(const unsigned char& r, const unsigned char& g, const unsigned char& b)
@@ -65,11 +68,6 @@ void SpriteComp::SetColor(const unsigned char& r, const unsigned char& g, const 
 	color.r = r;
 	color.g = g;
 	color.b = b;
-}
-
-void SpriteComp::SetAlpha(float _alpha)
-{
-	alpha = _alpha;
 }
 
 void SpriteComp::SetTexture(std::string name)
@@ -126,10 +124,10 @@ void SpriteComp::SetupShdrpgm()
 void SpriteComp::SetupVAO()
 {
     GLfloat vertices[] = {
-        1.0f, -1.0f, 	1.0f, 1.0f, 1.0f,	1.0f, 0.0f,
-        1.0f,  1.0f, 	1.0f, 1.0f, 1.0f,	1.0f, 1.0f,
-       -1.0f, -1.0f,	1.0f, 1.0f, 1.0f,	0.0f, 0.0f,
-       -1.0f,  1.0f, 	1.0f, 1.0f, 1.0f,	0.0f, 1.0f,
+        1.0f, -1.0f, 	1.0f, 0.0f,
+        1.0f,  1.0f, 	1.0f, 1.0f,
+       -1.0f, -1.0f,	0.0f, 0.0f,
+       -1.0f,  1.0f, 	0.0f, 1.0f,
     };
 
     glCreateVertexArrays(1, &VAO);
@@ -139,20 +137,17 @@ void SpriteComp::SetupVAO()
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glNamedBufferStorage(VBO, sizeof(vertices), vertices, GL_DYNAMIC_STORAGE_BIT);
 
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 7 * sizeof(GL_FLOAT), (void*)0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GL_FLOAT), (void*)0);
     glEnableVertexAttribArray(0);
 
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(GL_FLOAT), (void*)(2 * sizeof(GL_FLOAT)));
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GL_FLOAT), (void*)(2 * sizeof(GL_FLOAT)));
     glEnableVertexAttribArray(1);
-
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 7 * sizeof(GL_FLOAT), (void*)(5 * sizeof(GL_FLOAT)));
-    glEnableVertexAttribArray(2);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
     primitive_type = GL_TRIANGLE_STRIP;
-    draw_cnt = sizeof(vertices) / sizeof(GL_FLOAT) / 7;
+    draw_cnt = sizeof(vertices) / sizeof(GL_FLOAT) / 4;
 }
 
 void SpriteComp::SetupTexobj()

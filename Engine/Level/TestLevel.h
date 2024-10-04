@@ -3,7 +3,7 @@
 
 namespace level
 {
-	class TestLevel : public GSM::BaseLevel
+	class TestLevel : public BaseLevel
 	{
 	public:
 		void Init() override;

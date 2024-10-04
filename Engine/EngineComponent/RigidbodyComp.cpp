@@ -87,3 +87,39 @@ void RigidbodyComp::Update()
 
 	t->SetPos({ x, y });
 }
+
+void RigidbodyComp::LoadFromJson(const json& data)
+{
+	auto compData = data.find("compData");
+
+	if (compData != data.end())
+	{
+		auto it = compData->find("velocity");
+		velocity.x = it->begin().value();
+		velocity.y = (it->begin() + 1).value();
+
+		it = compData->find("maxVelocity");
+		maxVelocity.x = it->begin().value();
+		maxVelocity.y = (it->begin() + 1).value();
+	}
+}
+
+json RigidbodyComp::SaveToJson()
+{
+	json data;
+	data["type"] = TypeName;
+
+	json compData;
+	compData["velocity"] = { velocity.x, velocity.y };
+	compData["maxVelocity"] = { maxVelocity.x, maxVelocity.y };
+	data["compData"] = compData;
+
+	return data;
+}
+
+BaseRTTI* RigidbodyComp::CreateRigidBodyComponent(GameObject* owner)
+{
+	BaseRTTI* p = new RigidbodyComp(owner);
+	owner->AddComponent<RigidbodyComp>(static_cast<BaseComponent*>(p));
+	return p;
+}

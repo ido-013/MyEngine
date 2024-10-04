@@ -75,7 +75,7 @@
     <LibraryPath>$(SolutionDir)Extern\glfw\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir)Extern\glfw\include;$(SolutionDir)Extern\glad\include;$(SolutionDir)Extern\glm\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Extern\glfw\include;$(SolutionDir)Extern\glad\include;$(SolutionDir)Extern\glm\include;$(SolutionDir)Extern\json;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Extern\glfw\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -140,6 +140,7 @@
     <ClCompile Include="EngineComponent\EngineComponent.cpp" />
     <ClCompile Include="EngineComponent\RigidbodyComp.cpp" />
     <ClCompile Include="EngineComponent\TransformComp.cpp" />
+    <ClCompile Include="GameObjectManager\GameObjectManager.cpp" />
     <ClCompile Include="GameObject\GameObject.cpp" />
     <ClCompile Include="GameStateManager\GameStateManager.cpp" />
     <ClCompile Include="glad.c" />
@@ -150,15 +151,17 @@
     <ClCompile Include="LogicComponent\PlayerComp.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="OpenGL\GLHelper.cpp" />
-    <ClCompile Include="OpenGL\GLSLShader.cpp" />
-    <ClCompile Include="OpenGL\GLSLShader.h" />
+    <ClCompile Include="RTTI\Registry.cpp" />
+    <ClCompile Include="Serializer\Serializer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseComponent.h" />
     <ClInclude Include="ComponentManager\ComponentManager.h" />
+    <ClInclude Include="Components.h" />
     <ClInclude Include="EngineComponent\EngineComponent.h" />
     <ClInclude Include="EngineComponent\RigidbodyComp.h" />
     <ClInclude Include="EngineComponent\TransformComp.h" />
+    <ClInclude Include="GameObjectManager\GameObjectManager.h" />
     <ClInclude Include="GameObject\GameObject.h" />
     <ClInclude Include="GameStateManager\GameStateManager.h" />
     <ClInclude Include="GraphicComponent\GraphicComponent.h" />
@@ -168,6 +171,9 @@
     <ClInclude Include="LogicComponent\LogicComponent.h" />
     <ClInclude Include="LogicComponent\PlayerComp.h" />
     <ClInclude Include="OpenGL\GLHelper.h" />
+    <ClInclude Include="RTTI\BaseRTTI.h" />
+    <ClInclude Include="RTTI\Registry.h" />
+    <ClInclude Include="Serializer\Serializer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ComponentManager\ComponentManager.inl" />

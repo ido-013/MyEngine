@@ -9,7 +9,7 @@ int main()
 {
     GLHelper::Init(800, 600, "My Game!!!");
 
-    GSM::GameStateManager& gsm = GSM::GameStateManager::GetInstance();
+    GameStateManager& gsm = GameStateManager::GetInstance();
     gsm.ChangeLevel(new level::TestLevel);
 
     while (!glfwWindowShouldClose(GLHelper::ptr_window))

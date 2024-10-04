@@ -33,5 +33,10 @@ public:
 	//Other Fn
 	void PrintMatrix();
 
+	void LoadFromJson(const json&) override;
+	json SaveToJson() override;
+
+	static BaseRTTI* CreateTransformComponent(GameObject* owner);
+
 	static constexpr const char* TypeName = "TransformComp";
 };

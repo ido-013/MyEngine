@@ -1,9 +1,10 @@
 #pragma once
 #include <vector>
 #include <string>
-#include "../GameObject/GameObject.h"
+#include "GameObject/GameObject.h"
+#include "RTTI/BaseRTTI.h"
 
-class BaseComponent
+class BaseComponent : public BaseRTTI
 {
 private:
 	BaseComponent() = delete;

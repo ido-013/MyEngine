@@ -1,7 +1,6 @@
 #pragma once
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
-#include "../OpenGL/GLSLShader.h"
 #include "GraphicComponent.h"
 
 class SpriteComp : public GraphicComponent
@@ -45,6 +44,11 @@ public:
 	void SetupShdrpgm();
 	void SetupVAO();
 	void SetupTexobj();
+
+	void LoadFromJson(const json&) override;
+	json SaveToJson() override;
+
+	static BaseRTTI* CreateSpriteComponent(GameObject* owner);
 
 	static constexpr const char* TypeName = "SpriteComp";
 };

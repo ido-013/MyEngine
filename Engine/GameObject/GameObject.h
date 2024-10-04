@@ -23,6 +23,9 @@ public:
 	template <typename T>
 	T* AddComponent();
 
+	template <typename T>
+	T* AddComponent(BaseComponent* comp);
+
 	//GO will have a function to find if it already has a component of ANY TYPE
 	template <typename T>
 	T* GetComponent();
@@ -30,6 +33,8 @@ public:
 	//GO will have a function to delete ANY TYPE of component
 	template <typename T>
 	void DeleteComponent();
+
+	const std::map<std::string, BaseComponent*>& GetAllComponent() { return component; }
 };
 
 #include "GameObject.inl"

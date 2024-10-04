@@ -12,6 +12,19 @@ inline T* GameObject::AddComponent()
 	return comp;
 }
 
+template <typename T>
+inline T* GameObject::AddComponent(BaseComponent* comp)
+{
+	T* temp = GetComponent<T>();
+	if (temp != nullptr)
+	{
+		return nullptr;
+	}
+
+	component.insert({ T::TypeName, comp });
+	return temp;
+}
+
 template<typename T>
 inline T* GameObject::GetComponent()
 {

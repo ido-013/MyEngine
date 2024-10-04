@@ -48,16 +48,19 @@
     <ClCompile Include="OpenGL\GLHelper.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="OpenGL\GLSLShader.h">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="OpenGL\GLSLShader.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="EngineComponent\RigidbodyComp.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="LogicComponent\PlayerComp.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="RTTI\Registry.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Serializer\Serializer.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjectManager\GameObjectManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -102,6 +105,21 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="LogicComponent\PlayerComp.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="RTTI\Registry.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="RTTI\BaseRTTI.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Components.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Serializer\Serializer.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectManager\GameObjectManager.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

@@ -11,5 +11,10 @@ public:
 	~PlayerComp();
 	void Update() override;
 
+	void LoadFromJson(const json&) override;
+	json SaveToJson() override;
+
+	static BaseRTTI* CreatePlayerComponent(GameObject* owner);
+
 	static constexpr const char* TypeName = "PlayerComp";
 };

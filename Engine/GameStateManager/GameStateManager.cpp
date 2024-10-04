@@ -10,9 +10,9 @@
 
 #include "../Level/BaseLevel.h"
 
-GSM::GameStateManager::GameStateManager() : previousLevel(nullptr), currentLevel(nullptr) {}
+GameStateManager::GameStateManager() : previousLevel(nullptr), currentLevel(nullptr) {}
 
-GSM::GameStateManager::~GameStateManager()
+GameStateManager::~GameStateManager()
 {
     if (previousLevel)
         delete previousLevel;
@@ -21,7 +21,7 @@ GSM::GameStateManager::~GameStateManager()
         delete currentLevel;
 }
 
-void GSM::GameStateManager::Init()
+void GameStateManager::Init()
 {
     if (currentLevel)
     {
@@ -29,7 +29,7 @@ void GSM::GameStateManager::Init()
     }
 }
 
-void GSM::GameStateManager::Update()
+void GameStateManager::Update()
 {
     if (currentLevel)
     {
@@ -46,7 +46,7 @@ void GSM::GameStateManager::Update()
     }
 }
 
-void GSM::GameStateManager::Exit()
+void GameStateManager::Exit()
 {
     if (currentLevel)
     {
@@ -54,7 +54,7 @@ void GSM::GameStateManager::Exit()
     }
 }
 
-void GSM::GameStateManager::ChangeLevel(BaseLevel* newLvl)
+void GameStateManager::ChangeLevel(BaseLevel* newLvl)
 {
     delete previousLevel;
     previousLevel = currentLevel;
@@ -69,7 +69,7 @@ void GSM::GameStateManager::ChangeLevel(BaseLevel* newLvl)
     Init();
 }
 
-bool GSM::GameStateManager::ShouldExit()
+bool GameStateManager::ShouldExit()
 {
     return currentLevel == nullptr;
 }

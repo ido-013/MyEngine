@@ -2,7 +2,6 @@
 
 #include <iostream>
 #include <fstream>
-#include <array>
 #include <glm/gtc/type_ptr.hpp>
 
 #include "../EngineComponent/TransformComp.h"
@@ -169,4 +168,41 @@ void SpriteComp::SetupTexobj()
         GL_RGBA, GL_UNSIGNED_BYTE, ptr_texels);
 
     delete[] ptr_texels;
+}
+
+void SpriteComp::LoadFromJson(const json& data)
+{
+    auto compData = data.find("compData");
+
+    if (compData != data.end())
+    {
+        auto it = compData->find("color");
+        color.r = it->begin().value();
+        color.g = (it->begin() + 1).value();
+        color.b = (it->begin() + 2).value();
+
+        it = compData->find("textureName");
+        textureName = it.value();
+        SetTexture(textureName);
+    }
+}
+
+json SpriteComp::SaveToJson()
+{
+    json data;
+    data["type"] = TypeName;
+
+    json compData;
+    compData["color"] = { color.r, color.g, color.b };
+    compData["textureName"] = textureName;
+    data["compData"] = compData;
+
+    return data;
+}
+
+BaseRTTI* SpriteComp::CreateSpriteComponent(GameObject* owner)
+{
+    BaseRTTI* p = new SpriteComp(owner);
+    owner->AddComponent<SpriteComp>(static_cast<SpriteComp*>(p));
+    return p;
 }

@@ -86,3 +86,52 @@ void TransformComp::PrintMatrix()
 		std::cout << "| " << transformMatrix[i].x << " " << transformMatrix[i].y << " " << transformMatrix[i].z << " |\n";
 	}
 }
+
+void TransformComp::LoadFromJson(const json& data)
+{
+	// Check how you saved, load from there
+	auto compData = data.find("compData");
+
+	if (compData != data.end())
+	{
+		auto p = compData->find("position");
+		pos.x = p->begin().value();
+		pos.y = (p->begin() + 1).value();
+
+		auto s = compData->find("scale");
+		scale.x = s->begin().value();
+		scale.y = (s->begin() + 1).value();
+
+		auto r = compData->find("rotation");
+		rot = r.value();
+	}
+
+	// Data is loaded
+
+	// Utilize the data
+	CalculateMatrix();
+}
+
+json TransformComp::SaveToJson()
+{
+	json data;
+
+	data["type"] = TypeName;
+
+	json compData;
+	compData["position"] = { pos.x, pos.y };
+	compData["scale"] = { scale.x, scale.y };
+	compData["rotation"] = rot;
+
+	data["compData"] = compData;
+	return data;
+}
+
+BaseRTTI* TransformComp::CreateTransformComponent(GameObject* owner)
+{
+	BaseRTTI* p = new TransformComp(owner);
+
+	owner->AddComponent<TransformComp>(static_cast<BaseComponent*>(p));
+
+	return p;
+}

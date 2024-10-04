@@ -18,11 +18,9 @@ void level::TestLevel::Init()
 {
     tmp = new GameObject;
     TransformComp* t = tmp->AddComponent<TransformComp>();
-    t->SetScale({ 0.1f, 0.1f });
-    t->SetPos({ -0.5f, -0.5f });
+    t->SetScale({ 0.7f, 0.5f });
 
     SpriteComp* s = tmp->AddComponent<SpriteComp>();
-    s->SetColor(255, 255, 0);
 
     RigidbodyComp* r = tmp->AddComponent<RigidbodyComp>();
     
@@ -30,15 +28,15 @@ void level::TestLevel::Init()
 
     tmp2 = new GameObject;
     t = tmp2->AddComponent<TransformComp>();
-    t->SetScale({ 0.1f, 0.1f });
-    t->SetPos({ 0.5f, 0.5f });
+    t->SetScale({ 0.7f, 0.5f });
+    t->SetRot(90);
 
     s = tmp2->AddComponent<SpriteComp>();
 }
 
 void level::TestLevel::Update()
 {
-    tmp2->GetComponent<TransformComp>()->SetRot(tmp2->GetComponent<TransformComp>()->GetRot() + 1);
+    //tmp2->GetComponent<TransformComp>()->SetRot(tmp2->GetComponent<TransformComp>()->GetRot() + 1);
 }
 
 void level::TestLevel::Exit()

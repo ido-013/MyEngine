@@ -1,5 +1,7 @@
 #include "SpriteComp.h"
 
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
 #include <iostream>
 #include <fstream>
 #include <glm/gtc/type_ptr.hpp>
@@ -14,7 +16,7 @@ const char* my_fs = {
   #include "../OpenGL/my.frag"
 };
 
-SpriteComp::SpriteComp(GameObject* _owner) : GraphicComponent(_owner), color(), textureName("../Assets/duck-rgba-256.tex")
+SpriteComp::SpriteComp(GameObject* _owner) : GraphicComponent(_owner), color(),  textureName("../Assets/GSwftl7boAADleI.jfif") //textureName("../Assets/duck-rgba-256.tex")
 {
     SetupShdrpgm();
     SetupVAO();
@@ -151,15 +153,10 @@ void SpriteComp::SetupVAO()
 
 void SpriteComp::SetupTexobj()
 {
-    GLuint width{ 256 }, height{ 256 }, bytes_per_texel{ 4 };
+    GLint width, height, bytes_per_texel;
+    stbi_set_flip_vertically_on_load(1);    
 
-    std::ifstream input(textureName, std::ios::binary);
-    GLchar* ptr_texels = new GLchar[width * height * bytes_per_texel];
-
-    if (input) {
-        input.read((GLchar*)ptr_texels, width * height * bytes_per_texel);
-        input.close();
-    }
+    GLubyte* ptr_texels = stbi_load(textureName.c_str(), &width, &height, &bytes_per_texel, 4);
 
     glCreateTextures(GL_TEXTURE_2D, 1, &texobj);
 
@@ -167,7 +164,7 @@ void SpriteComp::SetupTexobj()
     glTextureSubImage2D(texobj, 0, 0, 0, width, height,
         GL_RGBA, GL_UNSIGNED_BYTE, ptr_texels);
 
-    delete[] ptr_texels;
+    stbi_image_free(ptr_texels);
 }
 
 void SpriteComp::LoadFromJson(const json& data)

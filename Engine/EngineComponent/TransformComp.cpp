@@ -1,6 +1,9 @@
 #include "TransformComp.h"
+
 #include <iostream>
 #include <glm/ext.hpp>
+
+#include "../Camera/Camera.h"
 
 void TransformComp::CalculateMatrix()
 {
@@ -29,7 +32,7 @@ void TransformComp::CalculateMatrix()
 	);
 
 	//Concatenate them
-	transformMatrix = translateMtx * rotationMtx * scaleMtx;
+	transformMatrix = Camera::GetInstance().GetMatrix() * translateMtx * rotationMtx * scaleMtx;
 }
 
 TransformComp::TransformComp(GameObject* _owner) : EngineComponent(_owner), pos(), scale(), rot(0), transformMatrix()

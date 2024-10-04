@@ -16,11 +16,10 @@ const char* my_fs = {
   #include "../OpenGL/my.frag"
 };
 
-SpriteComp::SpriteComp(GameObject* _owner) : GraphicComponent(_owner), color(),  textureName("../Assets/GSwftl7boAADleI.jfif") //textureName("../Assets/duck-rgba-256.tex")
+SpriteComp::SpriteComp(GameObject* _owner) : GraphicComponent(_owner), color(), textureName(), alpha(1)
 {
     SetupShdrpgm();
     SetupVAO();
-    SetupTexobj();
 
     glUseProgram(shaderProgram);
 }
@@ -47,7 +46,7 @@ void SpriteComp::Update()
 
     loc = glGetUniformLocation(shaderProgram, "uColor");
     if (loc >= 0) {
-        glUniform3f(loc, color.r / 255.f, color.g / 255.f, color.b / 255.f);
+        glUniform4f(loc, color.r / 255.f, color.g / 255.f, color.b / 255.f, alpha);
     }
 
     loc = glGetUniformLocation(shaderProgram, "uModel_to_NDC");
@@ -71,9 +70,11 @@ void SpriteComp::SetColor(const unsigned char& r, const unsigned char& g, const 
 	color.b = b;
 }
 
-void SpriteComp::SetTexture(std::string name)
+void SpriteComp::SetTexture(const std::string& name)
 {
+    glDeleteTextures(1, &texobj);
 	textureName = name;
+    SetupTexobj();
 }
 
 void SpriteComp::SetupShdrpgm()

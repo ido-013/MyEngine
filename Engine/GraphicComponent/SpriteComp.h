@@ -15,6 +15,7 @@ public:
 
 private:
 	Color color;
+	GLfloat alpha;
 
 	// 각각 다른 shader를 사용할 수 있도록 수정하기
 	GLuint shaderProgram;
@@ -37,9 +38,12 @@ public:
 
 	// Gettors/Settors
 	Color& GetColor() { return color; }
-
 	void SetColor(const unsigned char& r, const unsigned char& g, const unsigned char& b);
-	void SetTexture(std::string s);
+
+	void SetTexture(const std::string& s);
+
+	float& GetAlpha() { return alpha; }
+	void SetAlpha(const float& _alpha) { alpha = _alpha; };
 
 	void SetupShdrpgm();
 	void SetupVAO();

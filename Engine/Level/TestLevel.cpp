@@ -11,32 +11,31 @@
 #include "../EngineComponent/RigidbodyComp.h"
 #include "../LogicComponent/PlayerComp.h"
 
+#include "../Camera/Camera.h"
+
 GameObject* tmp = nullptr;
 GameObject* tmp2 = nullptr;
 
 void level::TestLevel::Init()
 {
+    Camera::GetInstance().SetPos(0, 0);
+
     tmp = new GameObject;
     TransformComp* t = tmp->AddComponent<TransformComp>();
-    t->SetScale({ 0.7f, 0.5f });
+    t->SetScale({ 1600.f, 900.f });
 
     SpriteComp* s = tmp->AddComponent<SpriteComp>();
+    s->SetTexture("../Assets/GSwftl7boAADleI.jfif");
+    s->SetColor(255, 255, 255);
+    s->SetAlpha(1.f);
 
     RigidbodyComp* r = tmp->AddComponent<RigidbodyComp>();
-    
     PlayerComp* p = tmp->AddComponent<PlayerComp>();
-
-    tmp2 = new GameObject;
-    t = tmp2->AddComponent<TransformComp>();
-    t->SetScale({ 0.7f, 0.5f });
-    t->SetRot(90);
-
-    s = tmp2->AddComponent<SpriteComp>();
 }
 
 void level::TestLevel::Update()
-{
-    //tmp2->GetComponent<TransformComp>()->SetRot(tmp2->GetComponent<TransformComp>()->GetRot() + 1);
+{    
+
 }
 
 void level::TestLevel::Exit()

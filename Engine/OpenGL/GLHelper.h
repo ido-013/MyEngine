@@ -5,7 +5,7 @@
 
 struct GLHelper
 {
-	static bool Init(GLint width, GLint height, std::string title);
+	static bool Init(GLfloat width, GLfloat height, std::string title);
 	static void Exit();
 
 	static void error_cb(int error, char const* description);
@@ -20,7 +20,7 @@ struct GLHelper
 
 	static void update_time(double fpsCalcInt = 1.0);
 
-	static GLint width, height;
+	static GLfloat width, height;
 	static GLdouble fps;
 	static GLdouble delta_time;
 	static std::string title;

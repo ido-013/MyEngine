@@ -137,6 +137,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Camera\Camera.cpp" />
     <ClCompile Include="EngineComponent\EngineComponent.cpp" />
     <ClCompile Include="EngineComponent\RigidbodyComp.cpp" />
     <ClCompile Include="EngineComponent\TransformComp.cpp" />
@@ -156,6 +157,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseComponent.h" />
+    <ClInclude Include="Camera\Camera.h" />
     <ClInclude Include="ComponentManager\ComponentManager.h" />
     <ClInclude Include="Components.h" />
     <ClInclude Include="EngineComponent\EngineComponent.h" />

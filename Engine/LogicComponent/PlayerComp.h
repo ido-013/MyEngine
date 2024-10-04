@@ -4,7 +4,7 @@
 class PlayerComp : public LogicComponent
 {
 private:
-	float speed = 0.5f;
+	float speed = 100;
 
 public:
 	PlayerComp(GameObject* _owner);

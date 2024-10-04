@@ -1,8 +1,8 @@
 #include "GLHelper.h"
 #include <iostream>
 
-GLint GLHelper::width;
-GLint GLHelper::height;
+GLfloat GLHelper::width;
+GLfloat GLHelper::height;
 GLdouble GLHelper::fps;
 GLdouble GLHelper::delta_time;
 std::string GLHelper::title;
@@ -16,7 +16,7 @@ GLboolean GLHelper::keystateD;
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
 // ---------------------------------------------------------------------------------------------
 
-bool GLHelper::Init(GLint width, GLint height, std::string title) 
+bool GLHelper::Init(GLfloat _width, GLfloat _height, std::string _title) 
 {
     // glfw: initialize and configure
     // ------------------------------
@@ -28,6 +28,10 @@ bool GLHelper::Init(GLint width, GLint height, std::string title)
 #ifdef __APPLE__
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
+
+    width = _width;
+    height = _height;
+    title = _title;
 
     // glfw window creation
     // --------------------

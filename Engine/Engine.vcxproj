@@ -71,7 +71,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)Extern\glfw\include;$(SolutionDir)Extern\glad\include;$(SolutionDir)Extern\glm\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Extern\glfw\include;$(SolutionDir)Extern\glad\include;$(SolutionDir)Extern\glm\include;$(SolutionDir)Extern\json;$(SolutionDIr)Extern\stb;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Extern\glfw\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

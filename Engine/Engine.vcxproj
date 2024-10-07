@@ -195,8 +195,6 @@
   <ItemGroup>
     <None Include="ComponentManager\ComponentManager.inl" />
     <None Include="GameObject\GameObject.inl" />
-    <None Include="OpenGL\base.frag" />
-    <None Include="OpenGL\base.vert" />
     <None Include="ResourceManager\ResourceManager.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

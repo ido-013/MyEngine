@@ -184,7 +184,5 @@
     <None Include="ResourceManager\ResourceManager.inl">
       <Filter>헤더 파일</Filter>
     </None>
-    <None Include="OpenGL\base.frag" />
-    <None Include="OpenGL\base.vert" />
   </ItemGroup>
 </Project>

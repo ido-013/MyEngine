@@ -18,7 +18,7 @@ void GLModel::init(std::string filename)
 	}
 	ifs.seekg(0, std::ios::beg);
 
-	std::vector<glm::vec2> pos_vtx;
+	std::vector<GLfloat> pos_vtx;
 	std::vector<GLushort> idx_vtx;
 
 	std::string line;
@@ -40,7 +40,11 @@ void GLModel::init(std::string filename)
 			glm::vec2 pos;
 			line_sstm >> pos.x >> pos.y;
 			
-			pos_vtx.emplace_back(pos);
+			pos_vtx.push_back(pos.x);
+			pos_vtx.push_back(pos.y);
+
+			pos_vtx.push_back(pos.x / 2 + 0.5f);
+			pos_vtx.push_back(pos.y / 2 + 0.5f);
 
 			break;
 		}
@@ -86,22 +90,22 @@ void GLModel::init(std::string filename)
 		}
 	}
 
-	glCreateBuffers(1, &VBO);
-	glNamedBufferStorage(VBO, sizeof(glm::vec2) * pos_vtx.size(),
-		nullptr, GL_DYNAMIC_STORAGE_BIT);
-
-	GLsizei position_data_offset = 0;
-	GLsizei position_attribute_size = sizeof(glm::vec2);
-	GLsizei position_data_size = position_attribute_size * static_cast<GLsizei>(pos_vtx.size());
-
-	glNamedBufferSubData(VBO, position_data_offset, position_data_size, pos_vtx.data());
-
 	glCreateVertexArrays(1, &VAO);
+	glBindVertexArray(VAO);
 
-	glEnableVertexArrayAttrib(VAO, 0);
-	glVertexArrayVertexBuffer(VAO, 3, VBO, position_data_offset, position_attribute_size);
-	glVertexArrayAttribFormat(VAO, 0, 2, GL_FLOAT, GL_FALSE, 0);
-	glVertexArrayAttribBinding(VAO, 0, 3);
+	glCreateBuffers(1, &VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glNamedBufferStorage(VBO, sizeof(GLfloat) * pos_vtx.size(), nullptr, GL_DYNAMIC_STORAGE_BIT);
+	glNamedBufferSubData(VBO, 0, sizeof(GLfloat) * pos_vtx.size(), pos_vtx.data());
+
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GL_FLOAT), (void*)0);
+	glEnableVertexAttribArray(0);
+
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GL_FLOAT), (void*)(2 * sizeof(GL_FLOAT)));
+	glEnableVertexAttribArray(1);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
 
 	draw_cnt = static_cast<GLuint>(idx_vtx.size());
 
@@ -109,6 +113,7 @@ void GLModel::init(std::string filename)
 	glNamedBufferStorage(EBO, sizeof(GLushort) * draw_cnt,
 		reinterpret_cast<GLvoid*>(idx_vtx.data()),
 		GL_DYNAMIC_STORAGE_BIT);
+
 	glVertexArrayElementBuffer(VAO, EBO);
 
 	glBindVertexArray(0);

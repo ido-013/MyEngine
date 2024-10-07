@@ -25,7 +25,7 @@ void level::TestLevel::Init()
     t->SetScale({ 600, 600 });
 
     SpriteComp* s = tmp->AddComponent<SpriteComp>();
-    s->SetTexture("../Assets/GSwftl7boAADleI.jfif");
+    s->SetTexture("Assets/GSwftl7boAADleI.jfif");
     s->SetColor(255, 255, 255);
     s->SetAlpha(1.f);
 

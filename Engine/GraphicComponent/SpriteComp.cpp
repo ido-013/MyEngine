@@ -2,23 +2,16 @@
 
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
+#include <sstream>
 #include <fstream>
 
 #include "../ResourceManager/ResourceManager.h"
 #include "../EngineComponent/TransformComp.h"
 
-const char* my_vs = {
-  #include "../OpenGL/base.vert"
-};
-
-const char* my_fs = {
-  #include "../OpenGL/base.frag"
-};
-
 SpriteComp::SpriteComp(GameObject* _owner) : GraphicComponent(_owner), color(), textureName(), alpha(1), texobj(nullptr)
 {
     SetupShdrpgm();
-    mdl = ResourceManager::GetInstance().GetResourcePointer<GLModel>("../Assets/meshes/circle.msh");
+    mdl = ResourceManager::GetInstance().GetResourcePointer<GLModel>("Assets/meshes/circle.msh");
     glUseProgram(shaderProgram);
 }
 
@@ -77,8 +70,36 @@ void SpriteComp::SetTexture(const std::string& name)
 
 void SpriteComp::SetupShdrpgm()
 {
+    //
+    std::string vertexCode;
+    std::string fragmentCode;
+
+    std::ifstream vShaderFile;
+    std::ifstream fShaderFile;
+
+    vShaderFile.open("Assets/Shader/base.vert");
+    fShaderFile.open("Assets/Shader/base.frag");
+
+    if (!vShaderFile.is_open())
+        exit(0);
+
+    std::stringstream vShaderStream, fShaderStream;
+
+    vShaderStream << vShaderFile.rdbuf();
+    fShaderStream << fShaderFile.rdbuf();
+
+    vShaderFile.close();
+    fShaderFile.close();
+
+    vertexCode = vShaderStream.str();
+    fragmentCode = fShaderStream.str();
+
+    const char* vShaderCode = vertexCode.c_str();
+    const char* fShaderCode = fragmentCode.c_str();
+    //
+
     unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader, 1, &my_vs, NULL);
+    glShaderSource(vertexShader, 1, &vShaderCode, NULL);
     glCompileShader(vertexShader);
 
     // check for shader compile errors
@@ -93,7 +114,8 @@ void SpriteComp::SetupShdrpgm()
 
     // fragment shader
     unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &my_fs, NULL);
+    //glShaderSource(fragmentShader, 1, &my_fs, NULL);
+    glShaderSource(fragmentShader, 1, &fShaderCode, NULL);
     glCompileShader(fragmentShader);
 
     // check for shader compile errors

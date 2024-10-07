@@ -1,7 +1,9 @@
 #pragma once
-#include "glad/glad.h"
-#include "GLFW/glfw3.h"
+
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 #include "GraphicComponent.h"
+#include "../OpenGL/GLModel.h"
 
 class SpriteComp : public GraphicComponent
 {
@@ -17,16 +19,11 @@ private:
 	Color color;
 	GLfloat alpha;
 
-	// 각각 다른 shader를 사용할 수 있도록 수정하기
 	GLuint shaderProgram;
-	GLuint VBO, VAO;
 
-	// resourceManager
-	GLuint texobj;
+	GLModel* mdl;
 
-	GLenum primitive_type;
-	GLuint draw_cnt;
-
+	GLuint* texobj;
 	std::string textureName;
 
 public:
@@ -46,8 +43,7 @@ public:
 	void SetAlpha(const float& _alpha) { alpha = _alpha; };
 
 	void SetupShdrpgm();
-	void SetupVAO();
-	void SetupTexobj();
+	//void SetupVAO();
 
 	void LoadFromJson(const json&) override;
 	json SaveToJson() override;

@@ -71,7 +71,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)Extern\glfw\include;$(SolutionDir)Extern\glad\include;$(SolutionDir)Extern\glm\include;$(SolutionDir)Extern\json;$(SolutionDIr)Extern\stb;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Extern\glfw\include;$(SolutionDir)Extern\glad\include;$(SolutionDir)Extern\glm\include;$(SolutionDir)Extern\json;$(SolutionDir)Extern\stb;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Extern\glfw\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -152,6 +152,14 @@
     <ClCompile Include="LogicComponent\PlayerComp.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="OpenGL\GLHelper.cpp" />
+    <ClCompile Include="OpenGL\GLModel.cpp" />
+    <ClCompile Include="ResourceManager\ResourceManager.cpp" />
+    <ClCompile Include="ResourceManager\ResourceManager.h" />
+    <ClCompile Include="Resource\AudioResource.cpp" />
+    <ClCompile Include="Resource\MeshResource.cpp" />
+    <ClCompile Include="Resource\Resource.cpp" />
+    <ClCompile Include="Resource\ShaderResource.cpp" />
+    <ClCompile Include="Resource\TextureResource.cpp" />
     <ClCompile Include="RTTI\Registry.cpp" />
     <ClCompile Include="Serializer\Serializer.cpp" />
   </ItemGroup>
@@ -173,6 +181,13 @@
     <ClInclude Include="LogicComponent\LogicComponent.h" />
     <ClInclude Include="LogicComponent\PlayerComp.h" />
     <ClInclude Include="OpenGL\GLHelper.h" />
+    <ClInclude Include="OpenGL\GLModel.h" />
+    <ClInclude Include="Resource\AudioResource.h" />
+    <ClInclude Include="Resource\MeshResource.h" />
+    <ClInclude Include="Resource\Resource.h" />
+    <ClInclude Include="Resource\Resources.h" />
+    <ClInclude Include="Resource\ShaderResource.h" />
+    <ClInclude Include="Resource\TextureResource.h" />
     <ClInclude Include="RTTI\BaseRTTI.h" />
     <ClInclude Include="RTTI\Registry.h" />
     <ClInclude Include="Serializer\Serializer.h" />
@@ -180,8 +195,9 @@
   <ItemGroup>
     <None Include="ComponentManager\ComponentManager.inl" />
     <None Include="GameObject\GameObject.inl" />
-    <None Include="OpenGL\my.frag" />
-    <None Include="OpenGL\my.vert" />
+    <None Include="OpenGL\base.frag" />
+    <None Include="OpenGL\base.vert" />
+    <None Include="ResourceManager\ResourceManager.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,26 +1,24 @@
 #include "SpriteComp.h"
 
-#define STB_IMAGE_IMPLEMENTATION
-#include <stb_image.h>
+#include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 #include <fstream>
-#include <glm/gtc/type_ptr.hpp>
 
+#include "../ResourceManager/ResourceManager.h"
 #include "../EngineComponent/TransformComp.h"
 
 const char* my_vs = {
-  #include "../OpenGL/my.vert"
+  #include "../OpenGL/base.vert"
 };
 
 const char* my_fs = {
-  #include "../OpenGL/my.frag"
+  #include "../OpenGL/base.frag"
 };
 
-SpriteComp::SpriteComp(GameObject* _owner) : GraphicComponent(_owner), color(), textureName(), alpha(1)
+SpriteComp::SpriteComp(GameObject* _owner) : GraphicComponent(_owner), color(), textureName(), alpha(1), texobj(nullptr)
 {
     SetupShdrpgm();
-    SetupVAO();
-
+    mdl = ResourceManager::GetInstance().GetResourcePointer<GLModel>("../Assets/meshes/circle.msh");
     glUseProgram(shaderProgram);
 }
 
@@ -29,8 +27,6 @@ SpriteComp::~SpriteComp()
     glUseProgram(0);
     glBindVertexArray(0);
 
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
     glDeleteProgram(shaderProgram);
 }
 
@@ -54,13 +50,13 @@ void SpriteComp::Update()
         glUniformMatrix3fv(loc, 1, GL_FALSE, glm::value_ptr(t->GetMatrix()));
     }
 
-    glBindTextureUnit(6, texobj);
-    glBindTexture(GL_TEXTURE_2D, texobj);
+    glBindTextureUnit(6, *texobj);
+    glBindTexture(GL_TEXTURE_2D, *texobj);
 
-    glBindVertexArray(VAO);
+    glBindVertexArray(mdl->VAO);
     glBindTexture(GL_TEXTURE_2D, 0);
 
-    glDrawArrays(primitive_type, 0, draw_cnt);
+    glDrawElements(mdl->primitive_type, mdl->draw_cnt, GL_UNSIGNED_SHORT, NULL);
 }
 
 void SpriteComp::SetColor(const unsigned char& r, const unsigned char& g, const unsigned char& b)
@@ -72,9 +68,11 @@ void SpriteComp::SetColor(const unsigned char& r, const unsigned char& g, const 
 
 void SpriteComp::SetTexture(const std::string& name)
 {
-    glDeleteTextures(1, &texobj);
+    if (texobj)
+        ResourceManager::GetInstance().UnloadResource(textureName);
+
 	textureName = name;
-    SetupTexobj();
+    texobj = ResourceManager::GetInstance().GetResourcePointer<GLuint>(name);
 }
 
 void SpriteComp::SetupShdrpgm()
@@ -121,51 +119,6 @@ void SpriteComp::SetupShdrpgm()
 
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
-}
-
-void SpriteComp::SetupVAO()
-{
-    GLfloat vertices[] = {
-        1.0f, -1.0f, 	1.0f, 0.0f,
-        1.0f,  1.0f, 	1.0f, 1.0f,
-       -1.0f, -1.0f,	0.0f, 0.0f,
-       -1.0f,  1.0f, 	0.0f, 1.0f,
-    };
-
-    glCreateVertexArrays(1, &VAO);
-    glBindVertexArray(VAO);
-
-    glCreateBuffers(1, &VBO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glNamedBufferStorage(VBO, sizeof(vertices), vertices, GL_DYNAMIC_STORAGE_BIT);
-
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GL_FLOAT), (void*)0);
-    glEnableVertexAttribArray(0);
-
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GL_FLOAT), (void*)(2 * sizeof(GL_FLOAT)));
-    glEnableVertexAttribArray(1);
-
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
-
-    primitive_type = GL_TRIANGLE_STRIP;
-    draw_cnt = sizeof(vertices) / sizeof(GL_FLOAT) / 4;
-}
-
-void SpriteComp::SetupTexobj()
-{
-    GLint width, height, bytes_per_texel;
-    stbi_set_flip_vertically_on_load(1);    
-
-    GLubyte* ptr_texels = stbi_load(textureName.c_str(), &width, &height, &bytes_per_texel, 4);
-
-    glCreateTextures(GL_TEXTURE_2D, 1, &texobj);
-
-    glTextureStorage2D(texobj, 1, GL_RGBA8, width, height);
-    glTextureSubImage2D(texobj, 0, 0, 0, width, height,
-        GL_RGBA, GL_UNSIGNED_BYTE, ptr_texels);
-
-    stbi_image_free(ptr_texels);
 }
 
 void SpriteComp::LoadFromJson(const json& data)

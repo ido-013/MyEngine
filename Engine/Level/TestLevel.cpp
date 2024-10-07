@@ -22,7 +22,7 @@ void level::TestLevel::Init()
 
     tmp = new GameObject;
     TransformComp* t = tmp->AddComponent<TransformComp>();
-    t->SetScale({ 1600.f, 900.f });
+    t->SetScale({ 600, 600 });
 
     SpriteComp* s = tmp->AddComponent<SpriteComp>();
     s->SetTexture("../Assets/GSwftl7boAADleI.jfif");

@@ -10,14 +10,14 @@ private:
 	//GO now will have a container of BaseComponent*
 	std::map<std::string, BaseComponent*> component;
 
-public:
 	GameObject();
-	GameObject(const GameObject& other) = delete;
-	GameObject& operator=(const GameObject& other) = delete;
-
 	//Components in the GO container are ALLOCATED IN THE HEAP, 
 	//so. When to GO is destroyed, the GO must be as well
 	~GameObject();
+
+public:
+	GameObject(const GameObject& other) = delete;
+	GameObject& operator=(const GameObject& other) = delete;
 
 	//GO will have a function to add ANY TYPE of component class to their container
 	template <typename T>
@@ -35,6 +35,8 @@ public:
 	void DeleteComponent();
 
 	const std::map<std::string, BaseComponent*>& GetAllComponent() { return component; }
+
+	friend class GameObjectManager;
 };
 
 #include "GameObject.inl"

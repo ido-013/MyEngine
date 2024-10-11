@@ -8,6 +8,12 @@
 
 class Editor
 {
+public:
+    enum EditorMode
+    {
+        play, pause, edit
+    };
+
 private:
     static char buffer[100];
     static void TopBar();

@@ -20,7 +20,10 @@ private:
 	GLfloat alpha;
 
 	GLuint* shaderProgram;
-	GLModel* mdl;
+	std::string shaderName;
+
+	GLModel* mesh;
+	std::string meshName;
 
 	GLuint* texobj;
 	std::string textureName;
@@ -36,13 +39,12 @@ public:
 	Color& GetColor() { return color; }
 	void SetColor(const unsigned char& r, const unsigned char& g, const unsigned char& b);
 
-	void SetTexture(const std::string& s);
+	void SetTexture(const std::string& name);
+	void SetShdrpgm(const std::string& name);
+	void SetMesh(const std::string& name);
 
 	float& GetAlpha() { return alpha; }
 	void SetAlpha(const float& _alpha) { alpha = _alpha; };
-
-	//void SetupShdrpgm();
-	//void SetupVAO();
 
 	void LoadFromJson(const json&) override;
 	json SaveToJson() override;

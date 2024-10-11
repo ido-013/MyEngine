@@ -46,8 +46,6 @@ void Editor::TopBar()
     }
 
     ImGui::EndMainMenuBar();
-
-    //Enum EditorMode (play, pause, edit)
 }
 
 void Editor::Init()

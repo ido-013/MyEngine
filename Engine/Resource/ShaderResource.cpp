@@ -22,7 +22,7 @@ ShaderResource::~ShaderResource()
 void ShaderResource::LoadData(const std::string& filename)
 {
     std::ifstream shaderFile;
-    shaderFile.open(filename);
+    shaderFile.open("Assets/Shader/" + filename);
 
     std::string vShaderFileName;
     std::string fShaderFileName;

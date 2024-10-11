@@ -8,8 +8,9 @@
 
 SpriteComp::SpriteComp(GameObject* _owner) : GraphicComponent(_owner), color(), textureName(), alpha(1), texobj(nullptr)
 {
-    shaderProgram = ResourceManager::GetInstance().GetResourcePointer<GLuint>("Assets/Shader/base.shd");
-    mdl = ResourceManager::GetInstance().GetResourcePointer<GLModel>("Assets/meshes/circle.msh");
+    shaderProgram = ResourceManager::GetInstance().GetResourcePointer<GLuint>("base.shd");
+    mesh = ResourceManager::GetInstance().GetResourcePointer<GLModel>("circle.msh");
+    
     glUseProgram(*shaderProgram);
 }
 
@@ -42,10 +43,10 @@ void SpriteComp::Update()
     glBindTextureUnit(6, *texobj);
     glBindTexture(GL_TEXTURE_2D, *texobj);
 
-    glBindVertexArray(mdl->VAO);
+    glBindVertexArray(mesh->VAO);
     glBindTexture(GL_TEXTURE_2D, 0);
 
-    glDrawElements(mdl->primitive_type, mdl->draw_cnt, GL_UNSIGNED_SHORT, NULL);
+    glDrawElements(mesh->primitive_type, mesh->draw_cnt, GL_UNSIGNED_SHORT, NULL);
 }
 
 void SpriteComp::SetColor(const unsigned char& r, const unsigned char& g, const unsigned char& b)
@@ -64,6 +65,17 @@ void SpriteComp::SetTexture(const std::string& name)
     texobj = ResourceManager::GetInstance().GetResourcePointer<GLuint>(name);
 }
 
+void SpriteComp::SetShdrpgm(const std::string& name)
+{
+    if (shaderProgram)
+        ResourceManager::GetInstance().UnloadResource(textureName);
+}
+
+void SpriteComp::SetMesh(const std::string& name)
+{
+
+}
+
 void SpriteComp::LoadFromJson(const json& data)
 {
     auto compData = data.find("compData");
@@ -74,6 +86,9 @@ void SpriteComp::LoadFromJson(const json& data)
         color.r = it->begin().value();
         color.g = (it->begin() + 1).value();
         color.b = (it->begin() + 2).value();
+
+        it = compData->find("alpha");
+        alpha = it.value();
 
         it = compData->find("textureName");
         textureName = it.value();
@@ -88,7 +103,9 @@ json SpriteComp::SaveToJson()
 
     json compData;
     compData["color"] = { color.r, color.g, color.b };
+    compData["alpha"] = alpha;
     compData["textureName"] = textureName;
+
     data["compData"] = compData;
 
     return data;

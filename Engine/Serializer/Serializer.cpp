@@ -20,16 +20,17 @@ void Serializer::LoadLevel(const std::string& filename)
 	if (!file.is_open())
 		throw std::invalid_argument("Serializer::LoadLevel Invalid filename " + filename);
 
-	json allData;
-	file >> allData;	// the json has all the file data
+	json allDataJson;
+	file >> allDataJson; // the json has all the file data
 
-	for (auto& item : allData)
+	for (auto& item : allDataJson)
 	{
-		GameObject* go = new GameObject;
 		auto objIt = item.find("object");
 
 		if (objIt != item.end())
 		{
+			GameObject* go = GameObjectManager::GetInstance().AddObject(objIt.value());
+
 			auto compIt = item.find("components");
 			if (compIt == item.end())
 				continue;
@@ -43,14 +44,12 @@ void Serializer::LoadLevel(const std::string& filename)
 
 				std::string typeName = dataIt.value().dump();	// convert to string
 				typeName = typeName.substr(1, typeName.size() - 2);
-				std::cout << typeName << std::endl;
 
 				// Look in the regitstry for this type and create it
+				// Add the comp to the GO
 				BaseRTTI* p = Registry::GetInstance().FindAndCreate(typeName, go);
 				if (p != nullptr)
 					p->LoadFromJson(comp);
-
-				// Add the comp to the GO
 			}
 		}
 	}
@@ -58,25 +57,25 @@ void Serializer::LoadLevel(const std::string& filename)
 
 void Serializer::SaveLevel(const std::string& filename)
 {
-	json allData;
+	json allDataJson;
 
 	// Counter instead of name as I do not have one
 	int i = 0;
 
-	for (GameObject* go : GameObjectManager::GetInstance().GetAllObjects())
+	for (const auto& obj : GameObjectManager::GetInstance().GetAllObject())
 	{
-		json obj;
-		obj["object"] = i++;
+		json objJson;
+		objJson["object"] = obj.first;
 
 		json components;
-		for (auto comp : go->GetAllComponent())
+		for (const auto& comp : obj.second->GetAllComponent())
 		{
 			BaseComponent* c = comp.second;
 			components.push_back(c->SaveToJson());
 		}
-		obj["components"] = components;
+		objJson["components"] = components;
 
-		allData.push_back(obj);
+		allDataJson.push_back(objJson);
 	}
 
 	// Open file
@@ -86,7 +85,7 @@ void Serializer::SaveLevel(const std::string& filename)
 	if (!file.is_open())
 		throw std::invalid_argument("Serializer::SaveLevel file write error " + filename);
 
-	file << std::setw(2) << allData;	// Separates in lines and each section
+	file << std::setw(2) << allDataJson;	// Separates in lines and each section
 
 	file.close();
 }

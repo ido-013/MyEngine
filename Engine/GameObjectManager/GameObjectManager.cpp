@@ -6,36 +6,50 @@ GameObjectManager::GameObjectManager()
 
 GameObjectManager::~GameObjectManager()
 {
-	for (auto it : objects)
+	for (auto& it : objects)
 	{
-		if (it)
-			delete it;
+		if (it.second)
+			delete it.second;
 	}
 }
 
-void GameObjectManager::AddObject(GameObject* obj)
+GameObject* GameObjectManager::GetObject(std::string name)
 {
-	objects.push_back(obj);
+	auto it = objects.find(name);
+
+	if (it != objects.end())
+	{
+		return it->second;
+	}
+
+	return nullptr;
 }
 
-void GameObjectManager::RemoveObject(GameObject* obj)
+GameObject* GameObjectManager::AddObject(std::string name)
 {
-	for (auto it = objects.begin(); it != objects.end(); it++)
+	GameObject* go = new GameObject;
+	objects.insert({ name, go });
+
+	return go;
+}
+
+void GameObjectManager::RemoveObject(std::string name)
+{
+	auto it = objects.find(name);
+
+	if (it != objects.end())
 	{
-		if (*it == obj)
-		{
-			delete *it;
-			it = objects.erase(it);
-			break;
-		}
+		delete it->second;
+		objects.erase(it);
 	}
 }
 
 void GameObjectManager::RemoveAllObject()
 {
-	for (auto it = objects.begin(); it != objects.end(); it++)
+	for (auto& it : objects)
 	{
-		delete *it;
+		if (it.second)
+			delete it.second;
 	}
 
 	objects.clear();

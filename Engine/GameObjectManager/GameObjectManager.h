@@ -1,12 +1,12 @@
 #pragma once
-#include <list>
+#include <map>
 #include <string>
 #include "../GameObject/GameObject.h"
 
 class GameObjectManager
 {
 private:
-	std::list<GameObject*> objects;
+	std::map<std::string, GameObject*> objects;
 
 	GameObjectManager();
 	~GameObjectManager();
@@ -15,15 +15,15 @@ private:
 	GameObjectManager& operator =(const GameObjectManager&) = delete;
 
 public:
-	std::list<GameObject*>& GetAllObjects() { return objects; }
-
 	static GameObjectManager& GetInstance()
 	{
 		static GameObjectManager instance;
 		return instance;
 	}
 
-	void AddObject(GameObject* obj);
-	void RemoveObject(GameObject* obj);
+	const std::map<std::string, GameObject*>& GetAllObject() { return objects; }
+	GameObject* GetObject(std::string name);
+	GameObject* AddObject(std::string name);
+	void RemoveObject(std::string name);
 	void RemoveAllObject();
 };

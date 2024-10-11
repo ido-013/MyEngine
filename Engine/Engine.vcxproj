@@ -72,11 +72,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>$(SolutionDir)Extern\glfw\include;$(SolutionDir)Extern\glad\include;$(SolutionDir)Extern\glm\include;$(SolutionDir)Extern\json;$(SolutionDir)Extern\stb;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Extern\glfw\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)Extern\glfw\lib;$(SoltuionDir)Extern\imgui;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>$(SolutionDir)Extern\glfw\include;$(SolutionDir)Extern\glad\include;$(SolutionDir)Extern\glm\include;$(SolutionDir)Extern\json;$(SolutionDir)Extern\stb;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Extern\glfw\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)Extern\glfw\lib;$(SoltuionDir)Extern\imgui;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -147,6 +147,14 @@
     <ClCompile Include="glad.c" />
     <ClCompile Include="GraphicComponent\GraphicComponent.cpp" />
     <ClCompile Include="GraphicComponent\SpriteComp.cpp" />
+    <ClCompile Include="Imgui\imgui.cpp" />
+    <ClCompile Include="Imgui\imgui_demo.cpp" />
+    <ClCompile Include="Imgui\imgui_draw.cpp" />
+    <ClCompile Include="Imgui\imgui_impl_glfw.cpp" />
+    <ClCompile Include="Imgui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="Imgui\imgui_stdlib.cpp" />
+    <ClCompile Include="Imgui\imgui_tables.cpp" />
+    <ClCompile Include="Imgui\imgui_widgets.cpp" />
     <ClCompile Include="Level\TestLevel.cpp" />
     <ClCompile Include="LogicComponent\LogicComponent.cpp" />
     <ClCompile Include="LogicComponent\PlayerComp.cpp" />
@@ -168,6 +176,7 @@
     <ClInclude Include="Camera\Camera.h" />
     <ClInclude Include="ComponentManager\ComponentManager.h" />
     <ClInclude Include="Components.h" />
+    <ClInclude Include="Editor\MainEditor.h" />
     <ClInclude Include="EngineComponent\EngineComponent.h" />
     <ClInclude Include="EngineComponent\RigidbodyComp.h" />
     <ClInclude Include="EngineComponent\TransformComp.h" />
@@ -176,6 +185,16 @@
     <ClInclude Include="GameStateManager\GameStateManager.h" />
     <ClInclude Include="GraphicComponent\GraphicComponent.h" />
     <ClInclude Include="GraphicComponent\SpriteComp.h" />
+    <ClInclude Include="Imgui\imconfig.h" />
+    <ClInclude Include="Imgui\imgui.h" />
+    <ClInclude Include="Imgui\imgui_impl_glfw.h" />
+    <ClInclude Include="Imgui\imgui_impl_opengl3.h" />
+    <ClInclude Include="Imgui\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="Imgui\imgui_internal.h" />
+    <ClInclude Include="Imgui\imgui_stdlib.h" />
+    <ClInclude Include="Imgui\imstb_rectpack.h" />
+    <ClInclude Include="Imgui\imstb_textedit.h" />
+    <ClInclude Include="Imgui\imstb_truetype.h" />
     <ClInclude Include="Level\BaseLevel.h" />
     <ClInclude Include="Level\TestLevel.h" />
     <ClInclude Include="LogicComponent\LogicComponent.h" />
@@ -195,7 +214,11 @@
   <ItemGroup>
     <None Include="ComponentManager\ComponentManager.inl" />
     <None Include="GameObject\GameObject.inl" />
+    <None Include="Imgui\imgui.natstepfilter" />
     <None Include="ResourceManager\ResourceManager.inl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="Imgui\imgui.natvis" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

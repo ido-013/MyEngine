@@ -44,8 +44,6 @@ void GameStateManager::Update()
 
         glClear(GL_COLOR_BUFFER_BIT);
         ComponentManager<GraphicComponent>::GetInstance().Update();
-        glfwSwapBuffers(GLHelper::ptr_window);
-        glfwPollEvents();
     }
 }
 

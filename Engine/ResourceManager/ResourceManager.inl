@@ -21,21 +21,21 @@ inline T* ResourceManager::GetResourcePointer(const std::string& filename)
 		case png:
 		case jpg:
 		case jfif:
-		{
 			res = new TextureResource;
 			break;
-		}
+
 		case mp3:
 		case wav:
-		{
 			res = new AudioResource;
 			break;
-		}
+
 		case msh:
-		{
 			res = new MeshResource;
 			break;
-		}
+
+		case shd:
+			res = new ShaderResource;
+			break;
 
 		default:
 			break;

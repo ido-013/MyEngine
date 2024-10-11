@@ -19,8 +19,7 @@ private:
 	Color color;
 	GLfloat alpha;
 
-	GLuint shaderProgram;
-
+	GLuint* shaderProgram;
 	GLModel* mdl;
 
 	GLuint* texobj;
@@ -42,7 +41,7 @@ public:
 	float& GetAlpha() { return alpha; }
 	void SetAlpha(const float& _alpha) { alpha = _alpha; };
 
-	void SetupShdrpgm();
+	//void SetupShdrpgm();
 	//void SetupVAO();
 
 	void LoadFromJson(const json&) override;

@@ -114,6 +114,9 @@
     <ClCompile Include="Imgui\imgui_widgets.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Editor\Editor.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameObject\GameObject.h">
@@ -227,7 +230,10 @@
     <ClInclude Include="Imgui\imstb_truetype.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Editor\MainEditor.h">
+    <ClInclude Include="Editor\Editor.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="OpenGL\GLShader.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

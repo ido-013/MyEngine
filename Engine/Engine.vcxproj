@@ -138,6 +138,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera\Camera.cpp" />
+    <ClCompile Include="Editor\Editor.cpp" />
     <ClCompile Include="EngineComponent\EngineComponent.cpp" />
     <ClCompile Include="EngineComponent\RigidbodyComp.cpp" />
     <ClCompile Include="EngineComponent\TransformComp.cpp" />
@@ -176,7 +177,7 @@
     <ClInclude Include="Camera\Camera.h" />
     <ClInclude Include="ComponentManager\ComponentManager.h" />
     <ClInclude Include="Components.h" />
-    <ClInclude Include="Editor\MainEditor.h" />
+    <ClInclude Include="Editor\Editor.h" />
     <ClInclude Include="EngineComponent\EngineComponent.h" />
     <ClInclude Include="EngineComponent\RigidbodyComp.h" />
     <ClInclude Include="EngineComponent\TransformComp.h" />
@@ -201,6 +202,7 @@
     <ClInclude Include="LogicComponent\PlayerComp.h" />
     <ClInclude Include="OpenGL\GLHelper.h" />
     <ClInclude Include="OpenGL\GLModel.h" />
+    <ClInclude Include="OpenGL\GLShader.h" />
     <ClInclude Include="Resource\AudioResource.h" />
     <ClInclude Include="Resource\MeshResource.h" />
     <ClInclude Include="Resource\Resource.h" />

@@ -26,6 +26,7 @@ public:
 	void ClearAcceleration();
 
 	void Update() override;
+	bool Edit() override { return true; }
 
 	void LoadFromJson(const json&) override;
 	json SaveToJson() override;

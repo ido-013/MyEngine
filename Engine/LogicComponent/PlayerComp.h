@@ -9,7 +9,9 @@ private:
 public:
 	PlayerComp(GameObject* _owner);
 	~PlayerComp();
+
 	void Update() override;
+	bool Edit() override { return true; };
 
 	void LoadFromJson(const json&) override;
 	json SaveToJson() override;

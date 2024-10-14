@@ -18,6 +18,7 @@ public:
 	~TransformComp();
 
 	void Update() override;
+	bool Edit() override;
 
 	//Gettors
 	const glm::vec2& GetPos() const { return pos; }

@@ -18,7 +18,8 @@ inline T* GameObject::AddComponent(BaseComponent* comp)
 	T* temp = GetComponent<T>();
 	if (temp != nullptr)
 	{
-		return nullptr;
+		delete comp;
+		return temp;
 	}
 
 	component.insert({ T::TypeName, comp });
@@ -40,11 +41,10 @@ inline T* GameObject::GetComponent()
 template<typename T>
 inline void GameObject::DeleteComponent()
 {
-	T* p = GetComponent<T>();
-
-	if (p)
+	auto it = component.find(T::TypeName);
+	if (it != component.end())
 	{
-		delete p;
-		component.erase(typeid(T).name());
+		delete it->second;
+		component.erase(it);
 	}
 }

@@ -4,6 +4,7 @@
 
 #include "../GameObjectManager/GameObjectManager.h"
 #include "../Serializer/Serializer.h"
+
 #include "../RTTI/Registry.h"
 #include "../Components.h"
 
@@ -123,16 +124,14 @@ void Editor::SelectedGameObjectInfo()
     {
         for (auto& it : selected->GetAllComponent())
         {
-            if (ImGui::Button(it.first.c_str()))
-            {
-                
-            }
+            if (!it.second->Edit())
+                break;
         }
 
         ImGui::TreePop();
     }
 
-    if (ImGui::Button("Delete"))
+    if (ImGui::Button("Delete Object"))
     {
         GameObjectManager::GetInstance().RemoveObject(selected->GetName());
         selected = nullptr;

@@ -34,16 +34,17 @@ private:
     void GameObjectList();
     void SelectedGameObjectInfo();
 
-            //if (ComponentBase::Edit()) { } -> override
-            //Transform->Pos
-                //ImGui::InputFloat2("Pos", &pos[0]);
-                //
-                //float t= glm::degrees(rotation);
-                //ImGui::SliderFloat("Rot", &t, -360, 360); 
-                //rotation = glm::radians(t);
-                //
-            //Imgui::TreePop();
-
+    //if (ComponentBase::Edit()) { } -> override
+    //Transform->Pos
+        //
+        //
+        //
+        //
+        //
+        //
+    //Imgui::TreePop();
+    //DeleteComponent
+    //Add delete button to ComponentBase::Edit()
 
     //extra
         //object picking

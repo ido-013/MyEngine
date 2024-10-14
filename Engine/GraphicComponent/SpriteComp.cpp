@@ -2,6 +2,7 @@
 
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
+#include <filesystem>
 
 #include "../ResourceManager/ResourceManager.h"
 #include "../EngineComponent/TransformComp.h"
@@ -13,24 +14,21 @@ SpriteComp::SpriteComp(GameObject* _owner) : GraphicComponent(_owner),
     SetShdrpgm(shaderName);
     SetMesh(meshName);
     SetTexture(textureName);
-    
-    glUseProgram(*shaderProgram);
 }
 
 SpriteComp::~SpriteComp()
 {
-    ResourceManager::GetInstance().UnloadResource(shaderName);
-    ResourceManager::GetInstance().UnloadResource(meshName);
-    ResourceManager::GetInstance().UnloadResource(textureName);
-
-    glUseProgram(0);
-    glBindVertexArray(0);
+    UnsetShdrpgm();
+    UnsetMesh();
+    UnsetTexture();
 }
 
 void SpriteComp::Update()
 {
     TransformComp* t = owner->GetComponent<TransformComp>();
     if (!t) return;
+
+    glUseProgram(*shaderProgram);
 
     GLint loc = glGetUniformLocation(*shaderProgram, "uTex2d");
     if (loc >= 0) {
@@ -54,6 +52,93 @@ void SpriteComp::Update()
     glBindTexture(GL_TEXTURE_2D, 0);
 
     glDrawElements(mesh->primitive_type, mesh->draw_cnt, GL_UNSIGNED_SHORT, NULL);
+
+    glUseProgram(0);
+}
+
+bool SpriteComp::Edit()
+{
+    if (ImGui::TreeNode(TypeName))
+    {
+        int colorArray[3] = { color.r, color.g, color.b };
+        ImGui::InputInt3("Color", &colorArray[0]);
+        color.r = std::max(std::min(colorArray[0], 255), 0);
+        color.g = std::max(std::min(colorArray[1], 255), 0);
+        color.b = std::max(std::min(colorArray[2], 255), 0);
+
+        ImGui::InputFloat("Alpha", &alpha);
+        alpha = alpha < 0 ? 0 : (alpha > 1 ? 1 : alpha);
+
+        std::string filename;
+        std::string extension;
+
+        //Change Shader
+        if (ImGui::BeginCombo("Shader", shaderName.c_str()))
+        {
+            for (const auto& entry : std::filesystem::directory_iterator("Assets/Shader"))
+            {
+                filename = entry.path().filename().string();
+                extension = entry.path().extension().string();
+
+                if (extension.compare(".shd") != 0)
+                    continue;
+
+                if (ImGui::MenuItem(filename.c_str()))
+                {
+                    SetShdrpgm(filename);
+                }
+            }
+
+            ImGui::EndCombo();
+        }
+        
+        //Change Mesh
+        if (ImGui::BeginCombo("Mesh", meshName.c_str()))
+        {
+            for (const auto& entry : std::filesystem::directory_iterator("Assets/Mesh"))
+            {
+                filename = entry.path().filename().string();
+                extension = entry.path().extension().string();
+
+                if (extension.compare(".msh") != 0)
+                    continue;
+
+                if (ImGui::MenuItem(filename.c_str()))
+                {
+                    SetMesh(filename);
+                }
+            }
+
+            ImGui::EndCombo();
+        }
+        
+        //Change Texture
+        if (ImGui::BeginCombo("Texture", textureName.c_str()))
+        {
+            for (const auto& entry : std::filesystem::directory_iterator("Assets/Texture"))
+            {
+                filename = entry.path().filename().string();
+
+                if (ImGui::MenuItem(filename.c_str()))
+                {
+                    SetTexture(filename);
+                }
+            }
+
+            ImGui::EndCombo();
+        }
+
+        if (ImGui::Button("Delete Component"))
+        {
+            owner->DeleteComponent<SpriteComp>();
+            ImGui::TreePop();
+            return false;
+        }
+
+        ImGui::TreePop();
+    }
+
+    return true;
 }
 
 void SpriteComp::SetColor(const unsigned char& r, const unsigned char& g, const unsigned char& b)
@@ -63,19 +148,10 @@ void SpriteComp::SetColor(const unsigned char& r, const unsigned char& g, const 
 	color.b = b;
 }
 
-void SpriteComp::SetTexture(const std::string& name)
-{
-    if (texobj)
-        ResourceManager::GetInstance().UnloadResource(textureName);
-
-	textureName = name;
-    texobj = ResourceManager::GetInstance().GetResourcePointer<GLuint>(name);
-}
-
 void SpriteComp::SetShdrpgm(const std::string& name)
 {
     if (shaderProgram)
-        ResourceManager::GetInstance().UnloadResource(shaderName);
+        UnsetShdrpgm();
 
     shaderName = name;
     shaderProgram = ResourceManager::GetInstance().GetResourcePointer<GLuint>(name);
@@ -84,10 +160,35 @@ void SpriteComp::SetShdrpgm(const std::string& name)
 void SpriteComp::SetMesh(const std::string& name)
 {
     if (mesh)
-        ResourceManager::GetInstance().UnloadResource(meshName);
+        UnsetMesh();
 
     meshName = name;
     mesh = ResourceManager::GetInstance().GetResourcePointer<GLModel>(meshName);
+}
+
+void SpriteComp::SetTexture(const std::string& name)
+{
+    if (texobj)
+        UnsetTexture();
+
+	textureName = name;
+    texobj = ResourceManager::GetInstance().GetResourcePointer<GLuint>(name);
+}
+
+
+void SpriteComp::UnsetShdrpgm()
+{
+    ResourceManager::GetInstance().UnloadResource(shaderName);
+}
+
+void SpriteComp::UnsetMesh()
+{
+    ResourceManager::GetInstance().UnloadResource(meshName);
+}
+
+void SpriteComp::UnsetTexture()
+{
+    ResourceManager::GetInstance().UnloadResource(textureName);
 }
 
 void SpriteComp::LoadFromJson(const json& data)

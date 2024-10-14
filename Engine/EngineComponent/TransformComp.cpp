@@ -42,8 +42,6 @@ TransformComp::TransformComp(GameObject* _owner) : EngineComponent(_owner), pos(
 
 	scale.x = 1;
 	scale.y = 1;
-
-	CalculateMatrix();
 }
 
 TransformComp::~TransformComp()
@@ -53,28 +51,45 @@ TransformComp::~TransformComp()
 
 void TransformComp::Update()
 {
+	CalculateMatrix();
+}
 
+bool TransformComp::Edit()
+{
+	if (ImGui::TreeNode(TypeName))
+	{
+		ImGui::InputFloat2("Pos", &pos[0]);
+
+		ImGui::InputFloat2("Scale", &scale[0]);
+
+		ImGui::SliderFloat("Rot", &rot, -360, 360);
+
+		if (ImGui::Button("Delete Component"))
+		{
+			owner->DeleteComponent<TransformComp>();
+			ImGui::TreePop();
+			return false;
+		}
+
+		ImGui::TreePop();
+	}
+
+	return true;
 }
 
 void TransformComp::SetPos(const glm::vec2& otherPos)
 {
 	this->pos = otherPos;
-
-	CalculateMatrix();
 }
 
 void TransformComp::SetScale(const glm::vec2& otherScale)
 {
 	this->scale = otherScale;
-
-	CalculateMatrix();
 }
 
 void TransformComp::SetRot(const float& otherRot)
 {
 	this->rot = otherRot;
-
-	CalculateMatrix();
 }
 
 void TransformComp::PrintMatrix()
@@ -108,11 +123,6 @@ void TransformComp::LoadFromJson(const json& data)
 		auto r = compData->find("rotation");
 		rot = r.value();
 	}
-
-	// Data is loaded
-
-	// Utilize the data
-	CalculateMatrix();
 }
 
 json TransformComp::SaveToJson()

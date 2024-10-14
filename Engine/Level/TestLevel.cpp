@@ -15,6 +15,7 @@
 #include "../Camera/Camera.h"
 
 GameObject* tmp = nullptr;
+GameObject* tmp2 = nullptr;
 TransformComp* t = nullptr;
 SpriteComp* s = nullptr;
 

@@ -4,7 +4,10 @@
 #include "../Imgui/imgui_impl_glfw.h"
 #include "../Imgui/imgui_impl_opengl3.h"
 
+#include "../GameObject/GameObject.h"
+
 #include <iostream>
+#include <vector>
 
 class Editor
 {
@@ -15,21 +18,22 @@ public:
     };
 
 private:
-    static char buffer[100];
-    static void TopBar();
+    Editor();
+    ~Editor();
 
-    //ShowAllObjects() - f
-        //GameObject* selected (private)
+    Editor(const Editor& other) = delete;
+    const Editor& operator=(const Editor& other) = delete;
 
-    //SelectedObjectWindow() - f
-        //AddComponent
-        //TODO: Move to factory
-        //if(ImGui::TreeNode("Add Component"))
-        //std::vector<std::string> comps = {Transform::GetName(), Sprite::GetName()};
-        //for (auto& compType : comps) {if (ImGui::Button(compTyp.c_str())) { selected->CreateComponent(compType); }
-        //SeleteComponent
-            //Call Component Edit function (virtual bool Edit() = 0)
-            //Imgui::TreeNode()
+    char buffer[100];
+    GameObject* selected;
+    std::vector<std::string> comps;
+
+    void ClearBuffer();
+
+    void TopBar();
+    void GameObjectList();
+    void SelectedGameObjectInfo();
+
             //if (ComponentBase::Edit()) { } -> override
             //Transform->Pos
                 //ImGui::InputFloat2("Pos", &pos[0]);
@@ -39,18 +43,22 @@ private:
                 //rotation = glm::radians(t);
                 //
             //Imgui::TreePop();
-        // 
-        //DeleteComponent
-        //Add delete button to ComponentBase::Edit()
-        //find / erase / delete / treePop / return false
 
-    //object picking
-    //different camera
-    //function key
-        //ctrl + '' -> use stack
+
+    //extra
+        //object picking
+        //different camera
+        //function key
+            //ctrl + '' -> use stack
 
 public:
-    static void Init();
-    static void Update();
-    static void Exit();
+    static Editor& GetInstance()
+    {
+        static Editor instance;
+        return instance;
+    }
+
+    void Init();
+    void Update();
+    void Exit();
 };

@@ -30,7 +30,9 @@
             255
           ],
           "alpha": 1.0,
-          "textureName": "GSwftl7boAADleI.jfif"
+          "shaderName": "base.shd",
+          "meshName": "square.msh",
+          "textureName": "PlanetTexture.png"
         }
       },
       {

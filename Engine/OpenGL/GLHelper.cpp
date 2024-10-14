@@ -52,6 +52,9 @@ bool GLHelper::Init(GLfloat _width, GLfloat _height, std::string _title)
         return -1;
     }
 
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     return 0;
 }
 
@@ -92,7 +95,7 @@ void GLHelper::key_cb(GLFWwindow* pwin, int key, int scancode, int action, int m
 
 void GLHelper::mousebutton_cb(GLFWwindow* pwin, int button, int action, int mod) 
 {
-    switch (button) {
+   /* switch (button) {
     case GLFW_MOUSE_BUTTON_LEFT:
 #ifdef _DEBUG
         std::cout << "Left mouse button ";
@@ -115,22 +118,22 @@ void GLHelper::mousebutton_cb(GLFWwindow* pwin, int button, int action, int mod)
         std::cout << "released!!!" << std::endl;
 #endif
         break;
-    }
+    }*/
 }
 
 void GLHelper::mousepos_cb(GLFWwindow* pwin, double xpos, double ypos) 
 {
-#ifdef _DEBUG
-    std::cout << "Mouse cursor position: (" << xpos << ", " << ypos << ")" << std::endl;
-#endif
+//#ifdef _DEBUG
+//    std::cout << "Mouse cursor position: (" << xpos << ", " << ypos << ")" << std::endl;
+//#endif
 }
 
 void GLHelper::mousescroll_cb(GLFWwindow* pwin, double xoffset, double yoffset)
 {
-#ifdef _DEBUG
-    std::cout << "Mouse scroll wheel offset: ("
-        << xoffset << ", " << yoffset << ")" << std::endl;
-#endif
+//#ifdef _DEBUG
+//    std::cout << "Mouse scroll wheel offset: ("
+//        << xoffset << ", " << yoffset << ")" << std::endl;
+//#endif
 }
 
 void GLHelper::error_cb(int error, char const* description) 

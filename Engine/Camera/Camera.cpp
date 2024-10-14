@@ -4,6 +4,7 @@
 
 Camera::Camera() : x(0), y(0), height(2), world_to_ndc_xform()
 {
+	CalculateMatrix();
 }
 
 Camera::~Camera()

@@ -8,6 +8,8 @@
 #include "../EngineComponent/EngineComponent.h"
 #include "../GraphicComponent/GraphicComponent.h"
 
+#include "../Camera/Camera.h"
+
 #include "../Level/BaseLevel.h"
 
 GameStateManager::GameStateManager() : previousLevel(nullptr), currentLevel(nullptr) {}
@@ -23,8 +25,7 @@ GameStateManager::~GameStateManager()
 
 void GameStateManager::Init()
 {
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    Camera::GetInstance();
 
     if (currentLevel)
     {

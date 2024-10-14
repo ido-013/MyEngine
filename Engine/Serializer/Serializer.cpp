@@ -29,7 +29,7 @@ void Serializer::LoadLevel(const std::string& filename)
 
 		if (objIt != item.end())
 		{
-			GameObject* go = GameObjectManager::GetInstance().AddObject(objIt.value());
+			GameObject* go = GameObjectManager::GetInstance().CreateObject(objIt.value());
 
 			auto compIt = item.find("components");
 			if (compIt == item.end())

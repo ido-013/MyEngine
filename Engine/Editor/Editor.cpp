@@ -2,50 +2,143 @@
 
 #include "../OpenGL/GLHelper.h"
 
-char Editor::buffer[100] = { '\0' };
+#include "../GameObjectManager/GameObjectManager.h"
+#include "../Serializer/Serializer.h"
+#include "../RTTI/Registry.h"
+#include "../Components.h"
+
+Editor::Editor() : buffer(), selected(nullptr)
+{
+    comps =
+    {
+        TransformComp::TypeName,
+        SpriteComp::TypeName
+    };
+}
+
+Editor::~Editor()
+{
+
+}
+
+void Editor::ClearBuffer()
+{
+    for (char& c : buffer)
+    {
+        c = '\0';
+    }
+}
 
 void Editor::TopBar()
 {
     ImGui::BeginMainMenuBar();
 
-    ImGui::Text("Hello World %i", 56);
-
-    if (ImGui::Button("Test Button"))
-    {
-        //When I press the button, this happens
-        std::cout << "Pressed!" << std::endl;
-    }
-
     if (ImGui::BeginMenu("New GameObject"))
     {
-        ImGui::Text("New Game Object Menu");
-
-        ImGui::InputText("GO Name", buffer, 100);
-        //ImGui::InputText("GO Name", this->buffer, 100);
+        ImGui::InputText("Name", buffer, 100);
 
         if (ImGui::Button("Create"))
         {
-            //Create Game Object
-            //GameObjectManager::GetInstance().Create(buffer);
+            GameObjectManager::GetInstance().CreateObject(buffer);
+            ClearBuffer();
         }
 
-        //New Level
-            //selected = nullptr
-        //Save Level
-        //Load Level
-            //selected = nullptr
+        ImGui::EndMenu();
+    }
 
-        ImGui::MenuItem("asdf");
+    if (ImGui::Button("New Level"))
+    {
+        selected = nullptr;
 
-        if (ImGui::BeginMenu("GameObject"))
+        GameObjectManager::GetInstance().RemoveAllObject();
+    }
+
+    if (ImGui::BeginMenu("Load Level"))
+    {
+        ImGui::InputText("Name", buffer, 100);
+
+        if (ImGui::Button("Load"))
         {
-            ImGui::EndMenu();
+            selected = nullptr;
+
+            Serializer::GetInstance().LoadLevel(buffer);
+            ClearBuffer();
+        }
+
+        ImGui::EndMenu();
+    }
+
+    if (ImGui::BeginMenu("Save Level"))
+    { 
+        ImGui::InputText("Name", buffer, 100);
+
+        if (ImGui::Button("Save"))
+        {
+            Serializer::GetInstance().SaveLevel(buffer);
+            ClearBuffer();
         }
 
         ImGui::EndMenu();
     }
 
     ImGui::EndMainMenuBar();
+}
+
+void Editor::GameObjectList()
+{
+    ImGui::Begin("Game Object List");
+
+    for (auto& it : GameObjectManager::GetInstance().GetAllObject())
+    {
+        if (ImGui::Button(it.first.c_str()))
+        {
+            selected = it.second;
+        }
+    }
+
+    ImGui::End();
+}
+
+void Editor::SelectedGameObjectInfo()
+{
+    if (selected == nullptr)
+        return;
+
+    ImGui::Begin("Game Object");
+
+    if (ImGui::TreeNode("Add Component"))
+    {
+        for (auto& compType : comps) 
+        {
+            if (ImGui::Button(compType.c_str()))
+            {
+                Registry::GetInstance().FindAndCreate(compType, selected);
+            }
+        }
+
+        ImGui::TreePop();
+    }
+
+    if (ImGui::TreeNode("Component"))
+    {
+        for (auto& it : selected->GetAllComponent())
+        {
+            if (ImGui::Button(it.first.c_str()))
+            {
+                
+            }
+        }
+
+        ImGui::TreePop();
+    }
+
+    if (ImGui::Button("Delete"))
+    {
+        GameObjectManager::GetInstance().RemoveObject(selected->GetName());
+        selected = nullptr;
+    }
+
+    ImGui::End();
 }
 
 void Editor::Init()
@@ -63,15 +156,15 @@ void Editor::Init()
 
 void Editor::Update()
 {
-    return;
-
     // Start the Dear ImGui frame
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
-    ImGui::ShowDemoWindow(); // Show demo window! :)
+    // ImGui::ShowDemoWindow(); // Show demo window! :)
 
     TopBar();
+    GameObjectList();
+    SelectedGameObjectInfo();
 
     // Rendering
     // (Your code clears your framebuffer, renders your other stuff etc.)

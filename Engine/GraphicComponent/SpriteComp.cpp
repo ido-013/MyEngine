@@ -6,16 +6,23 @@
 #include "../ResourceManager/ResourceManager.h"
 #include "../EngineComponent/TransformComp.h"
 
-SpriteComp::SpriteComp(GameObject* _owner) : GraphicComponent(_owner), color(), textureName(), alpha(1), texobj(nullptr)
+SpriteComp::SpriteComp(GameObject* _owner) : GraphicComponent(_owner), 
+                                             color({255, 255, 255}), alpha(1), texobj(nullptr),
+                                             shaderName("base.shd"), meshName("square.msh"), textureName("PlanetTexture.png")
 {
-    shaderProgram = ResourceManager::GetInstance().GetResourcePointer<GLuint>("base.shd");
-    mesh = ResourceManager::GetInstance().GetResourcePointer<GLModel>("circle.msh");
+    SetShdrpgm(shaderName);
+    SetMesh(meshName);
+    SetTexture(textureName);
     
     glUseProgram(*shaderProgram);
 }
 
 SpriteComp::~SpriteComp()
 {
+    ResourceManager::GetInstance().UnloadResource(shaderName);
+    ResourceManager::GetInstance().UnloadResource(meshName);
+    ResourceManager::GetInstance().UnloadResource(textureName);
+
     glUseProgram(0);
     glBindVertexArray(0);
 }
@@ -68,12 +75,19 @@ void SpriteComp::SetTexture(const std::string& name)
 void SpriteComp::SetShdrpgm(const std::string& name)
 {
     if (shaderProgram)
-        ResourceManager::GetInstance().UnloadResource(textureName);
+        ResourceManager::GetInstance().UnloadResource(shaderName);
+
+    shaderName = name;
+    shaderProgram = ResourceManager::GetInstance().GetResourcePointer<GLuint>(name);
 }
 
 void SpriteComp::SetMesh(const std::string& name)
 {
+    if (mesh)
+        ResourceManager::GetInstance().UnloadResource(meshName);
 
+    meshName = name;
+    mesh = ResourceManager::GetInstance().GetResourcePointer<GLModel>(meshName);
 }
 
 void SpriteComp::LoadFromJson(const json& data)
@@ -90,6 +104,14 @@ void SpriteComp::LoadFromJson(const json& data)
         it = compData->find("alpha");
         alpha = it.value();
 
+        it = compData->find("shaderName");
+        shaderName = it.value();
+        SetShdrpgm(shaderName);
+
+        it = compData->find("meshName");
+        meshName = it.value();
+        SetMesh(meshName);
+
         it = compData->find("textureName");
         textureName = it.value();
         SetTexture(textureName);
@@ -104,6 +126,8 @@ json SpriteComp::SaveToJson()
     json compData;
     compData["color"] = { color.r, color.g, color.b };
     compData["alpha"] = alpha;
+    compData["shaderName"] = shaderName;
+    compData["meshName"] = meshName;
     compData["textureName"] = textureName;
 
     data["compData"] = compData;

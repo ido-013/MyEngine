@@ -20,22 +20,15 @@ SpriteComp* s = nullptr;
 
 void level::TestLevel::Init()
 {
-    Camera::GetInstance().SetPos(0, 0);
-
-    tmp = GameObjectManager::GetInstance().AddObject("temp");
+    tmp = GameObjectManager::GetInstance().CreateObject("temp");
 
     t = tmp->AddComponent<TransformComp>();
     t->SetScale({ 600, 600 });
 
     s = tmp->AddComponent<SpriteComp>();
-    s->SetTexture("GSwftl7boAADleI.jfif");
-    s->SetColor(255, 255, 255);
-    s->SetAlpha(1.f);
 
     RigidbodyComp* r = tmp->AddComponent<RigidbodyComp>();
     PlayerComp* p = tmp->AddComponent<PlayerComp>();
-
-    Serializer::GetInstance().SaveLevel("t");
 }
 
 void level::TestLevel::Update()

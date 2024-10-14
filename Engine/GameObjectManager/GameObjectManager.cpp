@@ -25,9 +25,9 @@ GameObject* GameObjectManager::GetObject(std::string name)
 	return nullptr;
 }
 
-GameObject* GameObjectManager::AddObject(std::string name)
+GameObject* GameObjectManager::CreateObject(std::string name)
 {
-	GameObject* go = new GameObject;
+	GameObject* go = new GameObject(name);
 	objects.insert({ name, go });
 
 	return go;

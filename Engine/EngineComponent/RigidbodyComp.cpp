@@ -63,7 +63,7 @@ void RigidbodyComp::ClearAcceleration()
 void RigidbodyComp::Update()
 {
 	//float dt = (float)AEFrameRateControllerGetFrameTime();
-	float dt = GLHelper::delta_time;
+	float dt = (float)GLHelper::delta_time;
 
 	//Get the transform
 	TransformComp* t = owner->GetComponent<TransformComp>();

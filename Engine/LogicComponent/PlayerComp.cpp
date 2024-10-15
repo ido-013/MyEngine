@@ -1,7 +1,9 @@
 #include "PlayerComp.h"
 
 #include <string>
+
 #include "../OpenGL/GLHelper.h"
+
 #include "../EngineComponent/TransformComp.h"
 #include "../EngineComponent/RigidbodyComp.h"
 #include "../GraphicComponent/SpriteComp.h"
@@ -45,6 +47,25 @@ void PlayerComp::Update()
 	{
 		r->AddVelocity(speed, 0);
 	}
+}
+
+bool PlayerComp::Edit()
+{
+	if (ImGui::TreeNode(TypeName))
+	{
+		ImGui::InputFloat("Speed", &speed);
+
+		if (ImGui::Button("Delete Component"))
+		{
+			owner->DeleteComponent<PlayerComp>();
+			ImGui::TreePop();
+			return false;
+		}
+
+		ImGui::TreePop();
+	}
+
+	return true;
 }
 
 void PlayerComp::LoadFromJson(const json& data)

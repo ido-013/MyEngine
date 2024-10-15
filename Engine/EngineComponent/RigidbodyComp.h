@@ -13,6 +13,8 @@ private:
 	glm::vec2 acceleration;
 	glm::vec2 maxAcceleration;
 
+	bool CheckEpsilon(float value);
+
 public:
 	RigidbodyComp(GameObject* _owner);
 	~RigidbodyComp();
@@ -26,7 +28,7 @@ public:
 	void ClearAcceleration();
 
 	void Update() override;
-	bool Edit() override { return true; }
+	bool Edit() override;
 
 	void LoadFromJson(const json&) override;
 	json SaveToJson() override;

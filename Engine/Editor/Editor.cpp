@@ -2,6 +2,8 @@
 
 #include "../OpenGL/GLHelper.h"
 
+#include "../Imgui/imgui_stdlib.h"
+
 #include "../GameObjectManager/GameObjectManager.h"
 #include "../Serializer/Serializer.h"
 
@@ -13,7 +15,9 @@ Editor::Editor() : buffer(), selected(nullptr)
     comps =
     {
         TransformComp::TypeName,
-        SpriteComp::TypeName
+        SpriteComp::TypeName,
+        RigidbodyComp::TypeName,
+        PlayerComp::TypeName
     };
 }
 
@@ -30,53 +34,64 @@ void Editor::ClearBuffer()
     }
 }
 
+bool Editor::SameLineButton(const char* label)
+{
+    ImGui::SameLine();
+    return ImGui::Button(label);
+}
+
 void Editor::TopBar()
 {
     ImGui::BeginMainMenuBar();
 
-    if (ImGui::BeginMenu("New GameObject"))
+    if (ImGui::BeginMenu("Game Object"))
     {
-        ImGui::InputText("Name", buffer, 100);
-
-        if (ImGui::Button("Create"))
+        if (ImGui::BeginMenu("New Game Object"))
         {
-            GameObjectManager::GetInstance().CreateObject(buffer);
-            ClearBuffer();
+            if (ImGui::InputText("##", buffer, 100, ImGuiInputTextFlags_EnterReturnsTrue) || SameLineButton("Create"))
+            {
+                GameObjectManager::GetInstance().CreateObject(buffer);
+                ClearBuffer();
+            }
+
+            ImGui::EndMenu();
         }
 
         ImGui::EndMenu();
     }
+    
 
-    if (ImGui::Button("New Level"))
+    if (ImGui::BeginMenu("Level"))
     {
-        selected = nullptr;
-
-        GameObjectManager::GetInstance().RemoveAllObject();
-    }
-
-    if (ImGui::BeginMenu("Load Level"))
-    {
-        ImGui::InputText("Name", buffer, 100);
-
-        if (ImGui::Button("Load"))
+        if (ImGui::MenuItem("New Level")) 
         {
             selected = nullptr;
 
-            Serializer::GetInstance().LoadLevel(buffer);
-            ClearBuffer();
+            GameObjectManager::GetInstance().RemoveAllObject();
         }
 
-        ImGui::EndMenu();
-    }
-
-    if (ImGui::BeginMenu("Save Level"))
-    { 
-        ImGui::InputText("Name", buffer, 100);
-
-        if (ImGui::Button("Save"))
+        if (ImGui::BeginMenu("Load Level"))
         {
-            Serializer::GetInstance().SaveLevel(buffer);
-            ClearBuffer();
+            if (ImGui::InputText("##", buffer, 100, ImGuiInputTextFlags_EnterReturnsTrue) || SameLineButton("Load"))
+            {
+                selected = nullptr;
+
+                Serializer::GetInstance().LoadLevel(buffer);
+                ClearBuffer();
+            }
+
+            ImGui::EndMenu();
+        }
+
+        if (ImGui::BeginMenu("Save Level"))
+        {
+            if (ImGui::InputText("##", buffer, 100, ImGuiInputTextFlags_EnterReturnsTrue) || SameLineButton("Save"))
+            {
+                Serializer::GetInstance().SaveLevel(buffer);
+                ClearBuffer();
+            }
+
+            ImGui::EndMenu();
         }
 
         ImGui::EndMenu();
@@ -107,6 +122,8 @@ void Editor::SelectedGameObjectInfo()
 
     ImGui::Begin("Game Object");
 
+    ImGui::BulletText(("Name: " + selected->GetName()).c_str());
+
     if (ImGui::TreeNode("Add Component"))
     {
         for (auto& compType : comps) 
@@ -129,6 +146,12 @@ void Editor::SelectedGameObjectInfo()
         }
 
         ImGui::TreePop();
+    }
+
+    if (ImGui::InputText("##Name", buffer, 100, ImGuiInputTextFlags_EnterReturnsTrue) || SameLineButton("Rename"))
+    {
+        GameObjectManager::GetInstance().RenameObject(selected->GetName(), buffer);
+        ClearBuffer();
     }
 
     if (ImGui::Button("Delete Object"))
@@ -159,7 +182,7 @@ void Editor::Update()
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
-    // ImGui::ShowDemoWindow(); // Show demo window! :)
+    //ImGui::ShowDemoWindow(); // Show demo window! :)
 
     TopBar();
     GameObjectList();

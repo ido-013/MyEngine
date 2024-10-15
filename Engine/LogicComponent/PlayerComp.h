@@ -11,7 +11,7 @@ public:
 	~PlayerComp();
 
 	void Update() override;
-	bool Edit() override { return true; };
+	bool Edit() override;
 
 	void LoadFromJson(const json&) override;
 	json SaveToJson() override;

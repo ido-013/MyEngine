@@ -5,6 +5,11 @@
 
 #include <iostream>
 
+bool RigidbodyComp::CheckEpsilon(float value)
+{
+	return abs(value) < 0.001;
+}
+
 RigidbodyComp::RigidbodyComp(GameObject* _owner) : EngineComponent(_owner), velocity(), maxVelocity()
 {
 	velocity.x = 0;
@@ -62,12 +67,11 @@ void RigidbodyComp::ClearAcceleration()
 
 void RigidbodyComp::Update()
 {
-	//float dt = (float)AEFrameRateControllerGetFrameTime();
-	float dt = (float)GLHelper::delta_time;
-
 	//Get the transform
 	TransformComp* t = owner->GetComponent<TransformComp>();
 	if (!t)	return;
+
+	float dt = (float)GLHelper::delta_time;
 
 	velocity.x += acceleration.x * dt;
 	velocity.y += acceleration.y * dt;
@@ -78,14 +82,41 @@ void RigidbodyComp::Update()
 	velocity.x /= drag;
 	velocity.y /= drag;
 
-	////If im too low, just set to 0
-	/*if (CheckEpsilon(velocity.x) == false)
+	//If im too low, just set to 0
+	if (CheckEpsilon(velocity.x))
 		velocity.x = 0;
 
-	if (CheckEpsilon(velocity.y) == false)
-		velocity.y = 0;*/
+	if (CheckEpsilon(velocity.y))
+		velocity.y = 0;
 
 	t->SetPos({ x, y });
+}
+
+bool RigidbodyComp::Edit()
+{
+	if (ImGui::TreeNode(TypeName))
+	{
+		ImGui::InputFloat2("Velocity", &velocity[0], "%.3f", ImGuiInputTextFlags_EnterReturnsTrue);
+
+		ImGui::InputFloat2("MaxVelocity", &maxVelocity[0], "%.3f", ImGuiInputTextFlags_EnterReturnsTrue);
+
+		ImGui::InputFloat2("Acceleration", &acceleration[0], "%.3f", ImGuiInputTextFlags_EnterReturnsTrue);
+
+		ImGui::InputFloat2("MaxAcceleration", &maxAcceleration[0], "%.3f", ImGuiInputTextFlags_EnterReturnsTrue);
+
+		ImGui::InputFloat("Drag", &drag);
+
+		if (ImGui::Button("Delete Component"))
+		{
+			owner->DeleteComponent<RigidbodyComp>();
+			ImGui::TreePop();
+			return false;
+		}
+
+		ImGui::TreePop();
+	}
+
+	return true;
 }
 
 void RigidbodyComp::LoadFromJson(const json& data)
@@ -101,6 +132,17 @@ void RigidbodyComp::LoadFromJson(const json& data)
 		it = compData->find("maxVelocity");
 		maxVelocity.x = it->begin().value();
 		maxVelocity.y = (it->begin() + 1).value();
+
+		it = compData->find("acceleration");
+		acceleration.x = it->begin().value();
+		acceleration.y = (it->begin() + 1).value();
+
+		it = compData->find("maxAcceleration");
+		maxAcceleration.x = it->begin().value();
+		maxAcceleration.y = (it->begin() + 1).value();
+
+		it = compData->find("drag");
+		drag = it.value();
 	}
 }
 
@@ -112,6 +154,10 @@ json RigidbodyComp::SaveToJson()
 	json compData;
 	compData["velocity"] = { velocity.x, velocity.y };
 	compData["maxVelocity"] = { maxVelocity.x, maxVelocity.y };
+	compData["acceleration"] = { acceleration.x, acceleration.y };
+	compData["maxAcceleration"] = { maxAcceleration.x, maxAcceleration.y };
+	compData["drag"] = drag;
+
 	data["compData"] = compData;
 
 	return data;

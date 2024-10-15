@@ -29,6 +29,7 @@ private:
     std::vector<std::string> comps;
 
     void ClearBuffer();
+    bool SameLineButton(const char* label);
 
     void TopBar();
     void GameObjectList();

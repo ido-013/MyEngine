@@ -3,8 +3,6 @@
 
 class AudioResource : public Resource
 {
-private:
-
 public:
 	AudioResource() = default;
 	~AudioResource();

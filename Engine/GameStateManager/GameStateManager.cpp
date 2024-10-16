@@ -8,6 +8,7 @@
 #include "../EngineComponent/EngineComponent.h"
 #include "../GraphicComponent/GraphicComponent.h"
 
+#include "../Editor/Editor.h";
 #include "../Camera/Camera.h"
 
 #include "../Level/BaseLevel.h"
@@ -37,8 +38,15 @@ void GameStateManager::Update()
 {
     if (currentLevel)
     {
-        ComponentManager<LogicComponent>::GetInstance().Update();
-        ComponentManager<EngineComponent>::GetInstance().Update();
+        Editor::EditorMode editorMode = Editor::GetInstance().GetMode();
+
+        if (editorMode == Editor::PLAY)
+            ComponentManager<LogicComponent>::GetInstance().Update();
+
+        if (editorMode != Editor::PAUSE)
+            ComponentManager<EngineComponent>::GetInstance().Update();
+
+        Camera::GetInstance().Update();
 
         if (currentLevel)
             currentLevel->Update();

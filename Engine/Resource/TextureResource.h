@@ -4,7 +4,7 @@
 class TextureResource : public Resource
 {
 public:
+	TextureResource() = default;
 	~TextureResource();
-
 	void LoadData(const std::string& filename) override;
 };

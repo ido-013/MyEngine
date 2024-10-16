@@ -37,6 +37,10 @@ inline T* ResourceManager::GetResourcePointer(const std::string& filename)
 			res = new ShaderResource;
 			break;
 
+		case prefab:
+			res = new PrefabResource;
+			break;
+
 		default:
 			break;
 		}

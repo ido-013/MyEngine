@@ -14,7 +14,9 @@ class Editor
 public:
     enum EditorMode
     {
-        play, pause, edit
+        PLAY,
+        EDIT,
+        PAUSE,
     };
 
 private:
@@ -24,6 +26,7 @@ private:
     Editor(const Editor& other) = delete;
     const Editor& operator=(const Editor& other) = delete;
 
+    EditorMode mode;
     char buffer[100];
     GameObject* selected;
     std::vector<std::string> comps;
@@ -31,21 +34,10 @@ private:
     void ClearBuffer();
     bool SameLineButton(const char* label);
 
+    void ChangeMode();
     void TopBar();
     void GameObjectList();
     void SelectedGameObjectInfo();
-
-    //if (ComponentBase::Edit()) { } -> override
-    //Transform->Pos
-        //
-        //
-        //
-        //
-        //
-        //
-    //Imgui::TreePop();
-    //DeleteComponent
-    //Add delete button to ComponentBase::Edit()
 
     //extra
         //object picking
@@ -59,6 +51,8 @@ public:
         static Editor instance;
         return instance;
     }
+
+    const EditorMode& GetMode() const { return mode; }
 
     void Init();
     void Update();

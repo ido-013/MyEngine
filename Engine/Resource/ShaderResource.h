@@ -4,6 +4,7 @@
 class ShaderResource : public Resource
 {
 public:
+	ShaderResource() = default;
 	~ShaderResource();
 	void LoadData(const std::string& filename) override;
 };

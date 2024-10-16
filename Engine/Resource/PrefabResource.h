@@ -1,10 +1,10 @@
 #pragma once
 #include "Resource.h"
 
-class MeshResource : public Resource
+class PrefabResource : public Resource
 {
 public:
-	MeshResource() = default;
-	~MeshResource();
+	PrefabResource() = default;
+	~PrefabResource();
 	void LoadData(const std::string& filename) override;
 };

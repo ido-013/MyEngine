@@ -4,3 +4,4 @@
 #include "AudioResource.h"
 #include "ShaderResource.h"
 #include "MeshResource.h"
+#include "PrefabResource.h"

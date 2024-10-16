@@ -27,7 +27,8 @@ private:
 		wav,
 		mp3,
 		msh,
-		shd
+		shd,
+		prefab,
 	};
 
 	std::map<std::string, fileExt> stringToEnum =
@@ -38,7 +39,8 @@ private:
 		{"wav", wav},
 		{"mp3", mp3},
 		{"msh", msh},
-		{"shd", shd}
+		{"shd", shd},
+		{"prefab", prefab},
 	};
 
 public:

@@ -1,4 +1,4 @@
-#include "Editor.h"
+﻿#include "Editor.h"
 
 #include "../OpenGL/GLHelper.h"
 
@@ -8,9 +8,11 @@
 #include "../Serializer/Serializer.h"
 
 #include "../RTTI/Registry.h"
+#include "../Prefab/Prefab.h"
 #include "../Components.h"
+#include "../Camera/Camera.h"
 
-Editor::Editor() : buffer(), selected(nullptr)
+Editor::Editor() : buffer(), selected(nullptr), mode()
 {
     comps =
     {
@@ -40,6 +42,23 @@ bool Editor::SameLineButton(const char* label)
     return ImGui::Button(label);
 }
 
+void Editor::ChangeMode()
+{
+    ImGui::Begin("mode", 0, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove);
+
+    ImGui::Columns(3, 0, false);
+
+    if (ImGui::Selectable("Play", mode == PLAY)) mode = PLAY;
+
+    ImGui::NextColumn();
+    if (ImGui::Selectable("Pause", mode == PAUSE)) mode = PAUSE;
+
+    ImGui::NextColumn();
+    if (ImGui::Selectable("Edit", mode == EDIT)) mode = EDIT;
+
+    ImGui::End();
+}
+
 void Editor::TopBar()
 {
     ImGui::BeginMainMenuBar();
@@ -57,13 +76,23 @@ void Editor::TopBar()
             ImGui::EndMenu();
         }
 
+        if (ImGui::BeginMenu("Load Prefab"))
+        {
+            if (ImGui::InputText("##", buffer, 100, ImGuiInputTextFlags_EnterReturnsTrue) || SameLineButton("Load"))
+            {
+                Prefab::NewGameObject("asdfa", buffer);
+                ClearBuffer();
+            }
+
+            ImGui::EndMenu();
+        }
+
         ImGui::EndMenu();
     }
-    
 
     if (ImGui::BeginMenu("Level"))
     {
-        if (ImGui::MenuItem("New Level")) 
+        if (ImGui::MenuItem("New Level"))
         {
             selected = nullptr;
 
@@ -154,6 +183,23 @@ void Editor::SelectedGameObjectInfo()
         ClearBuffer();
     }
 
+    if (ImGui::Button("Save Prefab"))
+    {
+        ImGui::OpenPopup("Save Prefab");
+    }
+
+    if (ImGui::BeginPopupModal("Save Prefab", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+    {
+        if (ImGui::InputText("##Name", buffer, 100, ImGuiInputTextFlags_EnterReturnsTrue) || SameLineButton("Save"))
+        {
+            Prefab::SavePrefab(buffer, selected);   
+            ImGui::CloseCurrentPopup();
+            ClearBuffer();
+        }
+
+        ImGui::EndPopup();
+    }
+
     if (ImGui::Button("Delete Object"))
     {
         GameObjectManager::GetInstance().RemoveObject(selected->GetName());
@@ -182,12 +228,19 @@ void Editor::Update()
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
-    //ImGui::ShowDemoWindow(); // Show demo window! :)
 
-    TopBar();
-    GameObjectList();
-    SelectedGameObjectInfo();
+    ChangeMode();
 
+    if (mode != PLAY)
+    {
+        ImGui::ShowDemoWindow(); // Show demo window! :)
+
+        TopBar();
+        GameObjectList();
+        SelectedGameObjectInfo();
+        Camera::GetInstance().Info();
+    }
+    
     // Rendering
     // (Your code clears your framebuffer, renders your other stuff etc.)
     ImGui::Render();

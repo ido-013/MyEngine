@@ -11,10 +11,10 @@ private:
 	Camera(const Camera& other) = delete;
 	const Camera& operator=(const Camera& other) = delete;
 
-	float x;
-	float y;
+	glm::vec2 pos;
 
 	float height;
+	float speed;
 
 	glm::mat3 world_to_ndc_xform;
 
@@ -26,6 +26,7 @@ public:
 	}
 
 	void Update();
+	void Info();
 
 	void CalculateMatrix();
 	glm::mat3& GetMatrix() { return world_to_ndc_xform; }

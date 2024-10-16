@@ -164,10 +164,12 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="OpenGL\GLHelper.cpp" />
     <ClCompile Include="OpenGL\GLModel.cpp" />
+    <ClCompile Include="Prefab\Prefab.cpp" />
     <ClCompile Include="ResourceManager\ResourceManager.cpp" />
     <ClCompile Include="ResourceManager\ResourceManager.h" />
     <ClCompile Include="Resource\AudioResource.cpp" />
     <ClCompile Include="Resource\MeshResource.cpp" />
+    <ClCompile Include="Resource\PrefabResource.cpp" />
     <ClCompile Include="Resource\Resource.cpp" />
     <ClCompile Include="Resource\ShaderResource.cpp" />
     <ClCompile Include="Resource\TextureResource.cpp" />
@@ -205,8 +207,10 @@
     <ClInclude Include="OpenGL\GLHelper.h" />
     <ClInclude Include="OpenGL\GLModel.h" />
     <ClInclude Include="OpenGL\GLShader.h" />
+    <ClInclude Include="Prefab\Prefab.h" />
     <ClInclude Include="Resource\AudioResource.h" />
     <ClInclude Include="Resource\MeshResource.h" />
+    <ClInclude Include="Resource\PrefabResource.h" />
     <ClInclude Include="Resource\Resource.h" />
     <ClInclude Include="Resource\Resources.h" />
     <ClInclude Include="Resource\ShaderResource.h" />

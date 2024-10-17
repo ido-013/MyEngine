@@ -77,19 +77,19 @@ bool TransformComp::Edit()
 	return true;
 }
 
-void TransformComp::SetPos(const glm::vec2& otherPos)
+void TransformComp::SetPos(const glm::vec2& _otherPos)
 {
-	this->pos = otherPos;
+	this->pos = _otherPos;
 }
 
-void TransformComp::SetScale(const glm::vec2& otherScale)
+void TransformComp::SetScale(const glm::vec2& _otherScale)
 {
-	this->scale = otherScale;
+	this->scale = _otherScale;
 }
 
-void TransformComp::SetRot(const float& otherRot)
+void TransformComp::SetRot(const float& _otherRot)
 {
-	this->rot = otherRot;
+	this->rot = _otherRot;
 }
 
 void TransformComp::PrintMatrix()
@@ -105,12 +105,12 @@ void TransformComp::PrintMatrix()
 	}
 }
 
-void TransformComp::LoadFromJson(const json& data)
+void TransformComp::LoadFromJson(const json& _data)
 {
 	// Check how you saved, load from there
-	auto compData = data.find("compData");
+	auto compData = _data.find("compData");
 
-	if (compData != data.end())
+	if (compData != _data.end())
 	{
 		auto p = compData->find("position");
 		pos.x = p->begin().value();
@@ -140,11 +140,11 @@ json TransformComp::SaveToJson()
 	return data;
 }
 
-BaseRTTI* TransformComp::CreateTransformComponent(GameObject* owner)
+BaseRTTI* TransformComp::CreateTransformComponent(GameObject* _owner)
 {
-	BaseRTTI* p = new TransformComp(owner);
+	BaseRTTI* p = new TransformComp(_owner);
 
-	owner->AddComponent<TransformComp>(static_cast<BaseComponent*>(p));
+	_owner->AddComponent<TransformComp>(static_cast<BaseComponent*>(p));
 
 	return p;
 }

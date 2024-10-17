@@ -1,15 +1,15 @@
 template <typename T>
-inline void ComponentManager<T>::AddComp(T* comp)
+inline void ComponentManager<T>::AddComp(T* _comp)
 {
-    component.push_back(comp);
+    component.push_back(_comp);
 }
 
 template<typename T>
-inline void ComponentManager<T>::DelComp(T* comp)
+inline void ComponentManager<T>::DelComp(T* _comp)
 {
     for (auto it = component.begin(); it != component.end(); it++)
     {
-        if ((*it) == comp)
+        if ((*it) == _comp)
         {
             *it = nullptr;
             return;

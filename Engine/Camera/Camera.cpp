@@ -24,22 +24,22 @@ void Camera::Update()
 	{
 		float dt = GLHelper::delta_time;
 
-		if (ImGui::IsKeyPressed(ImGuiKey_W))
+		if (GLHelper::keystateW)
 		{
 			pos.y += speed * dt;
 		}
 
-		if (ImGui::IsKeyPressed(ImGuiKey_A))
+		if (GLHelper::keystateA)
 		{
 			pos.x -= speed * dt;
 		}
 
-		if (ImGui::IsKeyPressed(ImGuiKey_S))
+		if (GLHelper::keystateS)
 		{
 			pos.y -= speed * dt;
 		}
 
-		if (ImGui::IsKeyPressed(ImGuiKey_D))
+		if (GLHelper::keystateD)
 		{
 			pos.x += speed * dt;
 		}
@@ -78,10 +78,10 @@ void Camera::CalculateMatrix()
 	world_to_ndc_xform = camwin_to_ndc_xform * view_xform;
 }
 
-void Camera::GetPos(float* px, float* py)
+void Camera::GetPos(float* _px, float* _py)
 {
-	*px = pos.x;
-	*py = pos.y;
+	*_px = pos.x;
+	*_py = pos.y;
 }
 
 void Camera::SetPos(float _x, float _y)
@@ -90,12 +90,12 @@ void Camera::SetPos(float _x, float _y)
 	pos.y = _y;
 }
 
-void Camera::AddHeight(float value)
+void Camera::AddHeight(float _value)
 {
-	height += value;
+	height += _value;
 }
 
-void Camera::SetHeight(float value)
+void Camera::SetHeight(float _value)
 {
-	height = value;
+	height = _value;
 }

@@ -68,11 +68,11 @@ bool PlayerComp::Edit()
 	return true;
 }
 
-void PlayerComp::LoadFromJson(const json& data)
+void PlayerComp::LoadFromJson(const json& _data)
 {
-	auto compData = data.find("compData");
+	auto compData = _data.find("compData");
 
-	if (compData != data.end())
+	if (compData != _data.end())
 	{
 		auto it = compData->find("speed");
 		speed = it.value();
@@ -92,10 +92,10 @@ json PlayerComp::SaveToJson()
 }
 
 
-BaseRTTI* PlayerComp::CreatePlayerComponent(GameObject* owner)
+BaseRTTI* PlayerComp::CreatePlayerComponent(GameObject* _owner)
 {
-	BaseRTTI* p = new PlayerComp(owner);
-	owner->AddComponent<PlayerComp>(static_cast<BaseComponent*>(p));
+	BaseRTTI* p = new PlayerComp(_owner);
+	_owner->AddComponent<PlayerComp>(static_cast<BaseComponent*>(p));
 	return p;
 }
 

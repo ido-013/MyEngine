@@ -22,9 +22,9 @@ public:
 	}
 
 	const std::map<std::string, GameObject*>& GetAllObject() { return objects; }
-	GameObject* GetObject(std::string name);
-	GameObject* CreateObject(std::string name);
-	GameObject* RenameObject(std::string preName, std::string name);
-	void RemoveObject(std::string name);
+	GameObject* GetObject(const std::string& _name);
+	GameObject* CreateObject(const std::string& _name);
+	GameObject* RenameObject(const std::string& _preName, const std::string& _name);
+	void RemoveObject(const std::string& _name);
 	void RemoveAllObject();
 };

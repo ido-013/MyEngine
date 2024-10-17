@@ -64,7 +64,7 @@ void GameStateManager::Exit()
     }
 }
 
-void GameStateManager::ChangeLevel(BaseLevel* newLvl)
+void GameStateManager::ChangeLevel(BaseLevel* _newLvl)
 {
     delete previousLevel;
     previousLevel = currentLevel;
@@ -73,7 +73,7 @@ void GameStateManager::ChangeLevel(BaseLevel* newLvl)
     Exit();
 
     //Current level is now the "next" level
-    currentLevel = newLvl;
+    currentLevel = _newLvl;
 
     //initialize the level
     Init();

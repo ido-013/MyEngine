@@ -16,12 +16,12 @@ TextureResource::~TextureResource()
     data = nullptr;
 }
 
-void TextureResource::LoadData(const std::string& filename)
+void TextureResource::LoadData(const std::string& _filename)
 {
     GLint width, height, bytes_per_texel;
     stbi_set_flip_vertically_on_load(1);
 
-    GLubyte* ptr_texels = stbi_load(("Assets/Texture/" + filename).c_str(), &width, &height, &bytes_per_texel, 4);
+    GLubyte* ptr_texels = stbi_load(("Assets/Texture/" + _filename).c_str(), &width, &height, &bytes_per_texel, 4);
     GLuint* texobj = new GLuint;
 
     glCreateTextures(GL_TEXTURE_2D, 1, texobj);

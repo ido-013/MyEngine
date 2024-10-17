@@ -27,17 +27,17 @@ public:
 	const glm::mat3& GetMatrix() const { return transformMatrix; }
 
 	//Mutators
-	void SetPos(const glm::vec2& otherPos);
-	void SetScale(const glm::vec2& otherScale);
-	void SetRot(const float& otherRot);
+	void SetPos(const glm::vec2& _otherPos);
+	void SetScale(const glm::vec2& _otherScale);
+	void SetRot(const float& _otherRot);
 
 	//Other Fn
 	void PrintMatrix();
 
-	void LoadFromJson(const json&) override;
+	void LoadFromJson(const json& _data) override;
 	json SaveToJson() override;
 
-	static BaseRTTI* CreateTransformComponent(GameObject* owner);
+	static BaseRTTI* CreateTransformComponent(GameObject* _owner);
 
 	static constexpr const char* TypeName = "TransformComp";
 };

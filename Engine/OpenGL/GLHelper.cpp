@@ -72,28 +72,28 @@ void GLHelper::Exit()
     glfwTerminate();
 }
 
-void GLHelper::key_cb(GLFWwindow* pwin, int key, int scancode, int action, int mod) 
+void GLHelper::key_cb(GLFWwindow* _pwin, int _key, int _scancode, int _action, int _mod) 
 {
-    if (GLFW_PRESS == action) {
-        if (GLFW_KEY_ESCAPE == key) {
-            glfwSetWindowShouldClose(pwin, GLFW_TRUE);
+    if (GLFW_PRESS == _action) {
+        if (GLFW_KEY_ESCAPE == _key) {
+            glfwSetWindowShouldClose(_pwin, GLFW_TRUE);
         }
 
-        keystateW = (key == GLFW_KEY_W) ? GL_TRUE : keystateW;
-        keystateA = (key == GLFW_KEY_A) ? GL_TRUE : keystateA;
-        keystateS = (key == GLFW_KEY_S) ? GL_TRUE : keystateS;
-        keystateD = (key == GLFW_KEY_D) ? GL_TRUE : keystateD;
+        keystateW = (_key == GLFW_KEY_W) ? GL_TRUE : keystateW;
+        keystateA = (_key == GLFW_KEY_A) ? GL_TRUE : keystateA;
+        keystateS = (_key == GLFW_KEY_S) ? GL_TRUE : keystateS;
+        keystateD = (_key == GLFW_KEY_D) ? GL_TRUE : keystateD;
     }
-    else if (GLFW_RELEASE == action) {
+    else if (GLFW_RELEASE == _action) {
         // key start changes from pressed to released
-        keystateW = (key == GLFW_KEY_W) ? GL_FALSE : keystateW;
-        keystateA = (key == GLFW_KEY_A) ? GL_FALSE : keystateA;
-        keystateS = (key == GLFW_KEY_S) ? GL_FALSE : keystateS;
-        keystateD = (key == GLFW_KEY_D) ? GL_FALSE : keystateD;
+        keystateW = (_key == GLFW_KEY_W) ? GL_FALSE : keystateW;
+        keystateA = (_key == GLFW_KEY_A) ? GL_FALSE : keystateA;
+        keystateS = (_key == GLFW_KEY_S) ? GL_FALSE : keystateS;
+        keystateD = (_key == GLFW_KEY_D) ? GL_FALSE : keystateD;
     }
 }
 
-void GLHelper::mousebutton_cb(GLFWwindow* pwin, int button, int action, int mod) 
+void GLHelper::mousebutton_cb(GLFWwindow* _pwin, int _button, int _action, int _mod) 
 {
    /* switch (button) {
     case GLFW_MOUSE_BUTTON_LEFT:
@@ -121,38 +121,35 @@ void GLHelper::mousebutton_cb(GLFWwindow* pwin, int button, int action, int mod)
     }*/
 }
 
-void GLHelper::mousepos_cb(GLFWwindow* pwin, double xpos, double ypos) 
+void GLHelper::mousepos_cb(GLFWwindow* _pwin, double _xpos, double _ypos) 
 {
 //#ifdef _DEBUG
 //    std::cout << "Mouse cursor position: (" << xpos << ", " << ypos << ")" << std::endl;
 //#endif
 }
 
-void GLHelper::mousescroll_cb(GLFWwindow* pwin, double xoffset, double yoffset)
+void GLHelper::mousescroll_cb(GLFWwindow* _pwin, double _xoffset, double _yoffset)
 {
-//#ifdef _DEBUG
-//    std::cout << "Mouse scroll wheel offset: ("
-//        << xoffset << ", " << yoffset << ")" << std::endl;
-//#endif
+
 }
 
-void GLHelper::error_cb(int error, char const* description) 
+void GLHelper::error_cb(int _error, char const* _description) 
 {
 #ifdef _DEBUG
-    std::cerr << "GLFW error: " << description << std::endl;
+    std::cerr << "GLFW error: " << _description << std::endl;
 #endif
 }
 
-void GLHelper::fbsize_cb(GLFWwindow* ptr_win, int width, int height) 
+void GLHelper::fbsize_cb(GLFWwindow* _ptr_win, int _width, int _height) 
 {
 #ifdef _DEBUG
     std::cout << "fbsize_cb getting called!!!" << std::endl;
 #endif
-    GLHelper::width = width;
-    GLHelper::height = height;
+    GLHelper::width = _width;
+    GLHelper::height = _height;
 }
 
-void GLHelper::update_time(double fps_calc_interval) 
+void GLHelper::update_time(double _fps_calc_interval) 
 {
     // get elapsed time (in seconds) between previous and current frames
     static double prev_time = glfwGetTime();
@@ -169,9 +166,9 @@ void GLHelper::update_time(double fps_calc_interval)
     ++count;
 
     // update fps at least every 10 seconds ...
-    fps_calc_interval = (fps_calc_interval < 0.0) ? 0.0 : fps_calc_interval;
-    fps_calc_interval = (fps_calc_interval > 10.0) ? 10.0 : fps_calc_interval;
-    if (elapsed_time > fps_calc_interval) {
+    _fps_calc_interval = (_fps_calc_interval < 0.0) ? 0.0 : _fps_calc_interval;
+    _fps_calc_interval = (_fps_calc_interval > 10.0) ? 10.0 : _fps_calc_interval;
+    if (elapsed_time > _fps_calc_interval) {
         GLHelper::fps = count / elapsed_time;
         start_time = curr_time;
         count = 0.0;

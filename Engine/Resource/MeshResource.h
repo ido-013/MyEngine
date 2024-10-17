@@ -6,5 +6,5 @@ class MeshResource : public Resource
 public:
 	MeshResource() = default;
 	~MeshResource();
-	void LoadData(const std::string& filename) override;
+	void LoadData(const std::string& _filename) override;
 };

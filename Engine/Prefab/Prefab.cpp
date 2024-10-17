@@ -14,14 +14,14 @@ Prefab::~Prefab()
 {
 }
 
-void Prefab::SavePrefab(const std::string& _name, GameObject* obj)
+void Prefab::SavePrefab(const std::string& _name, GameObject* _obj)
 {
 	std::string filename = "./Assets/Prefab/" + _name + ".prefab";
 
 	json prefab;
 
 	json components;
-	for (auto comp : obj->GetAllComponent())
+	for (auto comp : _obj->GetAllComponent())
 	{
 		BaseComponent* c = comp.second;
 		components.push_back(c->SaveToJson());
@@ -39,11 +39,11 @@ void Prefab::SavePrefab(const std::string& _name, GameObject* obj)
 	file.close();
 }
 
-GameObject* Prefab::NewGameObject(const std::string& _name, const std::string& prefabName)
+GameObject* Prefab::NewGameObject(const std::string& _name, const std::string& _prefabName)
 {
 	GameObject* obj = GameObjectManager::GetInstance().CreateObject(_name);
 
-	json* data = ResourceManager::GetInstance().GetResourcePointer<json>(prefabName);
+	json* data = ResourceManager::GetInstance().GetResourcePointer<json>(_prefabName);
 
 	auto compIt = data->find("components");
 	if (compIt == data->end())

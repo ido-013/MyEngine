@@ -10,13 +10,13 @@ Registry::Registry()
     rttiMap.insert({ RigidbodyComp::TypeName, &RigidbodyComp::CreateRigidBodyComponent });
 }
 
-BaseRTTI* Registry::FindAndCreate(const std::string& type, GameObject* owner)
+BaseRTTI* Registry::FindAndCreate(const std::string& _type, GameObject* _owner)
 {
     BaseRTTI* ptr = nullptr;
-    if (rttiMap.find(type) != rttiMap.end())
-        ptr = rttiMap[type](owner);
+    if (rttiMap.find(_type) != rttiMap.end())
+        ptr = rttiMap[_type](_owner);
     else
-        throw std::invalid_argument("Registry FindAndCreate Invalid typeName " + type);
+        throw std::invalid_argument("Registry FindAndCreate Invalid typeName " + _type);
 
     return ptr;
 }

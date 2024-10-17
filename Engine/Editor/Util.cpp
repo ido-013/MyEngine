@@ -1,0 +1,49 @@
+#include "Util.h"
+
+#include <filesystem>
+
+#include "../Imgui/imgui.h"
+#include "../Imgui/imgui_impl_glfw.h"
+#include "../Imgui/imgui_impl_opengl3.h"
+
+bool FileSelectComboOnce(
+	std::string& _result,
+	const std::string& _label,
+	const std::string& _currentFilename,
+	const std::string& _filePath,
+	const std::string& _filter
+)
+{
+	if (ImGui::BeginCombo(_label.c_str(), _currentFilename.c_str()))
+	{
+		for (const auto& entry : std::filesystem::directory_iterator(_filePath))
+		{
+			std::string filename = entry.path().filename().string();
+			std::string extension = entry.path().extension().string();
+
+			if (!(_filter.empty()) && extension.compare(_filter) != 0)
+				continue;
+
+			if (ImGui::MenuItem(filename.c_str()))
+			{
+				_result = filename;
+				ImGui::EndCombo();
+				return true;
+			}
+		}
+
+		ImGui::EndCombo();
+	}
+
+	return false;
+}
+
+void FileSelectCombo(std::string& _result, const std::string& _label, const std::string& _currentFilename, const std::string& _filePath, const std::string& _filter)
+{
+	std::string temp;
+
+	if (FileSelectComboOnce(temp, _label, _currentFilename, _filePath, _filter))
+	{
+		_result = temp;
+	}
+}

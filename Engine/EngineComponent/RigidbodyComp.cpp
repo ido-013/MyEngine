@@ -28,16 +28,16 @@ RigidbodyComp::~RigidbodyComp()
 
 }
 
-void RigidbodyComp::AddVelocity(float x, float y)
+void RigidbodyComp::AddVelocity(float _x, float _y)
 {
-	velocity.x += x;
-	velocity.y += y;
+	velocity.x += _x;
+	velocity.y += _y;
 }
 
-void RigidbodyComp::SetVelocity(float x, float y)
+void RigidbodyComp::SetVelocity(float _x, float _y)
 {
-	velocity.x = x;
-	velocity.y = y;
+	velocity.x = _x;
+	velocity.y = _y;
 }
 
 
@@ -47,16 +47,16 @@ void RigidbodyComp::ClearVelocity()
 	velocity.y = 0;
 }
 
-void RigidbodyComp::AddAcceleration(float x, float y)
+void RigidbodyComp::AddAcceleration(float _x, float _y)
 {
-	acceleration.x += x;
-	acceleration.y += y;
+	acceleration.x += _x;
+	acceleration.y += _y;
 }
 
-void RigidbodyComp::SetAcceleration(float x, float y)
+void RigidbodyComp::SetAcceleration(float _x, float _y)
 {
-	acceleration.x = x;
-	acceleration.y = y;
+	acceleration.x = _x;
+	acceleration.y = _y;
 }
 
 void RigidbodyComp::ClearAcceleration()
@@ -119,11 +119,11 @@ bool RigidbodyComp::Edit()
 	return true;
 }
 
-void RigidbodyComp::LoadFromJson(const json& data)
+void RigidbodyComp::LoadFromJson(const json& _data)
 {
-	auto compData = data.find("compData");
+	auto compData = _data.find("compData");
 
-	if (compData != data.end())
+	if (compData != _data.end())
 	{
 		auto it = compData->find("velocity");
 		velocity.x = it->begin().value();
@@ -163,9 +163,9 @@ json RigidbodyComp::SaveToJson()
 	return data;
 }
 
-BaseRTTI* RigidbodyComp::CreateRigidBodyComponent(GameObject* owner)
+BaseRTTI* RigidbodyComp::CreateRigidBodyComponent(GameObject* _owner)
 {
-	BaseRTTI* p = new RigidbodyComp(owner);
-	owner->AddComponent<RigidbodyComp>(static_cast<BaseComponent*>(p));
+	BaseRTTI* p = new RigidbodyComp(_owner);
+	_owner->AddComponent<RigidbodyComp>(static_cast<BaseComponent*>(p));
 	return p;
 }

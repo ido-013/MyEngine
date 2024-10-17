@@ -10,26 +10,26 @@
 
 using json = nlohmann::ordered_json;	// Map. Orders the order the variables were declared in
 
-void Serializer::LoadLevel(const std::string& filename)
+void Serializer::LoadLevel(const std::string& _filename)
 {
 	// Open file
 	std::fstream file;
-	file.open(filename, std::fstream::in);
+	file.open(_filename, std::fstream::in);
 
 	// Check the file is valid
 	if (!file.is_open())
-		throw std::invalid_argument("Serializer::LoadLevel Invalid filename " + filename);
+		throw std::invalid_argument("Serializer::LoadLevel Invalid filename " + _filename);
 
 	json allDataJson;
 	file >> allDataJson; // the json has all the file data
 
 	for (auto& item : allDataJson)
 	{
-		auto objIt = item.find("object");
+		auto itObj = item.find("object");
 
-		if (objIt != item.end())
+		if (itObj != item.end())
 		{
-			GameObject* go = GameObjectManager::GetInstance().CreateObject(objIt.value());
+			GameObject* obj = GameObjectManager::GetInstance().CreateObject(itObj.value());
 
 			auto compIt = item.find("components");
 			if (compIt == item.end())
@@ -47,7 +47,7 @@ void Serializer::LoadLevel(const std::string& filename)
 
 				// Look in the regitstry for this type and create it
 				// Add the comp to the GO
-				BaseRTTI* p = Registry::GetInstance().FindAndCreate(typeName, go);
+				BaseRTTI* p = Registry::GetInstance().FindAndCreate(typeName, obj);
 				if (p != nullptr)
 					p->LoadFromJson(comp);
 			}
@@ -55,12 +55,9 @@ void Serializer::LoadLevel(const std::string& filename)
 	}
 }
 
-void Serializer::SaveLevel(const std::string& filename)
+void Serializer::SaveLevel(const std::string& _filename)
 {
 	json allDataJson;
-
-	// Counter instead of name as I do not have one
-	int i = 0;
 
 	for (const auto& obj : GameObjectManager::GetInstance().GetAllObject())
 	{
@@ -80,10 +77,10 @@ void Serializer::SaveLevel(const std::string& filename)
 
 	// Open file
 	std::fstream file;
-	file.open(filename, std::fstream::out);	// Open as write mode. Create it if it does not exist!
+	file.open(_filename, std::fstream::out);	// Open as write mode. Create it if it does not exist!
 
 	if (!file.is_open())
-		throw std::invalid_argument("Serializer::SaveLevel file write error " + filename);
+		throw std::invalid_argument("Serializer::SaveLevel file write error " + _filename);
 
 	file << std::setw(2) << allDataJson;	// Separates in lines and each section
 

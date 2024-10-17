@@ -13,9 +13,9 @@ GameObjectManager::~GameObjectManager()
 	}
 }
 
-GameObject* GameObjectManager::GetObject(std::string name)
+GameObject* GameObjectManager::GetObject(const std::string& _name)
 {
-	auto it = objects.find(name);
+	auto it = objects.find(_name);
 
 	if (it != objects.end())
 	{
@@ -25,39 +25,39 @@ GameObject* GameObjectManager::GetObject(std::string name)
 	return nullptr;
 }
 
-GameObject* GameObjectManager::CreateObject(std::string name)
+GameObject* GameObjectManager::CreateObject(const std::string& _name)
 {
-	auto it = objects.find(name);
+	auto it = objects.find(_name);
 
 	if (it != objects.end())
 	{
 		return it->second;
 	}
 
-	GameObject* go = new GameObject(name);
-	objects.insert({ name, go });
+	GameObject* obj = new GameObject(_name);
+	objects.insert({ _name, obj });
 
-	return go;
+	return obj;
 }
 
-GameObject* GameObjectManager::RenameObject(std::string preName, std::string name)
+GameObject* GameObjectManager::RenameObject(const std::string& _preName, const std::string& _name)
 {
-	auto it = objects.find(preName);
+	auto it = objects.find(_preName);
 
 	if (it != objects.end())
 	{
-		GameObject* go = it->second;
-		go->SetName(name);
+		GameObject* obj = it->second;
+		obj->SetName(_name);
 		objects.erase(it);
-		objects.insert({ name, go });
+		objects.insert({ _name, obj });
 	}
 
 	return nullptr;
 }
 
-void GameObjectManager::RemoveObject(std::string name)
+void GameObjectManager::RemoveObject(const std::string& _name)
 {
-	auto it = objects.find(name);
+	auto it = objects.find(_name);
 
 	if (it != objects.end())
 	{

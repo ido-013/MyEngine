@@ -6,7 +6,7 @@ AudioResource::~AudioResource()
 	//data = nullptr;
 }
 
-void AudioResource::LoadData(const std::string& name)
+void AudioResource::LoadData(const std::string& _filename)
 {
 	//audio = AEAudioLoadMusic(name.c_str());
 	//data = &audio;

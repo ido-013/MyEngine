@@ -13,10 +13,10 @@ public:
 	void Update() override;
 	bool Edit() override;
 
-	void LoadFromJson(const json&) override;
+	void LoadFromJson(const json& _data) override;
 	json SaveToJson() override;
 
-	static BaseRTTI* CreatePlayerComponent(GameObject* owner);
+	static BaseRTTI* CreatePlayerComponent(GameObject* _owner);
 
 	static constexpr const char* TypeName = "PlayerComp";
 };

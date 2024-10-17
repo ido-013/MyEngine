@@ -6,8 +6,8 @@ class ComponentManager
 {
 private:
 	ComponentManager();
-	ComponentManager(const ComponentManager& other) = delete;
-	const ComponentManager& operator=(const ComponentManager& other) = delete;
+	ComponentManager(const ComponentManager&) = delete;
+	const ComponentManager& operator=(const ComponentManager&) = delete;
 	~ComponentManager();
 
 	std::vector<T*> component;
@@ -19,8 +19,8 @@ public:
 		return instance;
 	};
 
-	void AddComp(T* comp);
-	void DelComp(T* comp);
+	void AddComp(T* _comp);
+	void DelComp(T* _comp);
 
 	void Update();
 };

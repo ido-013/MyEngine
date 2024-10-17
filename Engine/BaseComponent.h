@@ -12,7 +12,7 @@ class BaseComponent : public BaseRTTI
 {
 private:
 	BaseComponent() = delete;
-	BaseComponent(const BaseComponent& ohter) = delete;
+	BaseComponent(const BaseComponent&) = delete;
 
 protected:
 	GameObject* owner;

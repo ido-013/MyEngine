@@ -11,8 +11,8 @@ class ResourceManager
 private:
 	ResourceManager() = default;
 
-	ResourceManager(const ResourceManager& other) = delete;
-	const ResourceManager& operator=(const ResourceManager& other) = delete;
+	ResourceManager(const ResourceManager&) = delete;
+	const ResourceManager& operator=(const ResourceManager&) = delete;
 
 	~ResourceManager();
 
@@ -52,11 +52,11 @@ public:
 
 	//Get<T>(name) fn that returns a T* to the data allocated in the resource with that name
 	template <typename T>
-	T* GetResourcePointer(const std::string& filename);
+	T* GetResourcePointer(const std::string& _filename);
 
 	//Unload(name) fn that removes 1 from the counter of the resource.
 		//If the counter is 0, unload the resource, delete it, and remove from map
-	void UnloadResource(const std::string& filename);
+	void UnloadResource(const std::string& _filename);
 
 	//Fn to unload ALL resources
 	void UnloadAllResource();

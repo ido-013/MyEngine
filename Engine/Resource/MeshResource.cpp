@@ -14,9 +14,9 @@ MeshResource::~MeshResource()
 	data = nullptr;
 }
 
-void MeshResource::LoadData(const std::string& filename)
+void MeshResource::LoadData(const std::string& _filename)
 {
 	GLModel* mdl = new GLModel;
-	mdl->init("Assets/Mesh/" + filename);
+	mdl->init("Assets/Mesh/" + _filename);
 	data = mdl;
 }

@@ -17,15 +17,15 @@ private:
 	~GameObject();
 
 public:
-	GameObject(const GameObject& other) = delete;
-	GameObject& operator=(const GameObject& other) = delete;
+	GameObject(const GameObject&) = delete;
+	GameObject& operator=(const GameObject&) = delete;
 
 	//GO will have a function to add ANY TYPE of component class to their container
 	template <typename T>
 	T* AddComponent();
 
 	template <typename T>
-	T* AddComponent(BaseComponent* comp);
+	T* AddComponent(BaseComponent* _comp);
 
 	//GO will have a function to find if it already has a component of ANY TYPE
 	template <typename T>
@@ -44,3 +44,5 @@ public:
 };
 
 #include "GameObject.inl"
+
+

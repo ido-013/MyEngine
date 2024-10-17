@@ -42,7 +42,7 @@ public:
 	BaseLevel* GetCurrentLevel() { return currentLevel; }
 
 	//Functions to change level
-	void ChangeLevel(BaseLevel* newLvl);
+	void ChangeLevel(BaseLevel* _newLvl);
 
 	bool ShouldExit();
 	//Functions to quit...

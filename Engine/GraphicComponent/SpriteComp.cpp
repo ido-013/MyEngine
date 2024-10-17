@@ -2,8 +2,8 @@
 
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
-#include <filesystem>
 
+#include "../Editor/Util.h"
 #include "../ResourceManager/ResourceManager.h"
 #include "../EngineComponent/TransformComp.h"
 
@@ -70,62 +70,23 @@ bool SpriteComp::Edit()
         alpha = alpha < 0 ? 0 : (alpha > 1 ? 1 : alpha);
 
         std::string filename;
-        std::string extension;
 
         //Change Shader
-        if (ImGui::BeginCombo("Shader", shaderName.c_str()))
+        if (FileSelectComboOnce(filename, "Shader", shaderName, "Assets/Shader", ".shd"))
         {
-            for (const auto& entry : std::filesystem::directory_iterator("Assets/Shader"))
-            {
-                filename = entry.path().filename().string();
-                extension = entry.path().extension().string();
-
-                if (extension.compare(".shd") != 0)
-                    continue;
-
-                if (ImGui::MenuItem(filename.c_str()))
-                {
-                    SetShdrpgm(filename);
-                }
-            }
-
-            ImGui::EndCombo();
+            SetShdrpgm(filename);
         }
         
         //Change Mesh
-        if (ImGui::BeginCombo("Mesh", meshName.c_str()))
+        if (FileSelectComboOnce(filename, "Mesh", meshName, "Assets/Mesh", ".msh"))
         {
-            for (const auto& entry : std::filesystem::directory_iterator("Assets/Mesh"))
-            {
-                filename = entry.path().filename().string();
-                extension = entry.path().extension().string();
-
-                if (extension.compare(".msh") != 0)
-                    continue;
-
-                if (ImGui::MenuItem(filename.c_str()))
-                {
-                    SetMesh(filename);
-                }
-            }
-
-            ImGui::EndCombo();
+            SetMesh(filename);
         }
         
         //Change Texture
-        if (ImGui::BeginCombo("Texture", textureName.c_str()))
+        if (FileSelectComboOnce(filename, "Texture", textureName, "Assets/Texture"))
         {
-            for (const auto& entry : std::filesystem::directory_iterator("Assets/Texture"))
-            {
-                filename = entry.path().filename().string();
-
-                if (ImGui::MenuItem(filename.c_str()))
-                {
-                    SetTexture(filename);
-                }
-            }
-
-            ImGui::EndCombo();
+            SetTexture(filename);
         }
 
         if (ImGui::Button("Delete Component"))
@@ -141,11 +102,11 @@ bool SpriteComp::Edit()
     return true;
 }
 
-void SpriteComp::SetColor(const unsigned char& r, const unsigned char& g, const unsigned char& b)
+void SpriteComp::SetColor(const unsigned char& _r, const unsigned char& _g, const unsigned char& _b)
 {
-	color.r = r;
-	color.g = g;
-	color.b = b;
+	color.r = _r;
+	color.g = _g;
+	color.b = _b;
 }
 
 void SpriteComp::SetShdrpgm(const std::string& name)
@@ -191,11 +152,11 @@ void SpriteComp::UnsetTexture()
     ResourceManager::GetInstance().UnloadResource(textureName);
 }
 
-void SpriteComp::LoadFromJson(const json& data)
+void SpriteComp::LoadFromJson(const json& _data)
 {
-    auto compData = data.find("compData");
+    auto compData = _data.find("compData");
 
-    if (compData != data.end())
+    if (compData != _data.end())
     {
         auto it = compData->find("color");
         color.r = it->begin().value();
@@ -236,9 +197,9 @@ json SpriteComp::SaveToJson()
     return data;
 }
 
-BaseRTTI* SpriteComp::CreateSpriteComponent(GameObject* owner)
+BaseRTTI* SpriteComp::CreateSpriteComponent(GameObject* _owner)
 {
-    BaseRTTI* p = new SpriteComp(owner);
-    owner->AddComponent<SpriteComp>(static_cast<SpriteComp*>(p));
+    BaseRTTI* p = new SpriteComp(_owner);
+    _owner->AddComponent<SpriteComp>(static_cast<SpriteComp*>(p));
     return p;
 }

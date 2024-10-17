@@ -8,8 +8,8 @@ private:
 	Camera();
 	~Camera();
 
-	Camera(const Camera& other) = delete;
-	const Camera& operator=(const Camera& other) = delete;
+	Camera(const Camera&) = delete;
+	const Camera& operator=(const Camera&) = delete;
 
 	glm::vec2 pos;
 
@@ -31,9 +31,9 @@ public:
 	void CalculateMatrix();
 	glm::mat3& GetMatrix() { return world_to_ndc_xform; }
 	
-	void GetPos(float* px, float* py);
+	void GetPos(float* _px, float* _py);
 	void SetPos(float _x, float _y);
 
-	void SetHeight(float value);
-	void AddHeight(float value);
+	void SetHeight(float _value);
+	void AddHeight(float _value);
 };

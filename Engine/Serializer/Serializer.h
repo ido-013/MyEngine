@@ -19,6 +19,6 @@ public:
 		return instance;
 	}
 
-	void LoadLevel(const std::string& filename);
-	void SaveLevel(const std::string& filename);
+	void LoadLevel(const std::string& _filename);
+	void SaveLevel(const std::string& _filename);
 };

@@ -7,12 +7,12 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
-void GLModel::init(std::string filename)
+void GLModel::init(std::string _filename)
 {
-	std::ifstream ifs{ filename, std::ios::in };
+	std::ifstream ifs{ _filename, std::ios::in };
 	if (!ifs)
 	{
-		std::cout << "ERROR: Unable to open mesh file: " << filename << "\n";
+		std::cout << "ERROR: Unable to open mesh file: " << _filename << "\n";
 		exit(EXIT_FAILURE);
 	}
 	ifs.seekg(0, std::ios::beg);

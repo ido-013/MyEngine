@@ -19,10 +19,10 @@ ShaderResource::~ShaderResource()
     data = nullptr;
 }
 
-void ShaderResource::LoadData(const std::string& filename)
+void ShaderResource::LoadData(const std::string& _filename)
 {
     std::ifstream shaderFile;
-    shaderFile.open("Assets/Shader/" + filename);
+    shaderFile.open("Assets/Shader/" + _filename);
 
     std::string vShaderFileName;
     std::string fShaderFileName;

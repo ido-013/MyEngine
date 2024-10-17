@@ -6,11 +6,12 @@
 
 #include "../GameObjectManager/GameObjectManager.h"
 #include "../Serializer/Serializer.h"
-
 #include "../RTTI/Registry.h"
+#include "../Camera/Camera.h"
+
+#include "Util.h"
 #include "../Prefab/Prefab.h"
 #include "../Components.h"
-#include "../Camera/Camera.h"
 
 Editor::Editor() : buffer(), selected(nullptr), mode()
 {
@@ -42,7 +43,7 @@ bool Editor::SameLineButton(const char* label)
     return ImGui::Button(label);
 }
 
-void Editor::ChangeMode()
+void Editor::ModeChangeWindow()
 {
     ImGui::Begin("mode", 0, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove);
 
@@ -63,33 +64,13 @@ void Editor::TopBar()
 {
     ImGui::BeginMainMenuBar();
 
-    if (ImGui::BeginMenu("Game Object"))
-    {
-        if (ImGui::BeginMenu("New Game Object"))
-        {
-            if (ImGui::InputText("##", buffer, 100, ImGuiInputTextFlags_EnterReturnsTrue) || SameLineButton("Create"))
-            {
-                GameObjectManager::GetInstance().CreateObject(buffer);
-                ClearBuffer();
-            }
+    TopBarLevel();
 
-            ImGui::EndMenu();
-        }
+    ImGui::EndMainMenuBar();
+}
 
-        if (ImGui::BeginMenu("Load Prefab"))
-        {
-            if (ImGui::InputText("##", buffer, 100, ImGuiInputTextFlags_EnterReturnsTrue) || SameLineButton("Load"))
-            {
-                Prefab::NewGameObject("asdfa", buffer);
-                ClearBuffer();
-            }
-
-            ImGui::EndMenu();
-        }
-
-        ImGui::EndMenu();
-    }
-
+void Editor::TopBarLevel()
+{
     if (ImGui::BeginMenu("Level"))
     {
         if (ImGui::MenuItem("New Level"))
@@ -125,23 +106,79 @@ void Editor::TopBar()
 
         ImGui::EndMenu();
     }
-
-    ImGui::EndMainMenuBar();
 }
 
-void Editor::GameObjectList()
+void Editor::GameObjectInfo()
 {
-    ImGui::Begin("Game Object List");
+    ImGui::Begin("Game Object");
 
-    for (auto& it : GameObjectManager::GetInstance().GetAllObject())
-    {
-        if (ImGui::Button(it.first.c_str()))
-        {
-            selected = it.second;
-        }
-    }
-
+    ObjectList();
+    CreateObject();
+    
     ImGui::End();
+}
+
+void Editor::ObjectList()
+{
+    if (ImGui::TreeNode("List"))
+    {
+        for (auto& it : GameObjectManager::GetInstance().GetAllObject())
+        {
+            if (ImGui::Button(it.first.c_str()))
+            {
+                selected = it.second;
+            }
+        }
+
+        ImGui::TreePop();
+    }
+}
+
+void Editor::CreateObject()
+{
+    if (ImGui::TreeNode("Create"))
+    {
+        if (ImGui::Button("New Object"))
+        {
+            ImGui::OpenPopup("New Object");
+        }
+
+        if (ImGui::BeginPopupModal("New Object", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+        {
+            if (ImGui::InputText("##", buffer, 100, ImGuiInputTextFlags_EnterReturnsTrue) || SameLineButton("Create"))
+            {
+                GameObjectManager::GetInstance().CreateObject(buffer);
+                ImGui::CloseCurrentPopup();
+                ClearBuffer();
+            }
+
+            ImGui::EndPopup();
+        }
+
+        if (ImGui::Button("Load Prefab"))
+        {
+            ImGui::OpenPopup("Load Prefab");
+        }
+
+        if (ImGui::BeginPopupModal("Load Prefab", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+        {
+            ImGui::InputText("Name", buffer, 100, ImGuiInputTextFlags_EnterReturnsTrue);
+            static std::string s;
+
+            FileSelectCombo(s, "Prefab", s, "Assets/Prefab", ".prefab");
+           
+            if (ImGui::Button("Load"))
+            {
+                Prefab::NewGameObject(buffer, s);
+                ImGui::CloseCurrentPopup();
+                ClearBuffer();
+            }
+            
+            ImGui::EndPopup();
+        }
+
+        ImGui::TreePop();
+    }
 }
 
 void Editor::SelectedGameObjectInfo()
@@ -149,7 +186,7 @@ void Editor::SelectedGameObjectInfo()
     if (selected == nullptr)
         return;
 
-    ImGui::Begin("Game Object");
+    ImGui::Begin("Current Object");
 
     ImGui::BulletText(("Name: " + selected->GetName()).c_str());
 
@@ -187,7 +224,7 @@ void Editor::SelectedGameObjectInfo()
     {
         ImGui::OpenPopup("Save Prefab");
     }
-
+     
     if (ImGui::BeginPopupModal("Save Prefab", NULL, ImGuiWindowFlags_AlwaysAutoResize))
     {
         if (ImGui::InputText("##Name", buffer, 100, ImGuiInputTextFlags_EnterReturnsTrue) || SameLineButton("Save"))
@@ -229,15 +266,16 @@ void Editor::Update()
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 
-    ChangeMode();
+    ModeChangeWindow();
 
     if (mode != PLAY)
     {
         ImGui::ShowDemoWindow(); // Show demo window! :)
 
         TopBar();
-        GameObjectList();
+        GameObjectInfo();
         SelectedGameObjectInfo();
+
         Camera::GetInstance().Info();
     }
     

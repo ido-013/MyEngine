@@ -34,9 +34,15 @@ private:
     void ClearBuffer();
     bool SameLineButton(const char* label);
 
-    void ChangeMode();
+    void ModeChangeWindow();
+
     void TopBar();
-    void GameObjectList();
+    void TopBarLevel();
+
+    void GameObjectInfo();
+    void ObjectList();
+    void CreateObject();
+
     void SelectedGameObjectInfo();
 
     //extra

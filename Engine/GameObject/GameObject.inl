@@ -13,16 +13,16 @@ inline T* GameObject::AddComponent()
 }
 
 template <typename T>
-inline T* GameObject::AddComponent(BaseComponent* comp)
+inline T* GameObject::AddComponent(BaseComponent* _comp)
 {
 	T* temp = GetComponent<T>();
 	if (temp != nullptr)
 	{
-		delete comp;
+		delete _comp;
 		return temp;
 	}
 
-	component.insert({ T::TypeName, comp });
+	component.insert({ T::TypeName, _comp });
 	return temp;
 }
 

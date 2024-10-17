@@ -7,5 +7,5 @@ public:
 	AudioResource() = default;
 	~AudioResource();
 
-	void LoadData(const std::string& filename) override;
+	void LoadData(const std::string& _filename) override;
 };

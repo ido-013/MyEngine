@@ -157,7 +157,10 @@ void Editor::GameObjectWindow()
     ImGui::Begin("GameObject");
 
     ObjectListTree();
-    MakeObjectTree();
+    ImGui::Separator();
+
+    CreateObjectPopup();
+    LoadPrefabPopup();
 
     ImGui::End();
 }
@@ -214,7 +217,7 @@ void Editor::CreateObjectPopup()
 
 void Editor::LoadPrefabPopup()
 {
-    if (ImGui::Button("Load Prefab"))
+    if (SameLineButton("Load Prefab"))
     {
         ImGui::OpenPopup("Load Prefab");
     }
@@ -249,9 +252,17 @@ void Editor::SelectedGameObjectWindow()
     ImGui::Begin("Selected GameObject");
 
     GameObjectInfoText();
+    ImGui::Separator();
+
     AddComponentTree();
+    ImGui::Separator();
+
     ComponentListTree();
+    ImGui::Separator();
+
     RenameObjectInput();
+    ImGui::Separator();
+
     SavePrefabPopup();
     DeleteObjectButton();
 
@@ -266,6 +277,10 @@ void Editor::SelectedGameObjectWindow()
 void Editor::GameObjectInfoText()
 {
     ImGui::BulletText(("Name: " + selectedObj->GetName()).c_str());
+    
+    std::string prefabName = selectedObj->GetPrefabName();
+    if (!prefabName.empty())
+        ImGui::BulletText(("Prefab: " + prefabName.substr(0, prefabName.find_last_of('.'))).c_str());
 }
 
 void Editor::AddComponentTree()
@@ -301,7 +316,7 @@ void Editor::ComponentListTree()
 void Editor::RenameObjectInput()
 {
     char buffer[100] = { '\0' };
-    if (ImGui::InputText("Name", buffer, 100, ImGuiInputTextFlags_EnterReturnsTrue))
+    if (ImGui::InputText("Rename", buffer, 100, ImGuiInputTextFlags_EnterReturnsTrue))
     {
         GameObjectManager::GetInstance().RenameObject(selectedObj->GetName(), buffer);
     }
@@ -309,12 +324,12 @@ void Editor::RenameObjectInput()
 
 void Editor::SavePrefabPopup()
 {
-    if (ImGui::Button("Save Prefab"))
+    if (ImGui::Button("Save as Prefab"))
     {
-        ImGui::OpenPopup("Save Prefab");
+        ImGui::OpenPopup("Save as Prefab");
     }
 
-    if (ImGui::BeginPopupModal("Save Prefab", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+    if (ImGui::BeginPopupModal("Save as Prefab", NULL, ImGuiWindowFlags_AlwaysAutoResize))
     {
         char buffer[100] = { '\0' };
         if (ImGui::InputText("Name", buffer, 100, ImGuiInputTextFlags_EnterReturnsTrue))
@@ -331,7 +346,7 @@ void Editor::SavePrefabPopup()
 
 void Editor::DeleteObjectButton()
 {
-    if (ImGui::Button("Delete Object"))
+    if (SameLineButton("Delete Object"))
     {
         GameObjectManager::GetInstance().RemoveObject(selectedObj->GetName());
         selectedObj = nullptr;

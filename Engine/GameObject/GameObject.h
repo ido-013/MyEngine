@@ -9,7 +9,9 @@ class GameObject
 private:
 	//GO now will have a container of BaseComponent*
 	std::map<std::string, BaseComponent*> component;
+
 	std::string name;
+	std::string prefabName;
 
 	GameObject(std::string _name);
 	//Components in the GO container are ALLOCATED IN THE HEAP, 
@@ -38,7 +40,7 @@ public:
 	const std::map<std::string, BaseComponent*>& GetAllComponent() { return component; }
 	
 	const std::string& GetName() { return name; }
-	void SetName(const std::string& _name) { name = _name; }
+	const std::string& GetPrefabName() { return prefabName; }
 
 	friend class GameObjectManager;
 };

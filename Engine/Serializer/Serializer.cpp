@@ -5,8 +5,10 @@
 
 #include "../GameObjectManager/GameObjectManager.h"
 #include "../ComponentManager/ComponentManager.h"
-#include "../BaseComponent.h"
 #include "../RTTI/Registry.h"
+#include "../Prefab/Prefab.h"
+
+#include "../BaseComponent.h"
 
 using json = nlohmann::ordered_json;	// Map. Orders the order the variables were declared in
 
@@ -14,11 +16,11 @@ void Serializer::LoadLevel(const std::string& _filename)
 {
 	// Open file
 	std::fstream file;
-	file.open("Assets/Level/" + _filename, std::fstream::in);
+	file.open("Assets/Level/" + _filename + ".lvl", std::fstream::in);
 
 	// Check the file is valid
 	if (!file.is_open())
-		throw std::invalid_argument("Serializer::LoadLevel Invalid filename " + _filename);
+		throw std::invalid_argument("Serializer::LoadLevel Invalid filename " + _filename + ".lvl");
 
 	json allDataJson;
 	file >> allDataJson; // the json has all the file data
@@ -29,27 +31,37 @@ void Serializer::LoadLevel(const std::string& _filename)
 
 		if (itObj != item.end())
 		{
-			GameObject* obj = GameObjectManager::GetInstance().CreateObject(itObj.value());
+			GameObject* obj = nullptr;
 
-			auto compIt = item.find("components");
-			if (compIt == item.end())
-				continue;
-
-			// iterate on the json on cmp for each component, add it
-			for (auto& comp : *compIt)
+			auto itPrefab = item.find("prefab");
+			if (itPrefab != item.end())
 			{
-				auto dataIt = comp.find("type");
-				if (dataIt == comp.end())	// not found
-					continue;
+				obj = Prefab::NewGameObject(itObj.value(), itPrefab.value());
+			}
+			else
+			{
+				obj = GameObjectManager::GetInstance().CreateObject(itObj.value());
+			}
 
-				std::string typeName = dataIt.value().dump();	// convert to string
-				typeName = typeName.substr(1, typeName.size() - 2);
+			auto itComp = item.find("components");
+			if (itComp != item.end())
+			{
+				// iterate on the json on cmp for each component, add it
+				for (auto& comp : *itComp)
+				{
+					auto dataIt = comp.find("type");
+					if (dataIt == comp.end())	// not found
+						continue;
 
-				// Look in the regitstry for this type and create it
-				// Add the comp to the GO
-				BaseRTTI* p = Registry::GetInstance().FindAndCreate(typeName, obj);
-				if (p != nullptr)
-					p->LoadFromJson(comp);
+					std::string typeName = dataIt.value().dump();	// convert to string
+					typeName = typeName.substr(1, typeName.size() - 2);
+
+					// Look in the regitstry for this type and create it
+					// Add the comp to the GO
+					BaseRTTI* p = Registry::GetInstance().FindAndCreate(typeName, obj);
+					if (p != nullptr)
+						p->LoadFromJson(comp);
+				}
 			}
 		}
 	}
@@ -64,13 +76,22 @@ void Serializer::SaveLevel(const std::string& _filename)
 		json objJson;
 		objJson["object"] = obj.first;
 
-		json components;
-		for (const auto& comp : obj.second->GetAllComponent())
+		std::string prefabName = obj.second->GetPrefabName();
+
+		if (prefabName.empty())
 		{
-			BaseComponent* c = comp.second;
-			components.push_back(c->SaveToJson());
+			json components;
+			for (const auto& comp : obj.second->GetAllComponent())
+			{
+				BaseComponent* c = comp.second;
+				components.push_back(c->SaveToJson());
+			}
+			objJson["components"] = components;
 		}
-		objJson["components"] = components;
+		else
+		{
+			objJson["prefab"] = prefabName;
+		}
 
 		allDataJson.push_back(objJson);
 	}

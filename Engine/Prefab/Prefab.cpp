@@ -16,7 +16,7 @@ Prefab::~Prefab()
 
 void Prefab::SavePrefab(const std::string& _name, GameObject* _obj)
 {
-	std::string filename = "./Assets/Prefab/" + _name + ".prefab";
+	std::string filename = "./Assets/Prefab/" + _name;
 
 	json prefab;
 
@@ -41,7 +41,7 @@ void Prefab::SavePrefab(const std::string& _name, GameObject* _obj)
 
 GameObject* Prefab::NewGameObject(const std::string& _name, const std::string& _prefabName)
 {
-	GameObject* obj = GameObjectManager::GetInstance().CreateObject(_name);
+	GameObject* obj = GameObjectManager::GetInstance().CreateObject(_name, _prefabName);
 
 	json* data = ResourceManager::GetInstance().GetResourcePointer<json>(_prefabName);
 

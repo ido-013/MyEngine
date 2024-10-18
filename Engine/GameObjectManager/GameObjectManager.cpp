@@ -25,7 +25,7 @@ GameObject* GameObjectManager::GetObject(const std::string& _name)
 	return nullptr;
 }
 
-GameObject* GameObjectManager::CreateObject(const std::string& _name)
+GameObject* GameObjectManager::CreateObject(const std::string& _name, const std::string& _prefabName)
 {
 	auto it = objects.find(_name);
 
@@ -35,6 +35,7 @@ GameObject* GameObjectManager::CreateObject(const std::string& _name)
 	}
 
 	GameObject* obj = new GameObject(_name);
+	obj->prefabName = _prefabName;
 	objects.insert({ _name, obj });
 
 	return obj;
@@ -47,7 +48,7 @@ GameObject* GameObjectManager::RenameObject(const std::string& _preName, const s
 	if (it != objects.end())
 	{
 		GameObject* obj = it->second;
-		obj->SetName(_name);
+		obj->name = _name;
 		objects.erase(it);
 		objects.insert({ _name, obj });
 	}

@@ -59,3 +59,11 @@ bool SameLineButton(const char* _label)
 	ImGui::SameLine();
 	return ImGui::Button(_label);
 }
+
+void ClosePopupButton()
+{
+	if (ImGui::Button("Close") || ImGui::IsKeyPressed(ImGuiKey_Escape))
+	{
+		ImGui::CloseCurrentPopup();
+	}
+}

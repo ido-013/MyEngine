@@ -1,5 +1,8 @@
 #include "GLHelper.h"
+
 #include <iostream>
+
+#include "../Editor/Editor.h"
 
 GLfloat GLHelper::width;
 GLfloat GLHelper::height;
@@ -75,7 +78,7 @@ void GLHelper::Exit()
 void GLHelper::key_cb(GLFWwindow* _pwin, int _key, int _scancode, int _action, int _mod) 
 {
     if (GLFW_PRESS == _action) {
-        if (GLFW_KEY_ESCAPE == _key) {
+        if (GLFW_KEY_ESCAPE == _key && Editor::GetInstance().GetMode() == Editor::PLAY) {
             glfwSetWindowShouldClose(_pwin, GLFW_TRUE);
         }
 

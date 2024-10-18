@@ -111,7 +111,10 @@ void Editor::LoadLevelPopup(bool& _popup)
             GameObjectManager::GetInstance().RemoveAllObject();
             Serializer::GetInstance().LoadLevel(buffer);
             buffer.clear();
+            ImGui::CloseCurrentPopup();
         }
+
+        ClosePopupButton();
 
         ImGui::EndPopup();
     }
@@ -140,7 +143,10 @@ void Editor::SaveLevelPopup(bool& _popup)
         if (ImGui::InputText("Name", buffer, 100, ImGuiInputTextFlags_EnterReturnsTrue))
         {
             Serializer::GetInstance().SaveLevel(buffer);
+            ImGui::CloseCurrentPopup();
         }
+
+        ClosePopupButton();
 
         ImGui::EndPopup();
     }
@@ -162,7 +168,8 @@ void Editor::ObjectListTree()
     {
         for (auto& it : GameObjectManager::GetInstance().GetAllObject())
         {
-            if (ImGui::Button(it.first.c_str()))
+            // Can cause performance degradation
+            if (ImGui::MenuItem(it.first.c_str(), 0, selectedObj == nullptr ? false : !selectedObj->GetName().compare(it.first)))
             {
                 selectedObj = it.second;
             }
@@ -199,6 +206,8 @@ void Editor::CreateObjectPopup()
             ImGui::CloseCurrentPopup();
         }
 
+        ClosePopupButton();
+
         ImGui::EndPopup();
     }
 }
@@ -226,6 +235,8 @@ void Editor::LoadPrefabPopup()
             ImGui::CloseCurrentPopup();
         }
 
+        ClosePopupButton();
+
         ImGui::EndPopup();
     }
 }
@@ -243,6 +254,11 @@ void Editor::SelectedGameObjectWindow()
     RenameObjectInput();
     SavePrefabPopup();
     DeleteObjectButton();
+
+    if (ImGui::IsWindowFocused() && ImGui::IsKeyPressed(ImGuiKey_Escape))
+    {
+        selectedObj = nullptr;
+    }
 
     ImGui::End();
 }
@@ -306,6 +322,8 @@ void Editor::SavePrefabPopup()
             Prefab::SavePrefab(buffer, selectedObj);
             ImGui::CloseCurrentPopup();
         }
+
+        ClosePopupButton();
 
         ImGui::EndPopup();
     }

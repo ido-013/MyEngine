@@ -4,6 +4,7 @@
 #include <glm/ext.hpp>
 
 #include "../Camera/Camera.h"
+#include "../Editor/Editor.h"
 
 void TransformComp::CalculateMatrix()
 {
@@ -42,11 +43,15 @@ TransformComp::TransformComp(GameObject* _owner) : EngineComponent(_owner), pos(
 
 	scale.x = 1;
 	scale.y = 1;
+
+	CalculateMatrix();
+
+	Editor::GetInstance().AddTfComp(this);
 }
 
 TransformComp::~TransformComp()
 {
-
+	Editor::GetInstance().DeleteTfComp(this);
 }
 
 void TransformComp::Update()
@@ -71,6 +76,8 @@ bool TransformComp::Edit()
 			return false;
 		}
 
+		CalculateMatrix();
+
 		ImGui::TreePop();
 	}
 
@@ -80,16 +87,19 @@ bool TransformComp::Edit()
 void TransformComp::SetPos(const glm::vec2& _otherPos)
 {
 	this->pos = _otherPos;
+	CalculateMatrix();
 }
 
 void TransformComp::SetScale(const glm::vec2& _otherScale)
 {
 	this->scale = _otherScale;
+	CalculateMatrix();
 }
 
 void TransformComp::SetRot(const float& _otherRot)
 {
 	this->rot = _otherRot;
+	CalculateMatrix();
 }
 
 void TransformComp::PrintMatrix()

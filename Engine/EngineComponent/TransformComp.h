@@ -40,4 +40,6 @@ public:
 	static BaseRTTI* CreateTransformComponent(GameObject* _owner);
 
 	static constexpr const char* TypeName = "TransformComp";
+
+	friend class Editor;
 };

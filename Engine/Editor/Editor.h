@@ -5,6 +5,8 @@
 #include <iostream>
 #include <vector>
 
+class TransformComp;
+
 class Editor
 {
 public:
@@ -12,7 +14,6 @@ public:
     {
         PLAY,
         EDIT,
-        PAUSE,
     };
 
 private:
@@ -25,6 +26,7 @@ private:
     EditorMode mode;
     GameObject* selectedObj;
     std::vector<std::string> comps;
+    std::vector<TransformComp*> tfComps;
 
     void ModeChangeWindow();
 
@@ -64,6 +66,9 @@ public:
     }
 
     const EditorMode& GetMode() const { return mode; }
+
+    void AddTfComp(TransformComp* _tf);
+    void DeleteTfComp(const TransformComp* _tf);
 
     void Init();
     void Update();

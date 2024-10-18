@@ -41,10 +41,10 @@ void GameStateManager::Update()
         Editor::EditorMode editorMode = Editor::GetInstance().GetMode();
 
         if (editorMode == Editor::PLAY)
+        {
             ComponentManager<LogicComponent>::GetInstance().Update();
-
-        if (editorMode != Editor::PAUSE)
             ComponentManager<EngineComponent>::GetInstance().Update();
+        }
 
         Camera::GetInstance().Update();
 

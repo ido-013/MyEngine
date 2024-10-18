@@ -16,11 +16,11 @@ void Serializer::LoadLevel(const std::string& _filename)
 {
 	// Open file
 	std::fstream file;
-	file.open("Assets/Level/" + _filename + ".lvl", std::fstream::in);
+	file.open("Assets/Level/" + _filename, std::fstream::in);
 
 	// Check the file is valid
 	if (!file.is_open())
-		throw std::invalid_argument("Serializer::LoadLevel Invalid filename " + _filename + ".lvl");
+		throw std::invalid_argument("Serializer::LoadLevel Invalid filename " + _filename);
 
 	json allDataJson;
 	file >> allDataJson; // the json has all the file data
@@ -98,10 +98,10 @@ void Serializer::SaveLevel(const std::string& _filename)
 
 	// Open file
 	std::fstream file;
-	file.open("Assets/Level/" + _filename + ".lvl", std::fstream::out);	// Open as write mode. Create it if it does not exist!
+	file.open("Assets/Level/" + _filename, std::fstream::out);	// Open as write mode. Create it if it does not exist!
 
 	if (!file.is_open())
-		throw std::invalid_argument("Serializer::SaveLevel file write error " + _filename + ".lvl");
+		throw std::invalid_argument("Serializer::SaveLevel file write error " + _filename);
 
 	file << std::setw(2) << allDataJson;	// Separates in lines and each section
 

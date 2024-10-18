@@ -10,7 +10,7 @@
 
 Camera::Camera() : pos(), height(2), speed(300), world_to_ndc_xform()
 {
-
+	CalculateMatrix();
 }
 
 Camera::~Camera()

@@ -37,15 +37,21 @@ void Editor::ModeChangeWindow()
 {
     ImGui::Begin("mode", 0, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove);
 
-    ImGui::Columns(3, 0, false);
+    ImGui::Columns(2, 0, false);
 
-    if (ImGui::Selectable("Play", mode == PLAY)) mode = PLAY;
+    if (ImGui::Selectable("Play", mode == PLAY)) 
+    {
+        Serializer::GetInstance().SaveLevel("temp.lvl");
+        mode = PLAY;
+    }
 
     ImGui::NextColumn();
-    if (ImGui::Selectable("Pause", mode == PAUSE)) mode = PAUSE;
-
-    ImGui::NextColumn();
-    if (ImGui::Selectable("Edit", mode == EDIT)) mode = EDIT;
+    if (ImGui::Selectable("Edit", mode == EDIT))
+    {
+        GameObjectManager::GetInstance().RemoveAllObject();
+        Serializer::GetInstance().LoadLevel("temp.lvl");
+        mode = EDIT;
+    }
 
     ImGui::End();
 }
@@ -353,6 +359,23 @@ void Editor::DeleteObjectButton()
     }
 }
 
+void Editor::AddTfComp(TransformComp* _tf)
+{
+    tfComps.push_back(_tf);
+}
+
+void Editor::DeleteTfComp(const TransformComp* _tf)
+{
+    for (auto it = tfComps.begin(); it != tfComps.end(); it++)
+    {
+        if (*it == _tf)
+        {
+            tfComps.erase(it);
+            break;
+        }
+    }
+}
+
 void Editor::Init()
 {
     // Setup Dear ImGui context
@@ -384,6 +407,11 @@ void Editor::Update()
         SelectedGameObjectWindow();
 
         Camera::GetInstance().Window();
+
+        for (auto& tf : tfComps)
+        {
+            tf->CalculateMatrix();
+        }
     }
     
     // Rendering

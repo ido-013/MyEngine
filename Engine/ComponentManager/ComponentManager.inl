@@ -26,12 +26,6 @@ ComponentManager<T>::~ComponentManager() {}
 template <typename T>
 void ComponentManager<T>::Update()
 {
-    for (auto it : component)
-    {
-        if (it != nullptr)
-            it->Update();
-    }
-
     for (auto it = component.begin(); it != component.end(); )
     {
         if (*it == nullptr)
@@ -40,6 +34,7 @@ void ComponentManager<T>::Update()
         }
         else
         {
+            (*it)->Update();
             it++;
         }
     }

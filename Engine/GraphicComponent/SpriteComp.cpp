@@ -60,30 +60,32 @@ bool SpriteComp::Edit()
 {
     if (ImGui::TreeNode(TypeName))
     {
+        //Edit Color
         int colorArray[3] = { color.r, color.g, color.b };
         ImGui::InputInt3("Color", &colorArray[0]);
         color.r = std::max(std::min(colorArray[0], 255), 0);
         color.g = std::max(std::min(colorArray[1], 255), 0);
         color.b = std::max(std::min(colorArray[2], 255), 0);
 
+        //Edit Alpha
         ImGui::InputFloat("Alpha", &alpha);
         alpha = alpha < 0 ? 0 : (alpha > 1 ? 1 : alpha);
 
         std::string filename;
 
-        //Change Shader
+        //Edit Shader
         if (FileSelectComboOnce(filename, "Shader", shaderName, "Assets/Shader", ".shd"))
         {
             SetShdrpgm(filename);
         }
         
-        //Change Mesh
+        //Edit Mesh
         if (FileSelectComboOnce(filename, "Mesh", meshName, "Assets/Mesh", ".msh"))
         {
             SetMesh(filename);
         }
         
-        //Change Texture
+        //Edit Texture
         if (FileSelectComboOnce(filename, "Texture", textureName, "Assets/Texture"))
         {
             SetTexture(filename);
@@ -135,7 +137,6 @@ void SpriteComp::SetTexture(const std::string& name)
 	textureName = name;
     texobj = ResourceManager::GetInstance().GetResourcePointer<GLuint>(name);
 }
-
 
 void SpriteComp::UnsetShdrpgm()
 {

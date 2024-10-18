@@ -1,5 +1,6 @@
 #include "Util.h"
 
+#include <cstring>
 #include <filesystem>
 
 #include "../Imgui/imgui.h"
@@ -46,4 +47,15 @@ void FileSelectCombo(std::string& _result, const std::string& _label, const std:
 	{
 		_result = temp;
 	}
+}
+
+void ClearBuffer(char* _buffer, const int& _size)
+{
+	memset(_buffer, '\0', _size);
+}
+
+bool SameLineButton(const char* _label)
+{
+	ImGui::SameLine();
+	return ImGui::Button(_label);
 }

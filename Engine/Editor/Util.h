@@ -17,3 +17,7 @@ void FileSelectCombo(
 	const std::string& _filePath,
 	const std::string& _filter = std::string()
 );
+
+void ClearBuffer(char* _buffer, const int& _size);
+
+bool SameLineButton(const char* _label);

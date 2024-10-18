@@ -1,19 +1,23 @@
 ﻿#include "Editor.h"
 
-#include "../OpenGL/GLHelper.h"
-
+#include "../Imgui/imgui.h"
+#include "../Imgui/imgui_impl_glfw.h"
+#include "../Imgui/imgui_impl_opengl3.h"
 #include "../Imgui/imgui_stdlib.h"
+
+#include "../OpenGL/GLHelper.h"
 
 #include "../GameObjectManager/GameObjectManager.h"
 #include "../Serializer/Serializer.h"
 #include "../RTTI/Registry.h"
 #include "../Camera/Camera.h"
+#include "../Prefab/Prefab.h"
 
 #include "Util.h"
-#include "../Prefab/Prefab.h"
+
 #include "../Components.h"
 
-Editor::Editor() : buffer(), selected(nullptr), mode()
+Editor::Editor() : selectedObj(nullptr), mode(EDIT)
 {
     comps =
     {
@@ -27,20 +31,6 @@ Editor::Editor() : buffer(), selected(nullptr), mode()
 Editor::~Editor()
 {
 
-}
-
-void Editor::ClearBuffer()
-{
-    for (char& c : buffer)
-    {
-        c = '\0';
-    }
-}
-
-bool Editor::SameLineButton(const char* label)
-{
-    ImGui::SameLine();
-    return ImGui::Button(label);
 }
 
 void Editor::ModeChangeWindow()
@@ -64,61 +54,109 @@ void Editor::TopBar()
 {
     ImGui::BeginMainMenuBar();
 
-    TopBarLevel();
+    LevelMenu();
 
     ImGui::EndMainMenuBar();
 }
 
-void Editor::TopBarLevel()
+void Editor::LevelMenu()
 {
+    static bool loadPopup = false;
+    static bool savePopup = false;
+
     if (ImGui::BeginMenu("Level"))
     {
-        if (ImGui::MenuItem("New Level"))
-        {
-            selected = nullptr;
-
-            GameObjectManager::GetInstance().RemoveAllObject();
-        }
-
-        if (ImGui::BeginMenu("Load Level"))
-        {
-            if (ImGui::InputText("##", buffer, 100, ImGuiInputTextFlags_EnterReturnsTrue) || SameLineButton("Load"))
-            {
-                selected = nullptr;
-
-                Serializer::GetInstance().LoadLevel(buffer);
-                ClearBuffer();
-            }
-
-            ImGui::EndMenu();
-        }
-
-        if (ImGui::BeginMenu("Save Level"))
-        {
-            if (ImGui::InputText("##", buffer, 100, ImGuiInputTextFlags_EnterReturnsTrue) || SameLineButton("Save"))
-            {
-                Serializer::GetInstance().SaveLevel(buffer);
-                ClearBuffer();
-            }
-
-            ImGui::EndMenu();
-        }
+        NewLevelMenu();
+        LoadLevelMenu(loadPopup);
+        SaveLevelMenu(savePopup);
 
         ImGui::EndMenu();
     }
+
+    LoadLevelPopup(loadPopup);
+    SaveLevelPopup(savePopup);
 }
 
-void Editor::GameObjectInfo()
+void Editor::NewLevelMenu()
 {
-    ImGui::Begin("Game Object");
+    if (ImGui::MenuItem("New Level"))
+    {
+        selectedObj = nullptr;
+        GameObjectManager::GetInstance().RemoveAllObject();
+    }
+}
 
-    ObjectList();
-    CreateObject();
+void Editor::LoadLevelMenu(bool& _popup)
+{
+    if (ImGui::MenuItem("Load Level"))
+    {
+        _popup = true;
+    }
+}
+
+void Editor::LoadLevelPopup(bool& _popup)
+{
+    if (_popup)
+    {
+        ImGui::OpenPopup("Load Level");
+        _popup = false;
+    }
+
+    if (ImGui::BeginPopupModal("Load Level", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+    {
+        static std::string buffer;
+        if (FileSelectComboOnce(buffer, "Level", buffer, "Assets/Level", ".lvl"))
+        {
+            selectedObj = nullptr;
+            GameObjectManager::GetInstance().RemoveAllObject();
+            Serializer::GetInstance().LoadLevel(buffer);
+            buffer.clear();
+        }
+
+        ImGui::EndPopup();
+    }
     
+}
+
+void Editor::SaveLevelMenu(bool& _popup)
+{
+    if (ImGui::MenuItem("Save Level"))
+    {
+        _popup = true;
+    }
+}
+
+void Editor::SaveLevelPopup(bool& _popup)
+{
+    if (_popup)
+    {
+        ImGui::OpenPopup("Save Level");
+        _popup = false;
+    }
+
+    if (ImGui::BeginPopupModal("Save Level", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+    {
+        char buffer[100] = { '\0' };
+        if (ImGui::InputText("Name", buffer, 100, ImGuiInputTextFlags_EnterReturnsTrue))
+        {
+            Serializer::GetInstance().SaveLevel(buffer);
+        }
+
+        ImGui::EndPopup();
+    }
+}
+
+void Editor::GameObjectWindow()
+{
+    ImGui::Begin("GameObject");
+
+    ObjectListTree();
+    MakeObjectTree();
+
     ImGui::End();
 }
 
-void Editor::ObjectList()
+void Editor::ObjectListTree()
 {
     if (ImGui::TreeNode("List"))
     {
@@ -126,7 +164,7 @@ void Editor::ObjectList()
         {
             if (ImGui::Button(it.first.c_str()))
             {
-                selected = it.second;
+                selectedObj = it.second;
             }
         }
 
@@ -134,78 +172,107 @@ void Editor::ObjectList()
     }
 }
 
-void Editor::CreateObject()
+void Editor::MakeObjectTree()
 {
-    if (ImGui::TreeNode("Create"))
+    if (ImGui::TreeNode("Make"))
     {
-        if (ImGui::Button("New Object"))
-        {
-            ImGui::OpenPopup("New Object");
-        }
-
-        if (ImGui::BeginPopupModal("New Object", NULL, ImGuiWindowFlags_AlwaysAutoResize))
-        {
-            if (ImGui::InputText("##", buffer, 100, ImGuiInputTextFlags_EnterReturnsTrue) || SameLineButton("Create"))
-            {
-                GameObjectManager::GetInstance().CreateObject(buffer);
-                ImGui::CloseCurrentPopup();
-                ClearBuffer();
-            }
-
-            ImGui::EndPopup();
-        }
-
-        if (ImGui::Button("Load Prefab"))
-        {
-            ImGui::OpenPopup("Load Prefab");
-        }
-
-        if (ImGui::BeginPopupModal("Load Prefab", NULL, ImGuiWindowFlags_AlwaysAutoResize))
-        {
-            ImGui::InputText("Name", buffer, 100, ImGuiInputTextFlags_EnterReturnsTrue);
-            static std::string s;
-
-            FileSelectCombo(s, "Prefab", s, "Assets/Prefab", ".prefab");
-           
-            if (ImGui::Button("Load"))
-            {
-                Prefab::NewGameObject(buffer, s);
-                ImGui::CloseCurrentPopup();
-                ClearBuffer();
-            }
-            
-            ImGui::EndPopup();
-        }
+        CreateObjectPopup();
+        LoadPrefabPopup();
 
         ImGui::TreePop();
     }
 }
 
-void Editor::SelectedGameObjectInfo()
+void Editor::CreateObjectPopup()
 {
-    if (selected == nullptr)
+    if (ImGui::Button("New Object"))
+    {
+        ImGui::OpenPopup("New Object");
+    }
+
+    if (ImGui::BeginPopupModal("New Object", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+    {
+        char buffer[100] = { '\0' };
+        if (ImGui::InputText("Name", buffer, 100, ImGuiInputTextFlags_EnterReturnsTrue))
+        {
+            GameObjectManager::GetInstance().CreateObject(buffer);
+            ImGui::CloseCurrentPopup();
+        }
+
+        ImGui::EndPopup();
+    }
+}
+
+void Editor::LoadPrefabPopup()
+{
+    if (ImGui::Button("Load Prefab"))
+    {
+        ImGui::OpenPopup("Load Prefab");
+    }
+
+    if (ImGui::BeginPopupModal("Load Prefab", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+    {
+        static char buffer[100] = { '\0' };
+        ImGui::InputText("Name", buffer, 100);
+
+        static std::string prefabName;
+        FileSelectCombo(prefabName, "Prefab", prefabName, "Assets/Prefab", ".prefab");
+
+        if (ImGui::Button("Load"))
+        {
+            Prefab::NewGameObject(buffer, prefabName);
+            ClearBuffer(buffer, 100);
+            prefabName.clear();
+            ImGui::CloseCurrentPopup();
+        }
+
+        ImGui::EndPopup();
+    }
+}
+
+void Editor::SelectedGameObjectWindow()
+{
+    if (selectedObj == nullptr)
         return;
 
-    ImGui::Begin("Current Object");
+    ImGui::Begin("Selected GameObject");
 
-    ImGui::BulletText(("Name: " + selected->GetName()).c_str());
+    GameObjectInfoText();
+    AddComponentTree();
+    ComponentListTree();
+    RenameObjectInput();
+    SavePrefabPopup();
+    DeleteObjectButton();
 
+    ImGui::End();
+}
+
+void Editor::GameObjectInfoText()
+{
+    ImGui::BulletText(("Name: " + selectedObj->GetName()).c_str());
+}
+
+void Editor::AddComponentTree()
+{
     if (ImGui::TreeNode("Add Component"))
     {
-        for (auto& compType : comps) 
+        for (auto& compType : comps)
         {
             if (ImGui::Button(compType.c_str()))
             {
-                Registry::GetInstance().FindAndCreate(compType, selected);
+                Registry::GetInstance().FindAndCreate(compType, selectedObj);
             }
         }
 
         ImGui::TreePop();
     }
+}
 
-    if (ImGui::TreeNode("Component"))
+void Editor::ComponentListTree()
+{
+    if (ImGui::TreeNode("Component List"))
     {
-        for (auto& it : selected->GetAllComponent())
+        for (auto& it : selectedObj->GetAllComponent())
         {
             if (!it.second->Edit())
                 break;
@@ -213,37 +280,44 @@ void Editor::SelectedGameObjectInfo()
 
         ImGui::TreePop();
     }
+}
 
-    if (ImGui::InputText("##Name", buffer, 100, ImGuiInputTextFlags_EnterReturnsTrue) || SameLineButton("Rename"))
+void Editor::RenameObjectInput()
+{
+    char buffer[100] = { '\0' };
+    if (ImGui::InputText("Name", buffer, 100, ImGuiInputTextFlags_EnterReturnsTrue))
     {
-        GameObjectManager::GetInstance().RenameObject(selected->GetName(), buffer);
-        ClearBuffer();
+        GameObjectManager::GetInstance().RenameObject(selectedObj->GetName(), buffer);
     }
+}
 
+void Editor::SavePrefabPopup()
+{
     if (ImGui::Button("Save Prefab"))
     {
         ImGui::OpenPopup("Save Prefab");
     }
-     
+
     if (ImGui::BeginPopupModal("Save Prefab", NULL, ImGuiWindowFlags_AlwaysAutoResize))
     {
-        if (ImGui::InputText("##Name", buffer, 100, ImGuiInputTextFlags_EnterReturnsTrue) || SameLineButton("Save"))
+        char buffer[100] = { '\0' };
+        if (ImGui::InputText("Name", buffer, 100, ImGuiInputTextFlags_EnterReturnsTrue))
         {
-            Prefab::SavePrefab(buffer, selected);   
+            Prefab::SavePrefab(buffer, selectedObj);
             ImGui::CloseCurrentPopup();
-            ClearBuffer();
         }
 
         ImGui::EndPopup();
     }
+}
 
+void Editor::DeleteObjectButton()
+{
     if (ImGui::Button("Delete Object"))
     {
-        GameObjectManager::GetInstance().RemoveObject(selected->GetName());
-        selected = nullptr;
+        GameObjectManager::GetInstance().RemoveObject(selectedObj->GetName());
+        selectedObj = nullptr;
     }
-
-    ImGui::End();
 }
 
 void Editor::Init()
@@ -273,14 +347,13 @@ void Editor::Update()
         ImGui::ShowDemoWindow(); // Show demo window! :)
 
         TopBar();
-        GameObjectInfo();
-        SelectedGameObjectInfo();
+        GameObjectWindow();
+        SelectedGameObjectWindow();
 
-        Camera::GetInstance().Info();
+        Camera::GetInstance().Window();
     }
     
     // Rendering
-    // (Your code clears your framebuffer, renders your other stuff etc.)
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }

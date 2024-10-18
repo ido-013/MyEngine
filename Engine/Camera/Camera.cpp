@@ -48,7 +48,7 @@ void Camera::Update()
 	CalculateMatrix();
 }
 
-void Camera::Info()
+void Camera::Window()
 {
 	ImGui::SetNextWindowSize({ 280, 80 });
 	ImGui::Begin("Camera", 0, ImGuiWindowFlags_AlwaysAutoResize);

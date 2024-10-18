@@ -1,9 +1,5 @@
 #pragma once
 
-#include "../Imgui/imgui.h"
-#include "../Imgui/imgui_impl_glfw.h"
-#include "../Imgui/imgui_impl_opengl3.h"
-
 #include "../GameObject/GameObject.h"
 
 #include <iostream>
@@ -23,27 +19,36 @@ private:
     Editor();
     ~Editor();
 
-    Editor(const Editor& other) = delete;
-    const Editor& operator=(const Editor& other) = delete;
+    Editor(const Editor&) = delete;
+    const Editor& operator=(const Editor&) = delete;
 
     EditorMode mode;
-    char buffer[100];
-    GameObject* selected;
+    GameObject* selectedObj;
     std::vector<std::string> comps;
-
-    void ClearBuffer();
-    bool SameLineButton(const char* label);
 
     void ModeChangeWindow();
 
     void TopBar();
-    void TopBarLevel();
+        void LevelMenu();
+            void NewLevelMenu();
+            void LoadLevelMenu(bool& _popup);
+                void LoadLevelPopup(bool& _popup);
+            void SaveLevelMenu(bool& _popup);
+                void SaveLevelPopup(bool& _popup);
 
-    void GameObjectInfo();
-    void ObjectList();
-    void CreateObject();
+    void GameObjectWindow();
+        void ObjectListTree();
+        void MakeObjectTree();
+            void CreateObjectPopup();
+            void LoadPrefabPopup();
 
-    void SelectedGameObjectInfo();
+    void SelectedGameObjectWindow();
+        void GameObjectInfoText();
+        void AddComponentTree();
+        void ComponentListTree();
+        void RenameObjectInput();
+        void SavePrefabPopup();
+        void DeleteObjectButton();
 
     //extra
         //object picking

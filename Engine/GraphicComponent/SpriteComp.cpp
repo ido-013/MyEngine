@@ -3,8 +3,10 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 
-#include "../Editor/Util.h"
 #include "../ResourceManager/ResourceManager.h"
+#include "../Camera/Camera.h"
+
+#include "../Editor/Util.h"
 #include "../EngineComponent/TransformComp.h"
 
 SpriteComp::SpriteComp(GameObject* _owner) : GraphicComponent(_owner), 
@@ -31,18 +33,21 @@ void SpriteComp::Update()
     glUseProgram(*shaderProgram);
 
     GLint loc = glGetUniformLocation(*shaderProgram, "uTex2d");
-    if (loc >= 0) {
+    if (loc >= 0) 
+    {
         glUniform1i(loc, 6);
     }
 
     loc = glGetUniformLocation(*shaderProgram, "uColor");
-    if (loc >= 0) {
+    if (loc >= 0) 
+    {
         glUniform4f(loc, color.r / 255.f, color.g / 255.f, color.b / 255.f, alpha);
     }
 
     loc = glGetUniformLocation(*shaderProgram, "uModel_to_NDC");
-    if (loc >= 0) {
-        glUniformMatrix3fv(loc, 1, GL_FALSE, glm::value_ptr(t->GetMatrix()));
+    if (loc >= 0) 
+    {
+        glUniformMatrix3fv(loc, 1, GL_FALSE, glm::value_ptr(Camera::GetInstance().GetMatrix() * t->GetMatrix()));
     }
 
     glBindTextureUnit(6, *texobj);

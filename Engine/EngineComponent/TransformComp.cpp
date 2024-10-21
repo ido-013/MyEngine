@@ -27,13 +27,13 @@ void TransformComp::CalculateMatrix()
 
 	//Create a scale matrix
 	glm::mat3 scaleMtx = glm::mat3(
-		scale.x, 0.0f, 0.0f,
-		0.0f, scale.y, 0.0f,
+		scale.x / 2, 0.0f, 0.0f,
+		0.0f, scale.y / 2, 0.0f,
 		0.0f, 0.0f, 1.0f
 	);
 
 	//Concatenate them
-	transformMatrix = Camera::GetInstance().GetMatrix() * translateMtx * rotationMtx * scaleMtx;
+	transformMatrix = translateMtx * rotationMtx * scaleMtx;
 }
 
 TransformComp::TransformComp(GameObject* _owner) : EngineComponent(_owner), pos(), scale(), rot(0), transformMatrix()

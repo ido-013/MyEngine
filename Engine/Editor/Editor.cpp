@@ -14,6 +14,7 @@
 #include "../Prefab/Prefab.h"
 
 #include "Util.h"
+#include "../collisionManager/CollisionUtil.h"
 
 #include "../Components.h"
 
@@ -24,7 +25,8 @@ Editor::Editor() : selectedObj(nullptr), mode(EDIT)
         TransformComp::TypeName,
         SpriteComp::TypeName,
         RigidbodyComp::TypeName,
-        PlayerComp::TypeName
+        PlayerComp::TypeName,
+        ColliderComp::TypeName,
     };
 }
 
@@ -33,8 +35,27 @@ Editor::~Editor()
 
 }
 
-void Editor::ModeChangeWindow()
+void Editor::ObjectPicking()
 {
+    for (auto& tf : tfComps)
+    {
+        if (IsCollisionPointSquare(GLHelper::mousePos, tf->GetPos(), tf->GetScale()))
+        {
+            if (GLHelper::mousestateLeft)
+            {
+                selectedObj = tf->GetOwner();
+            }
+        }
+
+        tf->CalculateMatrix();
+    }
+}
+
+void Editor::ChangeModeWindow()
+{
+    ImGui::SetNextWindowPos({ ImGui::GetMainViewport()->GetCenter().x, 30 }, ImGuiCond_Always, {0.5, 0.0});
+    ImGui::SetNextWindowSize({ 100, 30 });
+
     ImGui::Begin("mode", 0, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove);
 
     ImGui::Columns(2, 0, false);
@@ -42,6 +63,7 @@ void Editor::ModeChangeWindow()
     if (ImGui::Selectable("Play", mode == PLAY)) 
     {
         Serializer::GetInstance().SaveLevel("temp.lvl");
+        selectedObj = nullptr;
         mode = PLAY;
     }
 
@@ -396,23 +418,19 @@ void Editor::Update()
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 
-    ModeChangeWindow();
-
-    if (mode != PLAY)
+    if (mode == EDIT)
     {
         ImGui::ShowDemoWindow(); // Show demo window! :)
 
+        ObjectPicking();
         TopBar();
         GameObjectWindow();
         SelectedGameObjectWindow();
 
-        Camera::GetInstance().Window();
-
-        for (auto& tf : tfComps)
-        {
-            tf->CalculateMatrix();
-        }
+        Camera::GetInstance().Edit();
     }
+
+    ChangeModeWindow();
     
     // Rendering
     ImGui::Render();

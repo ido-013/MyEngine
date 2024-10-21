@@ -18,17 +18,20 @@ public:
 
 private:
     Editor();
-    ~Editor();
 
     Editor(const Editor&) = delete;
     const Editor& operator=(const Editor&) = delete;
+
+    ~Editor();
 
     EditorMode mode;
     GameObject* selectedObj;
     std::vector<std::string> comps;
     std::vector<TransformComp*> tfComps;
 
-    void ModeChangeWindow();
+    void ObjectPicking();
+
+    void ChangeModeWindow();
 
     void TopBar();
         void LevelMenu();
@@ -54,7 +57,6 @@ private:
 
     //extra
         //object picking
-        //different camera
         //function key
             //ctrl + '' -> use stack
 

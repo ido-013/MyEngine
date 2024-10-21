@@ -4,12 +4,15 @@
 #include "../OpenGL/GLHelper.h"
 
 #include "../ComponentManager/ComponentManager.h"
+#include "../CollisionManager/CollisionManager.h"
+#include "../EventManager/EventManager.h"
+#include "../ResourceManager/ResourceManager.h"
+#include "../Editor/Editor.h"
+#include "../Camera/Camera.h"
+
 #include "../LogicComponent/LogicComponent.h"
 #include "../EngineComponent/EngineComponent.h"
 #include "../GraphicComponent/GraphicComponent.h"
-
-#include "../Editor/Editor.h";
-#include "../Camera/Camera.h"
 
 #include "../Level/BaseLevel.h"
 
@@ -44,6 +47,8 @@ void GameStateManager::Update()
         {
             ComponentManager<LogicComponent>::GetInstance().Update();
             ComponentManager<EngineComponent>::GetInstance().Update();
+            CollisionManager::GetInstance().Update();
+            EventManager::GetInstance().DispatchAllEvents();
         }
 
         Camera::GetInstance().Update();
@@ -62,6 +67,9 @@ void GameStateManager::Exit()
     {
         currentLevel->Exit();
     }
+
+    ResourceManager::GetInstance().UnloadAllResource();
+    EventManager::GetInstance().DeleteUndispahchEvent();
 }
 
 void GameStateManager::ChangeLevel(BaseLevel* _newLvl)

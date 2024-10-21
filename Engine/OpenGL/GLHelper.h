@@ -1,11 +1,12 @@
 #pragma once
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
 #include <string>
 
 struct GLHelper
 {
-	static bool Init(GLfloat _width, GLfloat _height, std::string _title);
+	static bool Init(GLint _width, GLint _height, std::string _title);
 	static void Exit();
 
 	static void error_cb(int _error, char const* _description);
@@ -20,7 +21,7 @@ struct GLHelper
 
 	static void update_time(double _fpsCalcInt = 1.0);
 
-	static GLfloat width, height;
+	static GLint width, height;
 	static GLdouble fps;
 	static GLdouble delta_time;
 	static std::string title;
@@ -30,4 +31,12 @@ struct GLHelper
 	static GLboolean keystateA;
 	static GLboolean keystateS;
 	static GLboolean keystateD;
+
+	static GLboolean keystateUp;
+	static GLboolean keystateLeft;
+	static GLboolean keystateDown;
+	static GLboolean keystateRight;
+
+	static glm::vec2 mousePos;
+	static GLboolean mousestateLeft;
 };

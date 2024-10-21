@@ -3,9 +3,10 @@
 #include <iostream>
 
 #include "../Editor/Editor.h"
+#include "../Camera/Camera.h"
 
-GLfloat GLHelper::width;
-GLfloat GLHelper::height;
+GLint GLHelper::width;
+GLint GLHelper::height;
 GLdouble GLHelper::fps;
 GLdouble GLHelper::delta_time;
 std::string GLHelper::title;
@@ -16,10 +17,18 @@ GLboolean GLHelper::keystateA;
 GLboolean GLHelper::keystateS;
 GLboolean GLHelper::keystateD;
 
+GLboolean GLHelper::keystateUp;
+GLboolean GLHelper::keystateLeft;
+GLboolean GLHelper::keystateDown;
+GLboolean GLHelper::keystateRight;
+
+glm::vec2 GLHelper::mousePos;
+GLboolean GLHelper::mousestateLeft;
+
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
 // ---------------------------------------------------------------------------------------------
 
-bool GLHelper::Init(GLfloat _width, GLfloat _height, std::string _title) 
+bool GLHelper::Init(GLint _width, GLint _height, std::string _title) 
 {
     // glfw: initialize and configure
     // ------------------------------
@@ -43,7 +52,7 @@ bool GLHelper::Init(GLfloat _width, GLfloat _height, std::string _title)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
-        return -1;
+        return false;
     }
     glfwMakeContextCurrent(ptr_window);
 
@@ -52,13 +61,13 @@ bool GLHelper::Init(GLfloat _width, GLfloat _height, std::string _title)
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
         std::cout << "Failed to initialize GLAD" << std::endl;
-        return -1;
+        return false;
     }
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    return 0;
+    return true;
 }
 
 void GLHelper::setup_event_callbacks() 
@@ -77,8 +86,10 @@ void GLHelper::Exit()
 
 void GLHelper::key_cb(GLFWwindow* _pwin, int _key, int _scancode, int _action, int _mod) 
 {
-    if (GLFW_PRESS == _action) {
-        if (GLFW_KEY_ESCAPE == _key && Editor::GetInstance().GetMode() == Editor::PLAY) {
+    if (_action == GLFW_PRESS) 
+    {
+        if (GLFW_KEY_ESCAPE == _key && Editor::GetInstance().GetMode() == Editor::PLAY) 
+        {
             glfwSetWindowShouldClose(_pwin, GLFW_TRUE);
         }
 
@@ -86,49 +97,47 @@ void GLHelper::key_cb(GLFWwindow* _pwin, int _key, int _scancode, int _action, i
         keystateA = (_key == GLFW_KEY_A) ? GL_TRUE : keystateA;
         keystateS = (_key == GLFW_KEY_S) ? GL_TRUE : keystateS;
         keystateD = (_key == GLFW_KEY_D) ? GL_TRUE : keystateD;
+
+        keystateUp      = (_key == GLFW_KEY_UP)    ? GL_TRUE : keystateUp;
+        keystateLeft    = (_key == GLFW_KEY_LEFT)  ? GL_TRUE : keystateLeft;
+        keystateDown    = (_key == GLFW_KEY_DOWN)  ? GL_TRUE : keystateDown;
+        keystateRight   = (_key == GLFW_KEY_RIGHT) ? GL_TRUE : keystateRight;
     }
-    else if (GLFW_RELEASE == _action) {
-        // key start changes from pressed to released
+    else if (_action == GLFW_RELEASE) 
+    {
         keystateW = (_key == GLFW_KEY_W) ? GL_FALSE : keystateW;
         keystateA = (_key == GLFW_KEY_A) ? GL_FALSE : keystateA;
         keystateS = (_key == GLFW_KEY_S) ? GL_FALSE : keystateS;
         keystateD = (_key == GLFW_KEY_D) ? GL_FALSE : keystateD;
+
+        keystateUp      = (_key == GLFW_KEY_UP)    ? GL_FALSE : keystateUp;
+        keystateLeft    = (_key == GLFW_KEY_LEFT)  ? GL_FALSE : keystateLeft;
+        keystateDown    = (_key == GLFW_KEY_DOWN)  ? GL_FALSE : keystateDown;
+        keystateRight   = (_key == GLFW_KEY_RIGHT) ? GL_FALSE : keystateRight;
     }
 }
 
 void GLHelper::mousebutton_cb(GLFWwindow* _pwin, int _button, int _action, int _mod) 
 {
-   /* switch (button) {
-    case GLFW_MOUSE_BUTTON_LEFT:
-#ifdef _DEBUG
-        std::cout << "Left mouse button ";
-#endif
-        break;
-    case GLFW_MOUSE_BUTTON_RIGHT:
-#ifdef _DEBUG
-        std::cout << "Right mouse button ";
-#endif
-        break;
+    if (_action == GLFW_PRESS) 
+    {
+        mousestateLeft = (_button == GLFW_MOUSE_BUTTON_LEFT) ? GL_TRUE : mousestateLeft;
     }
-    switch (action) {
-    case GLFW_PRESS:
-#ifdef _DEBUG
-        std::cout << "pressed!!!" << std::endl;
-#endif
-        break;
-    case GLFW_RELEASE:
-#ifdef _DEBUG
-        std::cout << "released!!!" << std::endl;
-#endif
-        break;
-    }*/
+    else if (_action == GLFW_RELEASE) 
+    {
+        mousestateLeft = (_button == GLFW_MOUSE_BUTTON_LEFT) ? GL_FALSE : mousestateLeft;
+    }
 }
 
 void GLHelper::mousepos_cb(GLFWwindow* _pwin, double _xpos, double _ypos) 
 {
-//#ifdef _DEBUG
-//    std::cout << "Mouse cursor position: (" << xpos << ", " << ypos << ")" << std::endl;
-//#endif
+    glm::vec2 cameraPos = Camera::GetInstance().GetPos();
+    float cameraHeight = Camera::GetInstance().GetHeight();
+
+    mousePos.x = (_xpos - (width / 2.)) * cameraHeight + cameraPos.x;
+    mousePos.y = -(_ypos - (height / 2.)) * cameraHeight + cameraPos.y;
+
+    std::cout << mousePos.x << " " << mousePos.y << std::endl;
 }
 
 void GLHelper::mousescroll_cb(GLFWwindow* _pwin, double _xoffset, double _yoffset)

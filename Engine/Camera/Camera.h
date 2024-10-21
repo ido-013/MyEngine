@@ -12,6 +12,8 @@ private:
 	const Camera& operator=(const Camera&) = delete;
 
 	glm::vec2 pos;
+	glm::vec2 editPos;
+	glm::vec2 playPos;
 
 	float height;
 	float speed;
@@ -26,14 +28,16 @@ public:
 	}
 
 	void Update();
-	void Window();
+	void Edit();
 
 	void CalculateMatrix();
 	glm::mat3& GetMatrix() { return world_to_ndc_xform; }
 	
-	void GetPos(float* _px, float* _py);
-	void SetPos(float _x, float _y);
+	const glm::vec2& GetPos();
+	void SetPos(const float& _x, const float& _y);
 
-	void SetHeight(float _value);
-	void AddHeight(float _value);
+	void SetHeight(const float& _value);
+	void AddHeight(const float& _value);
+
+	const float& GetHeight();
 };

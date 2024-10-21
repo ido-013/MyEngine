@@ -140,11 +140,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera\Camera.cpp" />
+    <ClCompile Include="CollisionManager\CollisionManager.cpp" />
+    <ClCompile Include="CollisionManager\CollisionUtil.cpp" />
     <ClCompile Include="Editor\Editor.cpp" />
     <ClCompile Include="Editor\Util.cpp" />
+    <ClCompile Include="EngineComponent\ColliderComp.cpp" />
     <ClCompile Include="EngineComponent\EngineComponent.cpp" />
     <ClCompile Include="EngineComponent\RigidbodyComp.cpp" />
     <ClCompile Include="EngineComponent\TransformComp.cpp" />
+    <ClCompile Include="EventManager\EventManager.cpp" />
+    <ClCompile Include="Event\Entity.cpp" />
+    <ClCompile Include="Event\Event.cpp" />
     <ClCompile Include="GameObjectManager\GameObjectManager.cpp" />
     <ClCompile Include="GameObject\GameObject.cpp" />
     <ClCompile Include="GameStateManager\GameStateManager.cpp" />
@@ -180,13 +186,20 @@
   <ItemGroup>
     <ClInclude Include="BaseComponent.h" />
     <ClInclude Include="Camera\Camera.h" />
+    <ClInclude Include="CollisionManager\CollisionManager.h" />
+    <ClInclude Include="CollisionManager\CollisionUtil.h" />
     <ClInclude Include="ComponentManager\ComponentManager.h" />
     <ClInclude Include="Components.h" />
     <ClInclude Include="Editor\Editor.h" />
     <ClInclude Include="Editor\Util.h" />
+    <ClInclude Include="EngineComponent\ColliderComp.h" />
     <ClInclude Include="EngineComponent\EngineComponent.h" />
     <ClInclude Include="EngineComponent\RigidbodyComp.h" />
     <ClInclude Include="EngineComponent\TransformComp.h" />
+    <ClInclude Include="EventManager\EventManager.h" />
+    <ClInclude Include="Event\CollisionEvent.h" />
+    <ClInclude Include="Event\Entity.h" />
+    <ClInclude Include="Event\Event.h" />
     <ClInclude Include="GameObjectManager\GameObjectManager.h" />
     <ClInclude Include="GameObject\GameObject.h" />
     <ClInclude Include="GameStateManager\GameStateManager.h" />
@@ -223,6 +236,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ComponentManager\ComponentManager.inl" />
+    <None Include="EventManager\EventManager.inl" />
     <None Include="GameObject\GameObject.inl" />
     <None Include="Imgui\imgui.natstepfilter" />
     <None Include="ResourceManager\ResourceManager.inl" />

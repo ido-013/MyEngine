@@ -11,7 +11,7 @@
 
 SpriteComp::SpriteComp(GameObject* _owner) : GraphicComponent(_owner), 
                                              color({255, 255, 255}), alpha(1), texobj(nullptr),
-                                             shaderName("base.shd"), meshName("square.msh"), textureName("PlanetTexture.png")
+                                             shaderName("base.shd"), meshName("square.msh"), textureName("base.png")
 {
     SetShdrpgm(shaderName);
     SetMesh(meshName);
@@ -139,7 +139,8 @@ void SpriteComp::SetTexture(const std::string& name)
     if (texobj)
         UnsetTexture();
 
-	textureName = name;
+    textureName = name;
+
     texobj = ResourceManager::GetInstance().GetResourcePointer<GLuint>(name);
 }
 

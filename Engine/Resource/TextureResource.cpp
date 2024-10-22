@@ -4,6 +4,7 @@
 #include <GLFW/glfw3.h>
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
+#include <array>
 
 TextureResource::~TextureResource()
 {
@@ -19,10 +20,20 @@ TextureResource::~TextureResource()
 void TextureResource::LoadData(const std::string& _filename)
 {
     GLint width, height, bytes_per_texel;
-    stbi_set_flip_vertically_on_load(1);
-
-    GLubyte* ptr_texels = stbi_load(("Assets/Texture/" + _filename).c_str(), &width, &height, &bytes_per_texel, 4);
     GLuint* texobj = new GLuint;
+    GLubyte base_ptr_texels[4] = { 255, 255, 255, 255 };
+    
+    stbi_set_flip_vertically_on_load(1);
+    GLubyte* ptr_texels = stbi_load(("Assets/Texture/" + _filename).c_str(), &width, &height, &bytes_per_texel, 4);
+    
+    GLboolean valid_texels = (ptr_texels != nullptr);
+
+    if (!valid_texels)
+    {
+        width = 1;
+        height = 1;
+        ptr_texels = base_ptr_texels;
+    }
 
     glCreateTextures(GL_TEXTURE_2D, 1, texobj);
 
@@ -33,7 +44,8 @@ void TextureResource::LoadData(const std::string& _filename)
     glTextureSubImage2D(*texobj, 0, 0, 0, 1, 1,
         GL_RGBA, GL_UNSIGNED_BYTE, ptr_texels);
 
-    stbi_image_free(ptr_texels);
+    if (valid_texels)
+        stbi_image_free(ptr_texels);
 
     data = texobj;
 }

@@ -29,6 +29,7 @@ private:
     std::vector<std::string> comps;
     std::vector<TransformComp*> tfComps;
 
+    void UpdateTfComps();
     void ObjectPicking();
 
     void ChangeModeWindow();
@@ -51,7 +52,7 @@ private:
         void GameObjectInfoText();
         void AddComponentTree();
         void ComponentListTree();
-        void RenameObjectInput();
+        void RenameObjectPopup();
         void SavePrefabPopup();
         void DeleteObjectButton();
 

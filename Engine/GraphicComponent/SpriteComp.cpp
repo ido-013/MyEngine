@@ -10,12 +10,11 @@
 #include "../EngineComponent/TransformComp.h"
 
 SpriteComp::SpriteComp(GameObject* _owner) : GraphicComponent(_owner), 
-                                             color({255, 255, 255}), alpha(1), texobj(nullptr),
-                                             shaderName("base.shd"), meshName("square.msh"), textureName("base.png")
+                                             color({255, 255, 255}), alpha(1), texobj(nullptr)
 {
-    SetShdrpgm(shaderName);
-    SetMesh(meshName);
-    SetTexture(textureName);
+    SetShdrpgm("base.shd");
+    SetMesh("square.msh");
+    SetTexture("base.png");
 }
 
 SpriteComp::~SpriteComp()
@@ -116,32 +115,40 @@ void SpriteComp::SetColor(const unsigned char& _r, const unsigned char& _g, cons
 	color.b = _b;
 }
 
-void SpriteComp::SetShdrpgm(const std::string& name)
+void SpriteComp::SetShdrpgm(const std::string& _name)
 {
+    if (shaderName.compare(_name) == 0)
+        return;
+
     if (shaderProgram)
         UnsetShdrpgm();
 
-    shaderName = name;
-    shaderProgram = ResourceManager::GetInstance().GetResourcePointer<GLuint>(name);
+    shaderName = _name;
+    shaderProgram = ResourceManager::GetInstance().GetResourcePointer<GLuint>(_name);
 }
 
-void SpriteComp::SetMesh(const std::string& name)
+void SpriteComp::SetMesh(const std::string& _name)
 {
+    if (meshName.compare(_name) == 0)
+        return;
+
     if (mesh)
         UnsetMesh();
 
-    meshName = name;
-    mesh = ResourceManager::GetInstance().GetResourcePointer<GLModel>(meshName);
+    meshName = _name;
+    mesh = ResourceManager::GetInstance().GetResourcePointer<GLModel>(_name);
 }
 
-void SpriteComp::SetTexture(const std::string& name)
+void SpriteComp::SetTexture(const std::string& _name)
 {
+    if (textureName.compare(_name) == 0)
+        return;
+
     if (texobj)
         UnsetTexture();
 
-    textureName = name;
-
-    texobj = ResourceManager::GetInstance().GetResourcePointer<GLuint>(name);
+    textureName = _name;
+    texobj = ResourceManager::GetInstance().GetResourcePointer<GLuint>(_name);
 }
 
 void SpriteComp::UnsetShdrpgm()
@@ -174,16 +181,13 @@ void SpriteComp::LoadFromJson(const json& _data)
         alpha = it.value();
 
         it = compData->find("shaderName");
-        shaderName = it.value();
-        SetShdrpgm(shaderName);
+        SetShdrpgm(it.value());
 
         it = compData->find("meshName");
-        meshName = it.value();
-        SetMesh(meshName);
+        SetMesh(it.value());
 
         it = compData->find("textureName");
-        textureName = it.value();
-        SetTexture(textureName);
+        SetTexture(it.value());
     }
 }
 

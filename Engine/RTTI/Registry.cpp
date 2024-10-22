@@ -4,11 +4,14 @@
 Registry::Registry()
 {
     // Register ALL the functions
-    rttiMap.insert({ TransformComp::TypeName, &TransformComp::CreateTransformComponent });
     rttiMap.insert({ PlayerComp::TypeName, &PlayerComp::CreatePlayerComponent });
-    rttiMap.insert({ SpriteComp::TypeName, &SpriteComp::CreateSpriteComponent });
+    rttiMap.insert({ AttackComp::TypeName, &AttackComp::CreateAttackComponent });
+
+    rttiMap.insert({ TransformComp::TypeName, &TransformComp::CreateTransformComponent });
     rttiMap.insert({ RigidbodyComp::TypeName, &RigidbodyComp::CreateRigidBodyComponent });
     rttiMap.insert({ ColliderComp::TypeName, &ColliderComp::CreateColliderComponent });
+
+    rttiMap.insert({ SpriteComp::TypeName, &SpriteComp::CreateSpriteComponent });
 }
 
 BaseRTTI* Registry::FindAndCreate(const std::string& _type, GameObject* _owner)

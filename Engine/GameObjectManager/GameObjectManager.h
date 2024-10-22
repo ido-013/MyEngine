@@ -1,5 +1,6 @@
 #pragma once
 #include <map>
+#include <list>
 #include <string>
 #include "../GameObject/GameObject.h"
 
@@ -7,6 +8,8 @@ class GameObjectManager
 {
 private:
 	std::map<std::string, GameObject*> objects;
+	std::map<std::string, int> nameInd;
+	std::list<GameObject*> orderList;
 
 	GameObjectManager();
 	~GameObjectManager();
@@ -22,6 +25,7 @@ public:
 	}
 
 	const std::map<std::string, GameObject*>& GetAllObject() { return objects; }
+	const std::list<GameObject*>& GetAllOrderObject() { return orderList; }
 	GameObject* GetObject(const std::string& _name);
 	GameObject* CreateObject(const std::string& _name, const std::string& _prefabName = std::string());
 	GameObject* RenameObject(const std::string& _preName, const std::string& _name);

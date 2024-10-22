@@ -27,6 +27,7 @@ Editor::Editor() : selectedObj(nullptr), mode(EDIT)
         RigidbodyComp::TypeName,
         PlayerComp::TypeName,
         ColliderComp::TypeName,
+        AttackComp::TypeName,
     };
 }
 
@@ -35,8 +36,19 @@ Editor::~Editor()
 
 }
 
+void Editor::UpdateTfComps()
+{
+    for (auto& tf : tfComps)
+    {
+        tf->CalculateMatrix();
+    }
+}
+
 void Editor::ObjectPicking()
 {
+    if (ImGui::IsPopupOpen(nullptr, ImGuiPopupFlags_AnyPopupId) || ImGui::IsWindowFocused(ImGuiFocusedFlags_AnyWindow))
+        return;
+
     for (auto& tf : tfComps)
     {
         if (IsCollisionPointSquare(GLHelper::mousePos, tf->GetPos(), tf->GetScale()))
@@ -46,8 +58,6 @@ void Editor::ObjectPicking()
                 selectedObj = tf->GetOwner();
             }
         }
-
-        tf->CalculateMatrix();
     }
 }
 
@@ -60,18 +70,19 @@ void Editor::ChangeModeWindow()
 
     ImGui::Columns(2, 0, false);
 
-    if (ImGui::Selectable("Play", mode == PLAY)) 
+    if (ImGui::Selectable("Play", mode == PLAY) && mode == EDIT)
     {
+        ImGui::SetWindowFocus(NULL);
         Serializer::GetInstance().SaveLevel("temp.lvl");
         selectedObj = nullptr;
         mode = PLAY;
     }
 
     ImGui::NextColumn();
-    if (ImGui::Selectable("Edit", mode == EDIT))
+    if (ImGui::Selectable("Edit", mode == EDIT) && mode == PLAY)
     {
         GameObjectManager::GetInstance().RemoveAllObject();
-        Serializer::GetInstance().LoadLevel("temp.lvl");
+        Serializer::GetInstance().LoadLevelOnce("temp.lvl");
         mode = EDIT;
     }
 
@@ -288,9 +299,7 @@ void Editor::SelectedGameObjectWindow()
     ComponentListTree();
     ImGui::Separator();
 
-    RenameObjectInput();
-    ImGui::Separator();
-
+    RenameObjectPopup();
     SavePrefabPopup();
     DeleteObjectButton();
 
@@ -341,18 +350,31 @@ void Editor::ComponentListTree()
     }
 }
 
-void Editor::RenameObjectInput()
+void Editor::RenameObjectPopup()
 {
-    char buffer[100] = { '\0' };
-    if (ImGui::InputText("Rename", buffer, 100, ImGuiInputTextFlags_EnterReturnsTrue))
+    if (ImGui::Button("Rename"))
     {
-        GameObjectManager::GetInstance().RenameObject(selectedObj->GetName(), buffer);
+        ImGui::OpenPopup("Rename");
+    }
+
+    if (ImGui::BeginPopupModal("Rename", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+    {
+        char buffer[100] = { '\0' };
+        if (ImGui::InputText("Name", buffer, 100, ImGuiInputTextFlags_EnterReturnsTrue))
+        {
+            GameObjectManager::GetInstance().RenameObject(selectedObj->GetName(), buffer);
+            ImGui::CloseCurrentPopup();
+        }
+
+        ClosePopupButton();
+
+        ImGui::EndPopup();
     }
 }
 
 void Editor::SavePrefabPopup()
 {
-    if (ImGui::Button("Save as Prefab"))
+    if (SameLineButton("Save as Prefab"))
     {
         ImGui::OpenPopup("Save as Prefab");
     }
@@ -420,9 +442,12 @@ void Editor::Update()
 
     if (mode == EDIT)
     {
-        ImGui::ShowDemoWindow(); // Show demo window! :)
+        //ImGui::ShowDemoWindow(); // Show demo window! :)
+
+        UpdateTfComps();
 
         ObjectPicking();
+       
         TopBar();
         GameObjectWindow();
         SelectedGameObjectWindow();

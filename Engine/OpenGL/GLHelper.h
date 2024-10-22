@@ -37,6 +37,8 @@ struct GLHelper
 	static GLboolean keystateDown;
 	static GLboolean keystateRight;
 
+	static GLboolean keystateZ;
+
 	static glm::vec2 mousePos;
 	static GLboolean mousestateLeft;
 };

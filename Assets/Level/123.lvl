@@ -41,7 +41,7 @@
           "alpha": 1.0,
           "shaderName": "base.shd",
           "meshName": "square.msh",
-          "textureName": "PlanetTexture.png"
+          "textureName": "base.png"
         }
       },
       {

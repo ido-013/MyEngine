@@ -49,9 +49,9 @@ void GameStateManager::Update()
             ComponentManager<EngineComponent>::GetInstance().Update();
             CollisionManager::GetInstance().Update();
             EventManager::GetInstance().DispatchAllEvents();
+            Camera::GetInstance().Update();
         }
 
-        Camera::GetInstance().Update();
 
         if (currentLevel)
             currentLevel->Update();

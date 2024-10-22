@@ -20,62 +20,38 @@ Camera::~Camera()
 
 void Camera::Update()
 {
-	float dt = GLHelper::delta_time;
+	float dt = (float)GLHelper::delta_time;
 
-	if (Editor::GetInstance().GetMode() == Editor::EDIT)
+	if (GLHelper::keystateW)
 	{
-		if (GLHelper::keystateW)
-		{
-			editPos.y += speed * dt;
-		}
-
-		if (GLHelper::keystateA)
-		{
-			editPos.x -= speed * dt;
-		}
-
-		if (GLHelper::keystateS)
-		{
-			editPos.y -= speed * dt;
-		}
-
-		if (GLHelper::keystateD)
-		{
-			editPos.x += speed * dt;
-		}
-
-		pos = editPos;
+		playPos.y += speed * dt;
 	}
-	else
+
+	if (GLHelper::keystateA)
 	{
-		if (GLHelper::keystateW)
-		{
-			playPos.y += speed * dt;
-		}
-
-		if (GLHelper::keystateA)
-		{
-			playPos.x -= speed * dt;
-		}
-
-		if (GLHelper::keystateS)
-		{
-			playPos.y -= speed * dt;
-		}
-
-		if (GLHelper::keystateD)
-		{
-			playPos.x += speed * dt;
-		}
-
-		pos = playPos;
+		playPos.x -= speed * dt;
 	}
+
+	if (GLHelper::keystateS)
+	{
+		playPos.y -= speed * dt;
+	}
+
+	if (GLHelper::keystateD)
+	{
+		playPos.x += speed * dt;
+	}
+
+	pos = playPos;
 
 	CalculateMatrix();
 }
 
 void Camera::Edit()
 {
+	if (ImGui::IsPopupOpen(nullptr, ImGuiPopupFlags_AnyPopupId))
+		return;
+
 	ImGui::SetNextWindowSize({ 280, 80 });
 	ImGui::Begin("Camera", 0, ImGuiWindowFlags_AlwaysAutoResize);
 
@@ -83,6 +59,32 @@ void Camera::Edit()
 	ImGui::SliderFloat("Height", &height, 1, 8);
 
 	ImGui::End();
+
+	float dt = (float)GLHelper::delta_time;
+
+	if (GLHelper::keystateW)
+	{
+		editPos.y += speed * dt;
+	}
+
+	if (GLHelper::keystateA)
+	{
+		editPos.x -= speed * dt;
+	}
+
+	if (GLHelper::keystateS)
+	{
+		editPos.y -= speed * dt;
+	}
+
+	if (GLHelper::keystateD)
+	{
+		editPos.x += speed * dt;
+	}
+
+	pos = editPos;
+
+	CalculateMatrix();
 }
 
 void Camera::CalculateMatrix()

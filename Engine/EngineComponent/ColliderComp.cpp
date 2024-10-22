@@ -4,6 +4,7 @@
 #include "../EventManager/EventManager.h"
 
 #include "../EngineComponent/TransformComp.h"
+#include "../EngineComponent/RigidbodyComp.h"
 #include "../GraphicComponent/SpriteComp.h"
 #include "../Event/CollisionEvent.h"
 
@@ -27,12 +28,6 @@ bool ColliderComp::Edit()
 {
 	if (ImGui::TreeNode(TypeName))
 	{
-		ImGui::InputFloat2("Pos", &pos[0]);
-
-		ImGui::InputFloat2("Scale", &scale[0]);
-
-		ImGui::SliderFloat("Rot", &rot, -360, 360);
-
 		if (ImGui::Button("Delete Component"))
 		{
 			owner->DeleteComponent<ColliderComp>();
@@ -49,10 +44,14 @@ bool ColliderComp::Edit()
 void ColliderComp::OnEvent(Event* _event)
 {
 	CollisionEvent* colEvent = dynamic_cast<CollisionEvent*>(_event);
-
+	
 	if (colEvent != nullptr)
 	{
-		std::cout << "!" << std::endl;
+		RigidbodyComp* r = owner->GetComponent<RigidbodyComp>();
+		if (r != nullptr)
+		{
+			r->colliders.push(static_cast<ColliderComp*>(_event->src));
+		}
 	}
 }
 

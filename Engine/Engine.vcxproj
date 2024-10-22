@@ -166,6 +166,7 @@
     <ClCompile Include="Imgui\imgui_tables.cpp" />
     <ClCompile Include="Imgui\imgui_widgets.cpp" />
     <ClCompile Include="Level\TestLevel.cpp" />
+    <ClCompile Include="LogicComponent\AttackComp.cpp" />
     <ClCompile Include="LogicComponent\LogicComponent.cpp" />
     <ClCompile Include="LogicComponent\PlayerComp.cpp" />
     <ClCompile Include="main.cpp" />
@@ -173,7 +174,6 @@
     <ClCompile Include="OpenGL\GLModel.cpp" />
     <ClCompile Include="Prefab\Prefab.cpp" />
     <ClCompile Include="ResourceManager\ResourceManager.cpp" />
-    <ClCompile Include="ResourceManager\ResourceManager.h" />
     <ClCompile Include="Resource\AudioResource.cpp" />
     <ClCompile Include="Resource\MeshResource.cpp" />
     <ClCompile Include="Resource\PrefabResource.cpp" />
@@ -217,12 +217,14 @@
     <ClInclude Include="Imgui\imstb_truetype.h" />
     <ClInclude Include="Level\BaseLevel.h" />
     <ClInclude Include="Level\TestLevel.h" />
+    <ClInclude Include="LogicComponent\AttackComp.h" />
     <ClInclude Include="LogicComponent\LogicComponent.h" />
     <ClInclude Include="LogicComponent\PlayerComp.h" />
     <ClInclude Include="OpenGL\GLHelper.h" />
     <ClInclude Include="OpenGL\GLModel.h" />
     <ClInclude Include="OpenGL\GLShader.h" />
     <ClInclude Include="Prefab\Prefab.h" />
+    <ClInclude Include="ResourceManager\ResourceManager.h" />
     <ClInclude Include="Resource\AudioResource.h" />
     <ClInclude Include="Resource\MeshResource.h" />
     <ClInclude Include="Resource\PrefabResource.h" />

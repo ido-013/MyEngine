@@ -1,6 +1,7 @@
 #include "Serializer.h"
 
 #include <fstream>
+#include <filesystem>
 #include <json.hpp>
 
 #include "../GameObjectManager/GameObjectManager.h"
@@ -20,7 +21,7 @@ void Serializer::LoadLevel(const std::string& _filename)
 
 	// Check the file is valid
 	if (!file.is_open())
-		throw std::invalid_argument("Serializer::LoadLevel Invalid filename " + _filename);
+		throw std::invalid_argument("Serializer::LoadLevel Invalid filename " + _filename + ".lvl");
 
 	json allDataJson;
 	file >> allDataJson; // the json has all the file data
@@ -67,21 +68,27 @@ void Serializer::LoadLevel(const std::string& _filename)
 	}
 }
 
+void Serializer::LoadLevelOnce(const std::string& _filename)
+{
+	LoadLevel(_filename + ".lvl");
+	std::filesystem::remove("Assets/Level/" + _filename + ".lvl");
+}
+
 void Serializer::SaveLevel(const std::string& _filename)
 {
 	json allDataJson;
 
-	for (const auto& obj : GameObjectManager::GetInstance().GetAllObject())
+	for (const auto& obj : GameObjectManager::GetInstance().GetAllOrderObject())
 	{
 		json objJson;
-		objJson["object"] = obj.first;
+		objJson["object"] = obj->GetName();
 
-		std::string prefabName = obj.second->GetPrefabName();
+		std::string prefabName = obj->GetPrefabName();
 
 		if (prefabName.empty())
 		{
 			json components;
-			for (const auto& comp : obj.second->GetAllComponent())
+			for (const auto& comp : obj->GetAllComponent())
 			{
 				BaseComponent* c = comp.second;
 				components.push_back(c->SaveToJson());
@@ -98,10 +105,10 @@ void Serializer::SaveLevel(const std::string& _filename)
 
 	// Open file
 	std::fstream file;
-	file.open("Assets/Level/" + _filename, std::fstream::out);	// Open as write mode. Create it if it does not exist!
+	file.open("Assets/Level/" + _filename + ".lvl", std::fstream::out);	// Open as write mode. Create it if it does not exist!
 
 	if (!file.is_open())
-		throw std::invalid_argument("Serializer::SaveLevel file write error " + _filename);
+		throw std::invalid_argument("Serializer::SaveLevel file write error " + _filename + ".lvl");
 
 	file << std::setw(2) << allDataJson;	// Separates in lines and each section
 

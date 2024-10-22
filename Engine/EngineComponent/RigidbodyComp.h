@@ -1,7 +1,11 @@
 #pragma once
 
+#include <queue>
 #include <glm/glm.hpp>
+
 #include "../EngineComponent/EngineComponent.h"
+
+class ColliderComp;
 
 class RigidbodyComp : public EngineComponent
 {
@@ -13,7 +17,10 @@ private:
 	glm::vec2 acceleration;
 	glm::vec2 maxAcceleration;
 
+	std::queue<ColliderComp*> colliders;
+
 	bool CheckEpsilon(float _value);
+	void CorrectPosByAABB(const ColliderComp* _col, const ColliderComp* _otherCol, float& _x, float& _y);
 
 public:
 	RigidbodyComp(GameObject* _owner);
@@ -36,4 +43,6 @@ public:
 	static BaseRTTI* CreateRigidBodyComponent(GameObject* _owner);
 
 	static constexpr const char* TypeName = "RigidbodyComp";
+
+	friend class ColliderComp;
 };

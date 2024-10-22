@@ -27,17 +27,25 @@ GameObject* GameObjectManager::GetObject(const std::string& _name)
 
 GameObject* GameObjectManager::CreateObject(const std::string& _name, const std::string& _prefabName)
 {
-	auto it = objects.find(_name);
+	GameObject* obj = nullptr;
+	std::string name;
 
+	auto it = objects.find(_name);
 	if (it != objects.end())
 	{
-		return it->second;
+		name = _name + std::to_string(nameInd[_name]);
+		nameInd[_name]++;
 	}
+	else
+		name = _name;
+	
+	obj = new GameObject(name);
 
-	GameObject* obj = new GameObject(_name);
 	obj->prefabName = _prefabName;
-	objects.insert({ _name, obj });
+	objects.insert({ name, obj });
 
+	orderList.push_back(obj);
+	
 	return obj;
 }
 
@@ -58,6 +66,15 @@ GameObject* GameObjectManager::RenameObject(const std::string& _preName, const s
 
 void GameObjectManager::RemoveObject(const std::string& _name)
 {
+	for (auto listIt = orderList.begin(); listIt != orderList.end(); listIt++)
+	{
+		if ((*listIt)->name.compare(_name) == 0)
+		{
+			orderList.erase(listIt);
+			break;
+		}
+	}
+
 	auto it = objects.find(_name);
 
 	if (it != objects.end())
@@ -69,6 +86,8 @@ void GameObjectManager::RemoveObject(const std::string& _name)
 
 void GameObjectManager::RemoveAllObject()
 {
+	orderList.clear();
+
 	for (auto& it : objects)
 	{
 		if (it.second)

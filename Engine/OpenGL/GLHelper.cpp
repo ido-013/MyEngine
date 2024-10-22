@@ -22,6 +22,8 @@ GLboolean GLHelper::keystateLeft;
 GLboolean GLHelper::keystateDown;
 GLboolean GLHelper::keystateRight;
 
+GLboolean GLHelper::keystateZ;
+
 glm::vec2 GLHelper::mousePos;
 GLboolean GLHelper::mousestateLeft;
 
@@ -102,6 +104,8 @@ void GLHelper::key_cb(GLFWwindow* _pwin, int _key, int _scancode, int _action, i
         keystateLeft    = (_key == GLFW_KEY_LEFT)  ? GL_TRUE : keystateLeft;
         keystateDown    = (_key == GLFW_KEY_DOWN)  ? GL_TRUE : keystateDown;
         keystateRight   = (_key == GLFW_KEY_RIGHT) ? GL_TRUE : keystateRight;
+
+        keystateZ = (_key == GLFW_KEY_Z) ? GL_TRUE : keystateZ;
     }
     else if (_action == GLFW_RELEASE) 
     {
@@ -114,6 +118,8 @@ void GLHelper::key_cb(GLFWwindow* _pwin, int _key, int _scancode, int _action, i
         keystateLeft    = (_key == GLFW_KEY_LEFT)  ? GL_FALSE : keystateLeft;
         keystateDown    = (_key == GLFW_KEY_DOWN)  ? GL_FALSE : keystateDown;
         keystateRight   = (_key == GLFW_KEY_RIGHT) ? GL_FALSE : keystateRight;
+
+        keystateZ = (_key == GLFW_KEY_Z) ? GL_FALSE : keystateZ;
     }
 }
 
@@ -136,8 +142,6 @@ void GLHelper::mousepos_cb(GLFWwindow* _pwin, double _xpos, double _ypos)
 
     mousePos.x = (_xpos - (width / 2.)) * cameraHeight + cameraPos.x;
     mousePos.y = -(_ypos - (height / 2.)) * cameraHeight + cameraPos.y;
-
-    std::cout << mousePos.x << " " << mousePos.y << std::endl;
 }
 
 void GLHelper::mousescroll_cb(GLFWwindow* _pwin, double _xoffset, double _yoffset)

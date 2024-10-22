@@ -16,7 +16,7 @@ Prefab::~Prefab()
 
 void Prefab::SavePrefab(const std::string& _name, GameObject* _obj)
 {
-	std::string filename = "./Assets/Prefab/" + _name;
+	std::string filename = "./Assets/Prefab/" + _name + ".prefab";
 
 	json prefab;
 

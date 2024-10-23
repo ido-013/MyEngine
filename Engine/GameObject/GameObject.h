@@ -37,6 +37,8 @@ public:
 	template <typename T>
 	void DeleteComponent();
 
+	bool IsHaveComponent(const std::string& _typeName);
+
 	const std::map<std::string, BaseComponent*>& GetAllComponent() { return component; }
 	
 	const std::string& GetName() { return name; }

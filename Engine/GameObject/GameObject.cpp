@@ -16,3 +16,8 @@ GameObject::~GameObject()
 
 	component.clear();
 }
+
+bool GameObject::IsHaveComponent(const std::string& _typeName)
+{
+	return component.find(_typeName) != component.end();
+}

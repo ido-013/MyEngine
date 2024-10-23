@@ -4,6 +4,7 @@
 #include "../Imgui/imgui_impl_glfw.h"
 #include "../Imgui/imgui_impl_opengl3.h"
 #include "../Imgui/imgui_stdlib.h"
+#include "../Imgui/imgui_internal.h"
 
 #include "../OpenGL/GLHelper.h"
 
@@ -326,6 +327,9 @@ void Editor::AddComponentTree()
     {
         for (auto& compType : comps)
         {
+            if (selectedObj->IsHaveComponent(compType))
+                continue;
+            
             if (ImGui::Button(compType.c_str()))
             {
                 Registry::GetInstance().FindAndCreate(compType, selectedObj);

@@ -1,11 +1,5 @@
 ﻿#include "Editor.h"
 
-#include "../Imgui/imgui.h"
-#include "../Imgui/imgui_impl_glfw.h"
-#include "../Imgui/imgui_impl_opengl3.h"
-#include "../Imgui/imgui_stdlib.h"
-#include "../Imgui/imgui_internal.h"
-
 #include "../OpenGL/GLHelper.h"
 
 #include "../GameObjectManager/GameObjectManager.h"
@@ -37,6 +31,21 @@ Editor::~Editor()
 
 }
 
+void Editor::ChangeSelectedObject(GameObject* _obj)
+{
+    if (selectedObj != nullptr)
+    {
+        selectedObj->selected = false;
+    }
+    
+    if (_obj != nullptr)
+    {
+        _obj->selected = true;
+    }
+
+    selectedObj = _obj;
+}
+
 void Editor::UpdateTfComps()
 {
     for (auto& tf : tfComps)
@@ -52,11 +61,15 @@ void Editor::ObjectPicking()
 
     for (auto& tf : tfComps)
     {
-        if (IsCollisionPointSquare(GLHelper::mousePos, tf->GetPos(), tf->GetScale()))
+        if (GLHelper::mousestateLeft)
         {
-            if (GLHelper::mousestateLeft)
+            if (IsCollisionPointSquare(GLHelper::mousePos, tf->GetPos(), tf->GetScale()))
             {
-                selectedObj = tf->GetOwner();
+                ChangeSelectedObject(tf->GetOwner());
+            }
+            else
+            {
+                ChangeSelectedObject(nullptr);
             }
         }
     }
@@ -74,8 +87,8 @@ void Editor::ChangeModeWindow()
     if (ImGui::Selectable("Play", mode == PLAY) && mode == EDIT)
     {
         ImGui::SetWindowFocus(NULL);
-        Serializer::GetInstance().SaveLevel("temp.lvl");
-        selectedObj = nullptr;
+        Serializer::GetInstance().SaveLevel("temp");
+        ChangeSelectedObject(nullptr);
         mode = PLAY;
     }
 
@@ -83,7 +96,8 @@ void Editor::ChangeModeWindow()
     if (ImGui::Selectable("Edit", mode == EDIT) && mode == PLAY)
     {
         GameObjectManager::GetInstance().RemoveAllObject();
-        Serializer::GetInstance().LoadLevelOnce("temp.lvl");
+        Serializer::GetInstance().LoadLevel("temp.lvl");
+        Serializer::GetInstance().DeleteLevel("temp");
         mode = EDIT;
     }
 
@@ -121,7 +135,7 @@ void Editor::NewLevelMenu()
 {
     if (ImGui::MenuItem("New Level"))
     {
-        selectedObj = nullptr;
+        ChangeSelectedObject(nullptr);
         GameObjectManager::GetInstance().RemoveAllObject();
     }
 }
@@ -147,7 +161,7 @@ void Editor::LoadLevelPopup(bool& _popup)
         static std::string buffer;
         if (FileSelectComboOnce(buffer, "Level", buffer, "Assets/Level", ".lvl"))
         {
-            selectedObj = nullptr;
+            ChangeSelectedObject(nullptr);
             GameObjectManager::GetInstance().RemoveAllObject();
             Serializer::GetInstance().LoadLevel(buffer);
             buffer.clear();
@@ -214,7 +228,7 @@ void Editor::ObjectListTree()
             // Can cause performance degradation
             if (ImGui::MenuItem(it.first.c_str(), 0, selectedObj == nullptr ? false : !selectedObj->GetName().compare(it.first)))
             {
-                selectedObj = it.second;
+                ChangeSelectedObject(it.second);
             }
         }
 
@@ -306,7 +320,7 @@ void Editor::SelectedGameObjectWindow()
 
     if (ImGui::IsWindowFocused() && ImGui::IsKeyPressed(ImGuiKey_Escape))
     {
-        selectedObj = nullptr;
+        ChangeSelectedObject(nullptr);
     }
 
     ImGui::End();
@@ -403,7 +417,7 @@ void Editor::DeleteObjectButton()
     if (SameLineButton("Delete Object"))
     {
         GameObjectManager::GetInstance().RemoveObject(selectedObj->GetName());
-        selectedObj = nullptr;
+        ChangeSelectedObject(nullptr);
     }
 }
 
@@ -468,6 +482,11 @@ void Editor::Update()
 
 void Editor::Exit()
 {
+    if (mode == PLAY)
+    {
+        Serializer::GetInstance().DeleteLevel("temp");
+    }
+
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();

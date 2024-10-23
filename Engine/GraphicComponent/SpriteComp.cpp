@@ -55,7 +55,19 @@ void SpriteComp::Update()
     glBindVertexArray(mesh->VAO);
     glBindTexture(GL_TEXTURE_2D, 0);
 
-    glDrawElements(mesh->primitive_type, mesh->draw_cnt, GL_UNSIGNED_SHORT, NULL);
+    glDrawArrays(mesh->primitive_type, 0, mesh->draw_cnt);
+
+    if (owner->selected)
+    {
+        loc = glGetUniformLocation(*shaderProgram, "uColor");
+        if (loc >= 0)
+        {
+            glUniform4f(loc, color.r / 255.f, 255 / 255.f, 0 / 255.f, alpha);
+        }
+
+        glLineWidth(5);
+        glDrawArrays(GL_LINE_LOOP, 0, mesh->draw_cnt);
+    }
 
     glUseProgram(0);
 }

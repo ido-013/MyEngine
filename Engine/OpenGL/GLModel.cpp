@@ -18,7 +18,6 @@ void GLModel::init(std::string _filename)
 	ifs.seekg(0, std::ios::beg);
 
 	std::vector<GLfloat> pos_vtx;
-	std::vector<GLushort> idx_vtx;
 
 	std::string line;
 
@@ -47,43 +46,6 @@ void GLModel::init(std::string _filename)
 
 			break;
 		}
-		case 't':
-		{
-			if (!on_idx)
-			{
-				primitive_type = GL_TRIANGLES;
-				on_idx = GL_TRUE;
-			}
-
-			for (GLint i{ 0 }; i < 3; i++)
-			{
-				line_sstm >> idx;
-				idx_vtx.emplace_back(idx);
-			}
-
-			break;
-		}
-		case 'f':
-		{
-			if (!on_idx)
-			{
-				primitive_type = GL_TRIANGLE_FAN;
-				on_idx = GL_TRUE;
-
-				for (GLint i{ 0 }; i < 3; i++)
-				{
-					line_sstm >> idx;
-					idx_vtx.emplace_back(idx);
-				}
-			}
-			else
-			{
-				line_sstm >> idx;
-				idx_vtx.emplace_back(idx);
-			}
-
-			break;
-		}
 		default:
 			break;
 		}
@@ -106,14 +68,8 @@ void GLModel::init(std::string _filename)
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 
-	draw_cnt = static_cast<GLuint>(idx_vtx.size());
-
-	glCreateBuffers(1, &EBO);
-	glNamedBufferStorage(EBO, sizeof(GLushort) * draw_cnt,
-		reinterpret_cast<GLvoid*>(idx_vtx.data()),
-		GL_DYNAMIC_STORAGE_BIT);
-
-	glVertexArrayElementBuffer(VAO, EBO);
+	draw_cnt = static_cast<GLuint>(pos_vtx.size() / sizeof(GLfloat));
+	primitive_type = GL_TRIANGLE_FAN;
 
 	glBindVertexArray(0);
 }

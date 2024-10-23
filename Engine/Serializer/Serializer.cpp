@@ -68,9 +68,8 @@ void Serializer::LoadLevel(const std::string& _filename)
 	}
 }
 
-void Serializer::LoadLevelOnce(const std::string& _filename)
+void Serializer::DeleteLevel(const std::string& _filename)
 {
-	LoadLevel(_filename + ".lvl");
 	std::filesystem::remove("Assets/Level/" + _filename + ".lvl");
 }
 

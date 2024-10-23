@@ -1,7 +1,7 @@
 #include "GameObject.h"
 #include "../BaseComponent.h"
 
-GameObject::GameObject(std::string _name) : name(_name), prefabName()
+GameObject::GameObject(std::string _name) : name(_name), prefabName(), selected(false)
 {
 
 }

@@ -38,6 +38,7 @@ public:
 	void DeleteComponent();
 
 	bool IsHaveComponent(const std::string& _typeName);
+	bool selected;
 
 	const std::map<std::string, BaseComponent*>& GetAllComponent() { return component; }
 	

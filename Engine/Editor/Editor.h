@@ -2,6 +2,12 @@
 
 #include "../GameObject/GameObject.h"
 
+#include "../Imgui/imgui.h"
+#include "../Imgui/imgui_impl_glfw.h"
+#include "../Imgui/imgui_impl_opengl3.h"
+#include "../Imgui/imgui_stdlib.h"
+#include "../Imgui/imgui_internal.h"
+
 #include <iostream>
 #include <vector>
 
@@ -29,6 +35,7 @@ private:
     std::vector<std::string> comps;
     std::vector<TransformComp*> tfComps;
 
+    void ChangeSelectedObject(GameObject* _obj);
     void UpdateTfComps();
     void ObjectPicking();
 

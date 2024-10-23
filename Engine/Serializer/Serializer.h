@@ -20,6 +20,6 @@ public:
 	}
 
 	void LoadLevel(const std::string& _filename);
-	void LoadLevelOnce(const std::string& _filename);
 	void SaveLevel(const std::string& _filename);
+	void DeleteLevel(const std::string& _filename);
 };

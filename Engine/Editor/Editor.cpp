@@ -13,7 +13,7 @@
 
 #include "../Components.h"
 
-Editor::Editor() : selectedObj(nullptr), mode(EDIT)
+Editor::Editor() : selectedObj(nullptr), mode(EDIT), isDrag(false), mouseOffset()
 {
     comps =
     {
@@ -54,24 +54,50 @@ void Editor::UpdateTfComps()
     }
 }
 
-void Editor::ObjectPicking()
+void Editor::ObjectMouseInteraction()
 {
-    if (ImGui::IsPopupOpen(nullptr, ImGuiPopupFlags_AnyPopupId) || ImGui::IsWindowFocused(ImGuiFocusedFlags_AnyWindow))
+    ObjectPick();
+    ObjectDrag();
+}
+
+void Editor::ObjectPick()
+{
+    if (isDrag || ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow) || ImGui::IsWindowFocused(ImGuiFocusedFlags_AnyWindow))
         return;
 
-    for (auto& tf : tfComps)
+    GameObject* obj = nullptr;
+
+    if (GLHelper::mousestateLeft)
     {
-        if (GLHelper::mousestateLeft)
+        for (auto& tf : tfComps)
         {
             if (IsCollisionPointSquare(GLHelper::mousePos, tf->GetPos(), tf->GetScale()))
             {
-                ChangeSelectedObject(tf->GetOwner());
-            }
-            else
-            {
-                ChangeSelectedObject(nullptr);
+                obj = tf->GetOwner();
+                if (selectedObj != nullptr && selectedObj == obj) break;
             }
         }
+
+        ChangeSelectedObject(obj);
+
+        if (obj != nullptr)
+        {
+            isDrag = true;
+            mouseOffset = obj->GetComponent<TransformComp>()->GetPos() - GLHelper::mousePos;
+        }
+    }
+}
+
+void Editor::ObjectDrag()
+{
+    if (isDrag)
+    {
+        selectedObj->GetComponent<TransformComp>()->SetPos(GLHelper::mousePos + mouseOffset);
+    }
+
+    if (!GLHelper::mousestateLeft)
+    {
+        isDrag = false;
     }
 }
 
@@ -303,7 +329,7 @@ void Editor::SelectedGameObjectWindow()
     if (selectedObj == nullptr)
         return;
 
-    ImGui::Begin("Selected GameObject");
+    ImGui::Begin("Selected GameObject", 0, ImGuiWindowFlags_NoFocusOnAppearing);
 
     GameObjectInfoText();
     ImGui::Separator();
@@ -464,7 +490,7 @@ void Editor::Update()
 
         UpdateTfComps();
 
-        ObjectPicking();
+        ObjectMouseInteraction();
        
         TopBar();
         GameObjectWindow();

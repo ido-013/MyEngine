@@ -10,6 +10,7 @@
 
 #include <iostream>
 #include <vector>
+#include <glm/glm.hpp>
 
 class TransformComp;
 
@@ -37,7 +38,13 @@ private:
 
     void ChangeSelectedObject(GameObject* _obj);
     void UpdateTfComps();
-    void ObjectPicking();
+
+    bool isDrag;
+    glm::vec2 mouseOffset;
+
+    void ObjectMouseInteraction();
+        void ObjectPick();
+        void ObjectDrag();
 
     void ChangeModeWindow();
 

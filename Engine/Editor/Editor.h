@@ -11,7 +11,6 @@
 #include <glm/glm.hpp>
 
 #include "../GameObject/GameObject.h"
-#include "../Color.h"
 
 class TransformComp;
 
@@ -36,7 +35,7 @@ private:
     GameObject* selectedObj;
     std::vector<std::string> comps;
     std::vector<TransformComp*> tfComps;
-    Color outlineColor;
+    float outlineColor[4];
 
     void ChangeSelectedObject(GameObject* _obj);
     void UpdateTfComps();
@@ -87,7 +86,7 @@ public:
     }
 
     const EditorMode& GetMode() const { return mode; }
-    const Color& GetOutlineColor() const { return outlineColor; }
+    const float* GetOutlineColor() const { return outlineColor; }
 
     void AddTfComp(TransformComp* _tf);
     void DeleteTfComp(const TransformComp* _tf);

@@ -13,7 +13,7 @@
 
 #include "../Components.h"
 
-Editor::Editor() : selectedObj(nullptr), mode(EDIT), isDrag(false), mouseOffset(), outlineColor({255, 255, 0})
+Editor::Editor() : selectedObj(nullptr), mode(EDIT), isDrag(false), mouseOffset(), outlineColor{1.f, 1.f, 0.f, 1.f}
 {
     comps =
     {
@@ -464,11 +464,7 @@ void Editor::OutlineColorTree()
 {
     if (ImGui::TreeNode("Outline Color"))
     {
-        int colorArray[3] = { outlineColor.r, outlineColor.g, outlineColor.b };
-        ImGui::InputInt3("Color", &colorArray[0]);
-        outlineColor.r = std::max(std::min(colorArray[0], 255), 0);
-        outlineColor.g = std::max(std::min(colorArray[1], 255), 0);
-        outlineColor.b = std::max(std::min(colorArray[2], 255), 0);
+        ImGui::ColorEdit4("Color", outlineColor);
 
         ImGui::TreePop();
     }
@@ -513,7 +509,7 @@ void Editor::Update()
 
     if (mode == EDIT)
     {
-        //ImGui::ShowDemoWindow(); // Show demo window! :)
+        ImGui::ShowDemoWindow(); // Show demo window! :)
 
         UpdateTfComps();
 

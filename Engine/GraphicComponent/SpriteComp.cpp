@@ -10,7 +10,7 @@
 #include "../EngineComponent/TransformComp.h"
 
 SpriteComp::SpriteComp(GameObject* _owner) : GraphicComponent(_owner), 
-                                             color({255, 255, 255}), alpha(1), texobj(nullptr), depth(1)
+                                             color{ 1.f, 1.f, 1.f, 1.f }, texobj(nullptr), depth(1)
 {
     SetShdrpgm("base.shd");
     SetMesh("square.msh");
@@ -43,15 +43,7 @@ bool SpriteComp::Edit()
     if (ImGui::TreeNode(TypeName))
     {
         //Edit Color
-        int colorArray[3] = { color.r, color.g, color.b };
-        ImGui::InputInt3("Color", &colorArray[0]);
-        color.r = std::max(std::min(colorArray[0], 255), 0);
-        color.g = std::max(std::min(colorArray[1], 255), 0);
-        color.b = std::max(std::min(colorArray[2], 255), 0);
-
-        //Edit Alpha
-        ImGui::InputFloat("Alpha", &alpha);
-        alpha = alpha < 0 ? 0 : (alpha > 1 ? 1 : alpha);
+        ImGui::ColorEdit4("Color", color);
 
         ImGui::InputFloat("Depth", &depth);
 
@@ -102,7 +94,7 @@ void SpriteComp::DrawSprite()
     loc = glGetUniformLocation(*shaderProgram, "uColor");
     if (loc >= 0)
     {
-        glUniform4f(loc, color.r / 255.f, color.g / 255.f, color.b / 255.f, alpha);
+        glUniform4fv(loc, 1, color);
     }
 
     loc = glGetUniformLocation(*shaderProgram, "uModel_to_NDC");
@@ -131,8 +123,8 @@ void SpriteComp::DrawOutline()
     GLuint loc = glGetUniformLocation(*shaderProgram, "uColor");
     if (loc >= 0)
     {
-        Color outlineColor = Editor::GetInstance().GetOutlineColor();
-        glUniform4f(loc, outlineColor.r / 255.f, outlineColor.g / 255.f, outlineColor.b / 255.f, 1.0);
+        const float* outlineColor = Editor::GetInstance().GetOutlineColor();
+        glUniform4fv(loc, 1, outlineColor);
     }
 
     loc = glGetUniformLocation(*shaderProgram, "uCoordZ");
@@ -144,11 +136,11 @@ void SpriteComp::DrawOutline()
     glDrawArrays(GL_LINE_LOOP, 0, mesh->draw_cnt);
 }
 
-void SpriteComp::SetColor(const unsigned char& _r, const unsigned char& _g, const unsigned char& _b)
+void SpriteComp::SetColor(const float& _r, const float& _g, const float& _b)
 {
-	color.r = _r;
-	color.g = _g;
-	color.b = _b;
+	color[0] = _r;
+	color[1] = _g;
+	color[2] = _b;
 }
 
 void SpriteComp::SetShdrpgm(const std::string& _name)
@@ -209,12 +201,7 @@ void SpriteComp::LoadFromJson(const json& _data)
     if (compData != _data.end())
     {
         auto it = compData->find("color");
-        color.r = it->begin().value();
-        color.g = (it->begin() + 1).value();
-        color.b = (it->begin() + 2).value();
-
-        it = compData->find("alpha");
-        alpha = it.value();
+        color[0] = it->begin().value();
 
         it = compData->find("shaderName");
         SetShdrpgm(it.value());
@@ -233,8 +220,7 @@ json SpriteComp::SaveToJson()
     data["type"] = TypeName;
 
     json compData;
-    compData["color"] = { color.r, color.g, color.b };
-    compData["alpha"] = alpha;
+    compData["color"] = color;
     compData["shaderName"] = shaderName;
     compData["meshName"] = meshName;
     compData["textureName"] = textureName;

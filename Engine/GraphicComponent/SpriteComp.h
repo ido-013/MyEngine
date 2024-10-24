@@ -5,13 +5,11 @@
 
 #include "GraphicComponent.h"
 #include "../OpenGL/GLModel.h"
-#include "../Color.h"
 
 class SpriteComp : public GraphicComponent
 {
 private:
-	Color color;
-	GLfloat alpha;
+	float color[4];
 
 	GLuint* shaderProgram;
 	std::string shaderName;
@@ -36,8 +34,7 @@ public:
 	void DrawOutline();
 
 	// Gettors/Settors
-	Color& GetColor() { return color; }
-	void SetColor(const unsigned char& _r, const unsigned char& _g, const unsigned char& _b);
+	void SetColor(const float& _r, const float& _g, const float& _b);
 
 	void SetShdrpgm(const std::string& _name);
 	void SetMesh(const std::string& _name);
@@ -47,8 +44,8 @@ public:
 	void UnsetMesh();
 	void UnsetTexture();
 
-	float& GetAlpha() { return alpha; }
-	void SetAlpha(const float& _alpha) { alpha = _alpha; };
+	float& GetAlpha() { return color[3]; }
+	void SetAlpha(const float& _alpha) { color[3] = _alpha; };
 
 	void LoadFromJson(const json& _data) override;
 	json SaveToJson() override;

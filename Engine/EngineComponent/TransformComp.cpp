@@ -9,27 +9,30 @@
 void TransformComp::CalculateMatrix()
 {
 	//Create a translate matrix
-	glm::mat3 translateMtx = glm::mat3(
-		1.f, 0.f, 0.f,
-		0.f, 1.f, 0.f,
-		pos.x, pos.y, 1.f
+	glm::mat4 translateMtx(
+		1.f, 0.f, 0.f, 0.f,
+		0.f, 1.f, 0.f, 0.f,
+		0.f, 0.f, 1.f, 0.f,
+		pos.x, pos.y, 0.f, 1.f
 	);
 
 	//Create a rotation matrix
 	float angle = glm::radians(rot);
 	float c = glm::cos(angle);
 	float s = glm::sin(angle);
-	glm::mat3 rotationMtx = glm::mat3(
-		c, s, 0.f,
-		-s, c, 0.f,
-		0.f, 0.f, 1.f
+	glm::mat4 rotationMtx(
+		c, s, 0.f, 0.f,
+		-s, c, 0.f, 0.f,
+		0.f, 0.f, 1.f, 0.f,
+		0.f, 0.f, 0.f, 1.f
 	);
 
 	//Create a scale matrix
-	glm::mat3 scaleMtx = glm::mat3(
-		scale.x / 2, 0.0f, 0.0f,
-		0.0f, scale.y / 2, 0.0f,
-		0.0f, 0.0f, 1.0f
+	glm::mat4 scaleMtx(
+		scale.x / 2, 0.f, 0.f, 0.f,
+		0.f, scale.y / 2, 0.f, 0.f,
+		0.f, 0.f, 1.f, 0.f,
+		0.f, 0.f, 0.f, 1.f
 	);
 
 	//Concatenate them

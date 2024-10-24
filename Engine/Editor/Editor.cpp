@@ -13,7 +13,7 @@
 
 #include "../Components.h"
 
-Editor::Editor() : selectedObj(nullptr), mode(EDIT), isDrag(false), mouseOffset()
+Editor::Editor() : selectedObj(nullptr), mode(EDIT), isDrag(false), mouseOffset(), outlineColor({255, 255, 0})
 {
     comps =
     {
@@ -56,13 +56,16 @@ void Editor::UpdateTfComps()
 
 void Editor::ObjectMouseInteraction()
 {
+    if (ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow) || ImGui::IsWindowFocused(ImGuiFocusedFlags_AnyWindow))
+        return;
+
     ObjectPick();
     ObjectDrag();
 }
 
 void Editor::ObjectPick()
 {
-    if (isDrag || ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow) || ImGui::IsWindowFocused(ImGuiFocusedFlags_AnyWindow))
+    if (isDrag)
         return;
 
     GameObject* obj = nullptr;
@@ -285,7 +288,7 @@ void Editor::CreateObjectPopup()
         char buffer[100] = { '\0' };
         if (ImGui::InputText("Name", buffer, 100, ImGuiInputTextFlags_EnterReturnsTrue))
         {
-            GameObjectManager::GetInstance().CreateObject(buffer);
+            ChangeSelectedObject(GameObjectManager::GetInstance().CreateObject(buffer));
             ImGui::CloseCurrentPopup();
         }
 
@@ -447,6 +450,30 @@ void Editor::DeleteObjectButton()
     }
 }
 
+void Editor::UtilsWindow()
+{
+    ImGui::Begin("Utils");
+
+    Camera::GetInstance().Edit();
+    OutlineColorTree();
+
+    ImGui::End();
+}
+
+void Editor::OutlineColorTree()
+{
+    if (ImGui::TreeNode("Outline Color"))
+    {
+        int colorArray[3] = { outlineColor.r, outlineColor.g, outlineColor.b };
+        ImGui::InputInt3("Color", &colorArray[0]);
+        outlineColor.r = std::max(std::min(colorArray[0], 255), 0);
+        outlineColor.g = std::max(std::min(colorArray[1], 255), 0);
+        outlineColor.b = std::max(std::min(colorArray[2], 255), 0);
+
+        ImGui::TreePop();
+    }
+}
+
 void Editor::AddTfComp(TransformComp* _tf)
 {
     tfComps.push_back(_tf);
@@ -496,7 +523,7 @@ void Editor::Update()
         GameObjectWindow();
         SelectedGameObjectWindow();
 
-        Camera::GetInstance().Edit();
+        UtilsWindow();
     }
 
     ChangeModeWindow();

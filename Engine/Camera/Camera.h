@@ -18,7 +18,7 @@ private:
 
 	float speed;
 
-	glm::mat3 world_to_ndc_xform;
+	glm::mat4 world_to_ndc_xform;
 	Editor::EditorMode mode;
 
 public:
@@ -34,7 +34,7 @@ public:
 	void move();
 
 	void CalculateMatrix();
-	glm::mat3& GetMatrix() { return world_to_ndc_xform; }
+	glm::mat4& GetMatrix() { return world_to_ndc_xform; }
 	
 	const glm::vec2& GetPos() const;
 	void SetPos(const float& _x, const float& _y);

@@ -21,11 +21,11 @@ void AttackComp::Update()
 	TransformComp* t = owner->GetComponent<TransformComp>();
 	if (!t) return;
 
-	if (GLHelper::keystateZ)
+	if (GLHelper::keyState[GLFW_KEY_Z])
 	{
 		GameObject* obj = Prefab::NewGameObject("Bomb", prefabName);
 		obj->GetComponent<TransformComp>()->SetPos(t->GetPos());
-		GLHelper::keystateZ = false;
+		GLHelper::keyState[GLFW_KEY_Z] = GL_FALSE;
 	}
 }
 

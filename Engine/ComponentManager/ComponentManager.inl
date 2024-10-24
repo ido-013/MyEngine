@@ -1,20 +1,13 @@
 template <typename T>
 inline void ComponentManager<T>::AddComp(T* _comp)
 {
-    component.push_back(_comp);
+    component.push_front(_comp);
 }
 
 template<typename T>
 inline void ComponentManager<T>::DelComp(T* _comp)
 {
-    for (auto it = component.begin(); it != component.end(); it++)
-    {
-        if ((*it) == _comp)
-        {
-            *it = nullptr;
-            return;
-        }
-    }
+    delComp = _comp;
 }
 
 template <typename T>
@@ -28,9 +21,10 @@ void ComponentManager<T>::Update()
 {
     for (auto it = component.begin(); it != component.end(); )
     {
-        if (*it == nullptr)
+        if (*it == delComp)
         {
             it = component.erase(it);
+            delComp = nullptr;
         }
         else
         {

@@ -1,5 +1,5 @@
 #pragma once
-#include <vector>
+#include <list>
 
 template <typename T>
 class ComponentManager
@@ -10,7 +10,8 @@ private:
 	const ComponentManager& operator=(const ComponentManager&) = delete;
 	~ComponentManager();
 
-	std::vector<T*> component;
+	std::list<T*> component;
+	T* delComp = nullptr;
 
 public:
 	static ComponentManager& GetInstance()

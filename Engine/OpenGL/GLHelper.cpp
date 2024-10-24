@@ -12,17 +12,7 @@ GLdouble GLHelper::delta_time;
 std::string GLHelper::title;
 GLFWwindow* GLHelper::ptr_window;
 
-GLboolean GLHelper::keystateW;
-GLboolean GLHelper::keystateA;
-GLboolean GLHelper::keystateS;
-GLboolean GLHelper::keystateD;
-
-GLboolean GLHelper::keystateUp;
-GLboolean GLHelper::keystateLeft;
-GLboolean GLHelper::keystateDown;
-GLboolean GLHelper::keystateRight;
-
-GLboolean GLHelper::keystateZ;
+std::map<int, GLboolean> GLHelper::keyState;
 
 glm::vec2 GLHelper::mousePos;
 GLboolean GLHelper::mousestateLeft;
@@ -69,6 +59,13 @@ bool GLHelper::Init(GLint _width, GLint _height, std::string _title)
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+    glEnable(GL_DEPTH_TEST);
+    glDepthRange(0, 1);
+    glDepthFunc(GL_LEQUAL);
+    glClearDepth(1.0);
+
+    glLineWidth(5);
+
     return true;
 }
 
@@ -95,31 +92,11 @@ void GLHelper::key_cb(GLFWwindow* _pwin, int _key, int _scancode, int _action, i
             glfwSetWindowShouldClose(_pwin, GLFW_TRUE);
         }
 
-        keystateW = (_key == GLFW_KEY_W) ? GL_TRUE : keystateW;
-        keystateA = (_key == GLFW_KEY_A) ? GL_TRUE : keystateA;
-        keystateS = (_key == GLFW_KEY_S) ? GL_TRUE : keystateS;
-        keystateD = (_key == GLFW_KEY_D) ? GL_TRUE : keystateD;
-
-        keystateUp      = (_key == GLFW_KEY_UP)    ? GL_TRUE : keystateUp;
-        keystateLeft    = (_key == GLFW_KEY_LEFT)  ? GL_TRUE : keystateLeft;
-        keystateDown    = (_key == GLFW_KEY_DOWN)  ? GL_TRUE : keystateDown;
-        keystateRight   = (_key == GLFW_KEY_RIGHT) ? GL_TRUE : keystateRight;
-
-        keystateZ = (_key == GLFW_KEY_Z) ? GL_TRUE : keystateZ;
+        keyState[_key] = GL_TRUE;
     }
     else if (_action == GLFW_RELEASE) 
     {
-        keystateW = (_key == GLFW_KEY_W) ? GL_FALSE : keystateW;
-        keystateA = (_key == GLFW_KEY_A) ? GL_FALSE : keystateA;
-        keystateS = (_key == GLFW_KEY_S) ? GL_FALSE : keystateS;
-        keystateD = (_key == GLFW_KEY_D) ? GL_FALSE : keystateD;
-
-        keystateUp      = (_key == GLFW_KEY_UP)    ? GL_FALSE : keystateUp;
-        keystateLeft    = (_key == GLFW_KEY_LEFT)  ? GL_FALSE : keystateLeft;
-        keystateDown    = (_key == GLFW_KEY_DOWN)  ? GL_FALSE : keystateDown;
-        keystateRight   = (_key == GLFW_KEY_RIGHT) ? GL_FALSE : keystateRight;
-
-        keystateZ = (_key == GLFW_KEY_Z) ? GL_FALSE : keystateZ;
+        keyState[_key] = GL_FALSE;
     }
 }
 

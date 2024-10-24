@@ -10,7 +10,7 @@
 #include "../EngineComponent/TransformComp.h"
 
 SpriteComp::SpriteComp(GameObject* _owner) : GraphicComponent(_owner), 
-                                             color({255, 255, 255}), alpha(1), texobj(nullptr)
+                                             color({255, 255, 255}), alpha(1), texobj(nullptr), depth(1)
 {
     SetShdrpgm("base.shd");
     SetMesh("square.msh");
@@ -26,47 +26,13 @@ SpriteComp::~SpriteComp()
 
 void SpriteComp::Update()
 {
-    TransformComp* t = owner->GetComponent<TransformComp>();
-    if (!t) return;
-
     glUseProgram(*shaderProgram);
 
-    GLint loc = glGetUniformLocation(*shaderProgram, "uTex2d");
-    if (loc >= 0) 
-    {
-        glUniform1i(loc, 6);
-    }
-
-    loc = glGetUniformLocation(*shaderProgram, "uColor");
-    if (loc >= 0) 
-    {
-        glUniform4f(loc, color.r / 255.f, color.g / 255.f, color.b / 255.f, alpha);
-    }
-
-    loc = glGetUniformLocation(*shaderProgram, "uModel_to_NDC");
-    if (loc >= 0) 
-    {
-        glUniformMatrix3fv(loc, 1, GL_FALSE, glm::value_ptr(Camera::GetInstance().GetMatrix() * t->GetMatrix()));
-    }
-
-    glBindTextureUnit(6, *texobj);
-    glBindTexture(GL_TEXTURE_2D, *texobj);
-
-    glBindVertexArray(mesh->VAO);
-    glBindTexture(GL_TEXTURE_2D, 0);
-
-    glDrawArrays(mesh->primitive_type, 0, mesh->draw_cnt);
+    DrawSprite();
 
     if (owner->selected)
     {
-        loc = glGetUniformLocation(*shaderProgram, "uColor");
-        if (loc >= 0)
-        {
-            glUniform4f(loc, color.r / 255.f, 255 / 255.f, 0 / 255.f, alpha);
-        }
-
-        glLineWidth(5);
-        glDrawArrays(GL_LINE_LOOP, 0, mesh->draw_cnt);
+        DrawOutline();
     }
 
     glUseProgram(0);
@@ -86,6 +52,8 @@ bool SpriteComp::Edit()
         //Edit Alpha
         ImGui::InputFloat("Alpha", &alpha);
         alpha = alpha < 0 ? 0 : (alpha > 1 ? 1 : alpha);
+
+        ImGui::InputFloat("Depth", &depth);
 
         std::string filename;
 
@@ -118,6 +86,62 @@ bool SpriteComp::Edit()
     }
 
     return true;
+}
+
+void SpriteComp::DrawSprite()
+{
+    TransformComp* t = owner->GetComponent<TransformComp>();
+    if (!t) return;
+
+    GLint loc = glGetUniformLocation(*shaderProgram, "uTex2d");
+    if (loc >= 0)
+    {
+        glUniform1i(loc, 6);
+    }
+
+    loc = glGetUniformLocation(*shaderProgram, "uColor");
+    if (loc >= 0)
+    {
+        glUniform4f(loc, color.r / 255.f, color.g / 255.f, color.b / 255.f, alpha);
+    }
+
+    loc = glGetUniformLocation(*shaderProgram, "uModel_to_NDC");
+    if (loc >= 0)
+    {
+        glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(Camera::GetInstance().GetMatrix() * t->GetMatrix()));
+    }
+
+    loc = glGetUniformLocation(*shaderProgram, "uCoordZ");
+    if (loc >= 0)
+    {
+        glUniform1f(loc, depth);
+    }
+
+    glBindTextureUnit(6, *texobj);
+    glBindTexture(GL_TEXTURE_2D, *texobj);
+
+    glBindVertexArray(mesh->VAO);
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    glDrawArrays(mesh->primitive_type, 0, mesh->draw_cnt);
+}
+
+void SpriteComp::DrawOutline()
+{
+    GLuint loc = glGetUniformLocation(*shaderProgram, "uColor");
+    if (loc >= 0)
+    {
+        Color outlineColor = Editor::GetInstance().GetOutlineColor();
+        glUniform4f(loc, outlineColor.r / 255.f, outlineColor.g / 255.f, outlineColor.b / 255.f, 1.0);
+    }
+
+    loc = glGetUniformLocation(*shaderProgram, "uCoordZ");
+    if (loc >= 0)
+    {
+        glUniform1f(loc, 0);
+    }
+
+    glDrawArrays(GL_LINE_LOOP, 0, mesh->draw_cnt);
 }
 
 void SpriteComp::SetColor(const unsigned char& _r, const unsigned char& _g, const unsigned char& _b)

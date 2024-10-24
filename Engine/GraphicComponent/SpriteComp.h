@@ -2,19 +2,13 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+
 #include "GraphicComponent.h"
 #include "../OpenGL/GLModel.h"
+#include "../Color.h"
 
 class SpriteComp : public GraphicComponent
 {
-public:
-	struct Color
-	{
-		unsigned char r = 255;
-		unsigned char g = 255;
-		unsigned char b = 255;
-	};
-
 private:
 	Color color;
 	GLfloat alpha;
@@ -28,6 +22,8 @@ private:
 	GLuint* texobj;
 	std::string textureName;
 
+	float depth;
+
 public:
 	SpriteComp(GameObject* _owner);
 	~SpriteComp();
@@ -36,6 +32,8 @@ public:
 	void Update() override;
 	bool Edit() override;
 
+	void DrawSprite();
+	void DrawOutline();
 
 	// Gettors/Settors
 	Color& GetColor() { return color; }

@@ -28,22 +28,22 @@ void PlayerComp::Update()
 
 	r->ClearVelocity();
 
-	if (GLHelper::keystateUp)
+	if (GLHelper::keyState[GLFW_KEY_UP])
 	{
 		r->AddVelocity(0, speed);
 	}
 
-	if (GLHelper::keystateLeft)
+	if (GLHelper::keyState[GLFW_KEY_LEFT])
 	{
 		r->AddVelocity(-speed, 0);
 	}
 
-	if (GLHelper::keystateDown)
+	if (GLHelper::keyState[GLFW_KEY_DOWN])
 	{
 		r->AddVelocity(0, -speed);
 	}
 
-	if (GLHelper::keystateRight)
+	if (GLHelper::keyState[GLFW_KEY_RIGHT])
 	{
 		r->AddVelocity(speed, 0);
 	}

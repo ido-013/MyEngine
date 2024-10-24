@@ -1,7 +1,5 @@
 #pragma once
 
-#include "../GameObject/GameObject.h"
-
 #include "../Imgui/imgui.h"
 #include "../Imgui/imgui_impl_glfw.h"
 #include "../Imgui/imgui_impl_opengl3.h"
@@ -11,6 +9,9 @@
 #include <iostream>
 #include <vector>
 #include <glm/glm.hpp>
+
+#include "../GameObject/GameObject.h"
+#include "../Color.h"
 
 class TransformComp;
 
@@ -35,6 +36,7 @@ private:
     GameObject* selectedObj;
     std::vector<std::string> comps;
     std::vector<TransformComp*> tfComps;
+    Color outlineColor;
 
     void ChangeSelectedObject(GameObject* _obj);
     void UpdateTfComps();
@@ -70,8 +72,10 @@ private:
         void SavePrefabPopup();
         void DeleteObjectButton();
 
+    void UtilsWindow();
+        void OutlineColorTree();
+
     //extra
-        //object picking
         //function key
             //ctrl + '' -> use stack
 
@@ -83,6 +87,7 @@ public:
     }
 
     const EditorMode& GetMode() const { return mode; }
+    const Color& GetOutlineColor() const { return outlineColor; }
 
     void AddTfComp(TransformComp* _tf);
     void DeleteTfComp(const TransformComp* _tf);

@@ -3,6 +3,8 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <string>
+#include <vector>
+#include <map>
 
 struct GLHelper
 {
@@ -27,17 +29,7 @@ struct GLHelper
 	static std::string title;
 	static GLFWwindow* ptr_window;
 
-	static GLboolean keystateW;
-	static GLboolean keystateA;
-	static GLboolean keystateS;
-	static GLboolean keystateD;
-
-	static GLboolean keystateUp;
-	static GLboolean keystateLeft;
-	static GLboolean keystateDown;
-	static GLboolean keystateRight;
-
-	static GLboolean keystateZ;
+	static std::map<int, GLboolean> keyState;
 
 	static glm::vec2 mousePos;
 	static GLboolean mousestateLeft;

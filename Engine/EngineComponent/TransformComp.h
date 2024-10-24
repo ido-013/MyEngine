@@ -9,7 +9,7 @@ private:
 	glm::vec2 scale;
 	float rot;
 
-	glm::mat3 transformMatrix;
+	glm::mat4 transformMatrix;
 
 	void CalculateMatrix();
 
@@ -24,7 +24,7 @@ public:
 	const glm::vec2& GetPos() const { return pos; }
 	const glm::vec2& GetScale() const { return scale; }
 	const float& GetRot() const { return rot; }
-	const glm::mat3& GetMatrix() const { return transformMatrix; }
+	const glm::mat4& GetMatrix() const { return transformMatrix; }
 
 	//Mutators
 	void SetPos(const glm::vec2& _otherPos);

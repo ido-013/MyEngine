@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 #include <list>
 
 template <typename T>
@@ -11,7 +12,6 @@ private:
 	~ComponentManager();
 
 	std::list<T*> component;
-	T* delComp = nullptr;
 
 public:
 	static ComponentManager& GetInstance()

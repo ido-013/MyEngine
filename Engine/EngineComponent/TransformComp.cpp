@@ -70,7 +70,7 @@ bool TransformComp::Edit()
 
 		ImGui::InputFloat2("Scale", &scale[0]);
 
-		ImGui::SliderFloat("Rot", &rot, -360, 360);
+		ImGui::DragFloat("Rot", &rot, 1, 0, 360);
 
 		if (ImGui::Button("Delete Component"))
 		{
@@ -156,8 +156,5 @@ json TransformComp::SaveToJson()
 BaseRTTI* TransformComp::CreateTransformComponent(GameObject* _owner)
 {
 	BaseRTTI* p = new TransformComp(_owner);
-
-	_owner->AddComponent<TransformComp>(static_cast<BaseComponent*>(p));
-
-	return p;
+	return _owner->AddComponent<TransformComp>(static_cast<BaseComponent*>(p));
 }

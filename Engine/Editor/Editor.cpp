@@ -17,12 +17,14 @@ Editor::Editor() : selectedObj(nullptr), mode(EDIT), isDrag(false), mouseOffset(
 {
     comps =
     {
-        TransformComp::TypeName,
-        SpriteComp::TypeName,
-        RigidbodyComp::TypeName,
         PlayerComp::TypeName,
-        ColliderComp::TypeName,
         AttackComp::TypeName,
+
+        TransformComp::TypeName,
+        RigidbodyComp::TypeName,
+        ColliderComp::TypeName,
+
+        SpriteComp::TypeName,
     };
 }
 
@@ -116,7 +118,7 @@ void Editor::ChangeModeWindow()
     if (ImGui::Selectable("Play", mode == PLAY) && mode == EDIT)
     {
         ImGui::SetWindowFocus(NULL);
-        Serializer::GetInstance().SaveLevel("temp");
+        Serializer::GetInstance().SaveLevel("temp", isSaveLevelPrefabComp, true);
         ChangeSelectedObject(nullptr);
         mode = PLAY;
     }
@@ -225,7 +227,7 @@ void Editor::SaveLevelPopup(bool& _popup)
         char buffer[100] = { '\0' };
         if (ImGui::InputText("Name", buffer, 100, ImGuiInputTextFlags_EnterReturnsTrue))
         {
-            Serializer::GetInstance().SaveLevel(buffer);
+            Serializer::GetInstance().SaveLevel(buffer, isSaveLevelPrefabComp);
             ImGui::CloseCurrentPopup();
         }
 
@@ -321,7 +323,7 @@ void Editor::LoadPrefabPopup()
             ImGui::CloseCurrentPopup();
         }
 
-        ClosePopupButton();
+        ClosePopupSameLineButton();
 
         ImGui::EndPopup();
     }
@@ -428,14 +430,33 @@ void Editor::SavePrefabPopup()
 
     if (ImGui::BeginPopupModal("Save as Prefab", NULL, ImGuiWindowFlags_AlwaysAutoResize))
     {
-        char buffer[100] = { '\0' };
-        if (ImGui::InputText("Name", buffer, 100, ImGuiInputTextFlags_EnterReturnsTrue))
+        static std::map<std::string, bool> isSaveComp;
+
+        if (ImGui::BeginChild("##", ImVec2(-FLT_MIN, ImGui::GetFontSize() * 10), ImGuiChildFlags_Borders))
         {
-            Prefab::SavePrefab(buffer, selectedObj);
+            for (auto& compType : comps)
+            {
+                if (!selectedObj->IsHaveComponent(compType))
+                    continue;
+
+                ImGui::Checkbox(compType.c_str(), &isSaveComp[compType]);
+            }
+
+            ImGui::EndChild();
+        }
+
+        static char buffer[100] = { '\0' };            
+        ImGui::InputText("Name", buffer, 100);
+
+        if (ImGui::Button("Save"))
+        {
+            Prefab::SavePrefab(buffer, selectedObj, isSaveComp);
+            isSaveComp.clear();
+            ClearBuffer(buffer, 100);
             ImGui::CloseCurrentPopup();
         }
 
-        ClosePopupButton();
+        ClosePopupSameLineButton();
 
         ImGui::EndPopup();
     }
@@ -456,6 +477,7 @@ void Editor::UtilsWindow()
 
     Camera::GetInstance().Edit();
     OutlineColorTree();
+    PrefabCompTree();
 
     ImGui::End();
 }
@@ -465,6 +487,19 @@ void Editor::OutlineColorTree()
     if (ImGui::TreeNode("Outline Color"))
     {
         ImGui::ColorEdit4("Color", outlineColor);
+
+        ImGui::TreePop();
+    }
+}
+
+void Editor::PrefabCompTree()
+{
+    if (ImGui::TreeNode("Prefab Component to Save Level"))
+    {
+        for (auto& compType : comps)
+        {
+            ImGui::Checkbox(compType.c_str(), &isSaveLevelPrefabComp[compType]);
+        }
 
         ImGui::TreePop();
     }

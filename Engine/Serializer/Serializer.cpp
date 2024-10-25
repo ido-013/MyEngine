@@ -73,7 +73,7 @@ void Serializer::DeleteLevel(const std::string& _filename)
 	std::filesystem::remove("Assets/Level/" + _filename + ".lvl");
 }
 
-void Serializer::SaveLevel(const std::string& _filename)
+void Serializer::SaveLevel(const std::string& _filename, std::map<std::string, bool>& _isSaveLevelPrefabComp, bool _isTemp)
 {
 	json allDataJson;
 
@@ -84,19 +84,34 @@ void Serializer::SaveLevel(const std::string& _filename)
 
 		std::string prefabName = obj->GetPrefabName();
 
-		if (prefabName.empty())
+		json components;
+
+		if (!prefabName.empty())
 		{
-			json components;
+			objJson["prefab"] = prefabName;
+
+			for (const auto& comp : obj->GetAllComponent())
+			{
+				if (!_isSaveLevelPrefabComp[comp.first] && !_isTemp)
+					continue;
+
+				BaseComponent* c = comp.second;
+				components.push_back(c->SaveToJson());
+			}
+		}
+
+		else
+		{
 			for (const auto& comp : obj->GetAllComponent())
 			{
 				BaseComponent* c = comp.second;
 				components.push_back(c->SaveToJson());
 			}
-			objJson["components"] = components;
 		}
-		else
+
+		if (!components.empty())
 		{
-			objJson["prefab"] = prefabName;
+			objJson["components"] = components;
 		}
 
 		allDataJson.push_back(objJson);

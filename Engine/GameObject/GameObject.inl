@@ -23,7 +23,7 @@ inline T* GameObject::AddComponent(BaseComponent* _comp)
 	}
 
 	component.insert({ T::TypeName, _comp });
-	return temp;
+	return static_cast<T*>(_comp);
 }
 
 template<typename T>

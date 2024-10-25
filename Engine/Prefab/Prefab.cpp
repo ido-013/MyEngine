@@ -2,6 +2,9 @@
 
 #include <fstream>
 
+#include "../Imgui/imgui_inc.h"
+#include "../Editor/Util.h"
+
 #include "../BaseComponent.h"
 #include "../RTTI/Registry.h"
 #include "../ResourceManager/ResourceManager.h"
@@ -14,7 +17,7 @@ Prefab::~Prefab()
 {
 }
 
-void Prefab::SavePrefab(const std::string& _name, GameObject* _obj)
+void Prefab::SavePrefab(const std::string& _name, GameObject* _obj, std::map<std::string, bool>& _isSaveComp)
 {
 	std::string filename = "./Assets/Prefab/" + _name + ".prefab";
 
@@ -23,6 +26,9 @@ void Prefab::SavePrefab(const std::string& _name, GameObject* _obj)
 	json components;
 	for (auto comp : _obj->GetAllComponent())
 	{
+		if (!_isSaveComp[comp.first])
+			continue;
+
 		BaseComponent* c = comp.second;
 		components.push_back(c->SaveToJson());
 	}

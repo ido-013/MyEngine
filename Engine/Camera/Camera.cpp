@@ -16,7 +16,7 @@ void Camera::Update()
 {
 	mode = Editor::GetInstance().GetMode();
 
-	move();
+	Move();
 }
 
 void Camera::Edit()
@@ -32,8 +32,11 @@ void Camera::Edit()
 	}
 }
 
-void Camera::move()
+void Camera::Move()
 {
+	if (ImGui::IsPopupOpen(nullptr, ImGuiPopupFlags_AnyPopupId))
+		return;
+
 	float dt = (float)GLHelper::delta_time;
 
 	if (GLHelper::keyState[GLFW_KEY_W])

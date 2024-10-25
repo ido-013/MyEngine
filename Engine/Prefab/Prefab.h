@@ -1,5 +1,6 @@
 #pragma once
 
+#include <map>
 #include <string>
 
 #include "json.hpp"
@@ -14,6 +15,6 @@ public:
 	Prefab(std::string _name);
 	~Prefab();
 
-	static void SavePrefab(const std::string& _name, GameObject* _obj);
+	static void SavePrefab(const std::string& _name, GameObject* _obj, std::map<std::string, bool>& _isSaveComp);
 	static GameObject* NewGameObject(const std::string& _name, const std::string& _prefabName);
 };

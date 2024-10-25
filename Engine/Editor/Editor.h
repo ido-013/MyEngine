@@ -1,14 +1,11 @@
 #pragma once
 
-#include "../Imgui/imgui.h"
-#include "../Imgui/imgui_impl_glfw.h"
-#include "../Imgui/imgui_impl_opengl3.h"
-#include "../Imgui/imgui_stdlib.h"
-#include "../Imgui/imgui_internal.h"
-
 #include <iostream>
 #include <vector>
+#include <list>
 #include <glm/glm.hpp>
+
+#include "../Imgui/imgui_inc.h"
 
 #include "../GameObject/GameObject.h"
 
@@ -34,8 +31,10 @@ private:
     EditorMode mode;
     GameObject* selectedObj;
     std::vector<std::string> comps;
-    std::vector<TransformComp*> tfComps;
+    std::list<TransformComp*> tfComps;
     float outlineColor[4];
+
+    std::map<std::string, bool> isSaveLevelPrefabComp;
 
     void ChangeSelectedObject(GameObject* _obj);
     void UpdateTfComps();
@@ -73,6 +72,7 @@ private:
 
     void UtilsWindow();
         void OutlineColorTree();
+        void PrefabCompTree();
 
     //extra
         //function key

@@ -222,6 +222,5 @@ json RigidbodyComp::SaveToJson()
 BaseRTTI* RigidbodyComp::CreateRigidBodyComponent(GameObject* _owner)
 {
 	BaseRTTI* p = new RigidbodyComp(_owner);
-	_owner->AddComponent<RigidbodyComp>(static_cast<BaseComponent*>(p));
-	return p;
+	return _owner->AddComponent<RigidbodyComp>(static_cast<BaseComponent*>(p));
 }

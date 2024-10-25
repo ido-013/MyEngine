@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <map>
 
 class Serializer
 {
@@ -20,6 +21,6 @@ public:
 	}
 
 	void LoadLevel(const std::string& _filename);
-	void SaveLevel(const std::string& _filename);
+	void SaveLevel(const std::string& _filename, std::map<std::string, bool>& _isSaveLevelPrefabComp, bool _isTemp = false);
 	void DeleteLevel(const std::string& _filename);
 };

@@ -122,9 +122,6 @@ json ColliderComp::SaveToJson()
 BaseRTTI* ColliderComp::CreateColliderComponent(GameObject* _owner)
 {
 	BaseRTTI* p = new ColliderComp(_owner);
-
-	_owner->AddComponent<ColliderComp>(static_cast<BaseComponent*>(p));
-
-	return p;
+	return _owner->AddComponent<ColliderComp>(static_cast<BaseComponent*>(p));
 }
 

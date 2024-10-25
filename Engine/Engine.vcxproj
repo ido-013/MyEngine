@@ -210,6 +210,7 @@
     <ClInclude Include="Imgui\imgui_impl_glfw.h" />
     <ClInclude Include="Imgui\imgui_impl_opengl3.h" />
     <ClInclude Include="Imgui\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="Imgui\imgui_inc.h" />
     <ClInclude Include="Imgui\imgui_internal.h" />
     <ClInclude Include="Imgui\imgui_stdlib.h" />
     <ClInclude Include="Imgui\imstb_rectpack.h" />

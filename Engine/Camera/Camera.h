@@ -31,7 +31,7 @@ public:
 	void Update();
 	void Edit();
 
-	void move();
+	void Move();
 
 	void CalculateMatrix();
 	glm::mat4& GetMatrix() { return world_to_ndc_xform; }

@@ -5,6 +5,7 @@
 
 #include "../ComponentManager/ComponentManager.h"
 #include "../CollisionManager/CollisionManager.h"
+#include "../GameObjectManager/GameObjectManager.h"
 #include "../EventManager/EventManager.h"
 #include "../ResourceManager/ResourceManager.h"
 #include "../Editor/Editor.h"
@@ -68,6 +69,7 @@ void GameStateManager::Exit()
         currentLevel->Exit();
     }
 
+    GameObjectManager::GetInstance().RemoveAllObject();
     ResourceManager::GetInstance().UnloadAllResource();
     EventManager::GetInstance().DeleteUndispahchEvent();
 }

@@ -29,25 +29,11 @@
       }
     },
     {
-      "type": "SpriteComp",
-      "compData": {
-        "color": [
-          1.0,
-          1.0,
-          1.0,
-          1.0
-        ],
-        "shaderName": "base.shd",
-        "meshName": "square.msh",
-        "textureName": "base.png"
-      }
-    },
-    {
       "type": "TransformComp",
       "compData": {
         "position": [
-          -13.0,
-          -9.0
+          0.0,
+          0.0
         ],
         "scale": [
           600.0,

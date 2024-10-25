@@ -3,9 +3,7 @@
 #include <cstring>
 #include <filesystem>
 
-#include "../Imgui/imgui.h"
-#include "../Imgui/imgui_impl_glfw.h"
-#include "../Imgui/imgui_impl_opengl3.h"
+#include "../Imgui/imgui_inc.h"
 
 bool FileSelectComboOnce(
 	std::string& _result,
@@ -63,6 +61,14 @@ bool SameLineButton(const char* _label)
 void ClosePopupButton()
 {
 	if (ImGui::Button("Close") || ImGui::IsKeyPressed(ImGuiKey_Escape))
+	{
+		ImGui::CloseCurrentPopup();
+	}
+}
+
+void ClosePopupSameLineButton()
+{
+	if (SameLineButton("Close") || ImGui::IsKeyPressed(ImGuiKey_Escape))
 	{
 		ImGui::CloseCurrentPopup();
 	}

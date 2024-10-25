@@ -74,6 +74,5 @@ json AttackComp::SaveToJson()
 BaseRTTI* AttackComp::CreateAttackComponent(GameObject* _owner)
 {
 	BaseRTTI* p = new AttackComp(_owner);
-	_owner->AddComponent<AttackComp>(static_cast<BaseComponent*>(p));
-	return p;
+	return _owner->AddComponent<AttackComp>(static_cast<BaseComponent*>(p));
 }

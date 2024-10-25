@@ -17,6 +17,7 @@ Registry::Registry()
 BaseRTTI* Registry::FindAndCreate(const std::string& _type, GameObject* _owner)
 {
     BaseRTTI* ptr = nullptr;
+
     if (rttiMap.find(_type) != rttiMap.end())
         ptr = rttiMap[_type](_owner);
     else

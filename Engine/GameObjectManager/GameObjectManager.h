@@ -11,6 +11,8 @@ private:
 	std::map<std::string, int> nameInd;
 	std::list<GameObject*> orderList;
 
+	//layer
+
 	GameObjectManager();
 	~GameObjectManager();
 

@@ -233,6 +233,5 @@ json SpriteComp::SaveToJson()
 BaseRTTI* SpriteComp::CreateSpriteComponent(GameObject* _owner)
 {
     BaseRTTI* p = new SpriteComp(_owner);
-    _owner->AddComponent<SpriteComp>(static_cast<SpriteComp*>(p));
-    return p;
+    return _owner->AddComponent<SpriteComp>(static_cast<SpriteComp*>(p));
 }

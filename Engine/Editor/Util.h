@@ -22,5 +22,5 @@ void ClearBuffer(char* _buffer, const int& _size);
 
 bool SameLineButton(const char* _label);
 
-void ClosePopupButton();
-void ClosePopupSameLineButton();
+bool ClosePopupButton();
+bool ClosePopupSameLineButton();

@@ -1,0 +1,10 @@
+[
+  {
+    "name": "Default",
+    "depth": 1.0
+  },
+  {
+    "name": "UI",
+    "depth": 0.0
+  }
+]

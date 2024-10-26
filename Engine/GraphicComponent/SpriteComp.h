@@ -20,6 +20,8 @@ private:
 	GLuint* texobj;
 	std::string textureName;
 
+	GLuint* outlineTexobj;
+
 	float depth;
 
 public:
@@ -39,6 +41,7 @@ public:
 	void SetShdrpgm(const std::string& _name);
 	void SetMesh(const std::string& _name);
 	void SetTexture(const std::string& _name);
+	void SetDepth();
 
 	void UnsetShdrpgm();
 	void UnsetMesh();

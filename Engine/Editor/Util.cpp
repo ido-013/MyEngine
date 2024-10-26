@@ -5,6 +5,8 @@
 
 #include "../Imgui/imgui_inc.h"
 
+#include "../OpenGL/GLHelper.h"
+
 bool FileSelectComboOnce(
 	std::string& _result,
 	const std::string& _label,
@@ -58,18 +60,16 @@ bool SameLineButton(const char* _label)
 	return ImGui::Button(_label);
 }
 
-void ClosePopupButton()
+bool ClosePopupButton()
 {
-	if (ImGui::Button("Close") || ImGui::IsKeyPressed(ImGuiKey_Escape))
-	{
-		ImGui::CloseCurrentPopup();
-	}
+	bool ret = ImGui::Button("Close") || GLHelper::keyState[GLFW_KEY_ESCAPE];
+	GLHelper::keyState[GLFW_KEY_ESCAPE] = GL_FALSE;
+	return ret;
 }
 
-void ClosePopupSameLineButton()
+bool ClosePopupSameLineButton()
 {
-	if (SameLineButton("Close") || ImGui::IsKeyPressed(ImGuiKey_Escape))
-	{
-		ImGui::CloseCurrentPopup();
-	}
+	bool ret = SameLineButton("Close") || GLHelper::keyState[GLFW_KEY_ESCAPE];
+	GLHelper::keyState[GLFW_KEY_ESCAPE] = GL_FALSE;
+	return ret;
 }

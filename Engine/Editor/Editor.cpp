@@ -1,8 +1,11 @@
 ﻿#include "Editor.h"
 
+#include <format>
+
 #include "../OpenGL/GLHelper.h"
 
 #include "../GameObjectManager/GameObjectManager.h"
+#include "../LayerManager/LayerManager.h"
 #include "../Serializer/Serializer.h"
 #include "../RTTI/Registry.h"
 #include "../Camera/Camera.h"
@@ -195,11 +198,16 @@ void Editor::LoadLevelPopup(bool& _popup)
             ChangeSelectedObject(nullptr);
             GameObjectManager::GetInstance().RemoveAllObject();
             Serializer::GetInstance().LoadLevel(buffer);
+
             buffer.clear();
             ImGui::CloseCurrentPopup();
         }
 
-        ClosePopupButton();
+        if (ClosePopupButton())
+        {
+            buffer.clear();
+            ImGui::CloseCurrentPopup();
+        } 
 
         ImGui::EndPopup();
     }
@@ -228,10 +236,14 @@ void Editor::SaveLevelPopup(bool& _popup)
         if (ImGui::InputText("Name", buffer, 100, ImGuiInputTextFlags_EnterReturnsTrue))
         {
             Serializer::GetInstance().SaveLevel(buffer, isSaveLevelPrefabComp);
+
             ImGui::CloseCurrentPopup();
         }
 
-        ClosePopupButton();
+        if (ClosePopupButton())
+        {
+            ImGui::CloseCurrentPopup();
+        }
 
         ImGui::EndPopup();
     }
@@ -260,6 +272,19 @@ void Editor::ObjectListTree()
             if (ImGui::MenuItem(it.first.c_str(), 0, selectedObj == nullptr ? false : !selectedObj->GetName().compare(it.first)))
             {
                 ChangeSelectedObject(it.second);
+            }
+
+            if (ImGui::BeginPopupContextItem())
+            {
+                if (ImGui::MenuItem("Delete"))
+                {
+                    GameObjectManager::GetInstance().RemoveObject(it.first);
+                    ChangeSelectedObject(nullptr);
+                    ImGui::EndPopup();
+                    break;
+                }
+
+                ImGui::EndPopup();
             }
         }
 
@@ -294,7 +319,10 @@ void Editor::CreateObjectPopup()
             ImGui::CloseCurrentPopup();
         }
 
-        ClosePopupButton();
+        if (ClosePopupButton())
+        {
+            ImGui::CloseCurrentPopup();
+        }
 
         ImGui::EndPopup();
     }
@@ -318,12 +346,18 @@ void Editor::LoadPrefabPopup()
         if (ImGui::Button("Load"))
         {
             Prefab::NewGameObject(buffer, prefabName);
+
             ClearBuffer(buffer, 100);
             prefabName.clear();
             ImGui::CloseCurrentPopup();
         }
 
-        ClosePopupSameLineButton();
+        if (ClosePopupSameLineButton())
+        {
+            ClearBuffer(buffer, 100);
+            prefabName.clear();
+            ImGui::CloseCurrentPopup();
+        }
 
         ImGui::EndPopup();
     }
@@ -339,6 +373,9 @@ void Editor::SelectedGameObjectWindow()
     GameObjectInfoText();
     ImGui::Separator();
 
+    SelectLayerCombo();
+    ImGui::Separator();
+
     AddComponentTree();
     ImGui::Separator();
 
@@ -349,9 +386,9 @@ void Editor::SelectedGameObjectWindow()
     SavePrefabPopup();
     DeleteObjectButton();
 
-    if (ImGui::IsWindowFocused() && ImGui::IsKeyPressed(ImGuiKey_Escape))
+    if (ImGui::IsWindowFocused() && GLHelper::keyState[GLFW_KEY_ESCAPE])
     {
-        ChangeSelectedObject(nullptr);
+        ChangeSelectedObject(nullptr); 
     }
 
     ImGui::End();
@@ -364,6 +401,80 @@ void Editor::GameObjectInfoText()
     std::string prefabName = selectedObj->GetPrefabName();
     if (!prefabName.empty())
         ImGui::BulletText(("Prefab: " + prefabName.substr(0, prefabName.find_last_of('.'))).c_str());
+}
+
+void Editor::SelectLayerCombo()
+{
+    static bool isAddLayer = false;
+
+    if (ImGui::BeginCombo("Layer", selectedObj->GetLayerName().c_str()))
+    {
+        for (auto& layer : LayerManager::GetInstance().GetAllLayer())
+        {
+            if (ImGui::MenuItem((layer.first + " (Depth: " + std::to_string(layer.second).substr(0, 4) + ")").c_str()))
+            {
+                selectedObj->SetLayerName(layer.first);
+            }
+
+            if (ImGui::BeginPopupContextItem())
+            {
+                if (ImGui::MenuItem("Delete")) 
+                {
+                    LayerManager::GetInstance().DeleteLayer(layer.first);
+                }
+                ImGui::EndPopup();
+            }
+        }
+        ImGui::Separator();
+
+        AddLayerMenuItem(isAddLayer);
+
+        ImGui::EndCombo();
+    }
+    
+    AddLayerPopup(isAddLayer);
+}
+
+void Editor::AddLayerMenuItem(bool& _popup)
+{
+    if (ImGui::MenuItem("Add Layer..."))
+    {
+        _popup = true;
+    }
+}
+
+void Editor::AddLayerPopup(bool& _popup)
+{
+    if (_popup)
+    {
+        ImGui::OpenPopup("Add Layer");
+        _popup = false;
+    }
+
+    if (ImGui::BeginPopupModal("Add Layer", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+    {
+        static char buffer[100] = { '\0' };
+        static float depth = 0;
+
+        ImGui::InputText("Name", buffer, 100);
+        ImGui::DragFloat("Depth", &depth, 0.01f, 0, 1, "%.2f");
+
+        if (ImGui::Button("Add Layer"))
+        {
+            LayerManager::GetInstance().AddLayer(buffer, depth);
+
+            ClearBuffer(buffer, 100);
+            ImGui::CloseCurrentPopup();
+        }
+
+        if (ClosePopupSameLineButton())
+        {
+            ClearBuffer(buffer, 100);
+            ImGui::CloseCurrentPopup();
+        }
+
+        ImGui::EndPopup();
+    }
 }
 
 void Editor::AddComponentTree()
@@ -412,10 +523,14 @@ void Editor::RenameObjectPopup()
         if (ImGui::InputText("Name", buffer, 100, ImGuiInputTextFlags_EnterReturnsTrue))
         {
             GameObjectManager::GetInstance().RenameObject(selectedObj->GetName(), buffer);
+
             ImGui::CloseCurrentPopup();
         }
 
-        ClosePopupButton();
+        if (ClosePopupButton())
+        {
+            ImGui::CloseCurrentPopup();
+        }
 
         ImGui::EndPopup();
     }
@@ -451,12 +566,18 @@ void Editor::SavePrefabPopup()
         if (ImGui::Button("Save"))
         {
             Prefab::SavePrefab(buffer, selectedObj, isSaveComp);
+
             isSaveComp.clear();
             ClearBuffer(buffer, 100);
             ImGui::CloseCurrentPopup();
         }
 
-        ClosePopupSameLineButton();
+        if (ClosePopupSameLineButton())
+        {
+            isSaveComp.clear();
+            ClearBuffer(buffer, 100);
+            ImGui::CloseCurrentPopup();
+        }
 
         ImGui::EndPopup();
     }

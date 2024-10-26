@@ -4,17 +4,21 @@
 #include <iostream>
 
 #include "../ResourceManager/ResourceManager.h"
+#include "../LayerManager/LayerManager.h"
 #include "../Camera/Camera.h"
 
 #include "../Editor/Util.h"
 #include "../EngineComponent/TransformComp.h"
 
 SpriteComp::SpriteComp(GameObject* _owner) : GraphicComponent(_owner), 
-                                             color{ 1.f, 1.f, 1.f, 1.f }, texobj(nullptr), depth(1)
+                                             color{ 1.f, 1.f, 1.f, 1.f }, texobj(nullptr)
 {
     SetShdrpgm("base.shd");
     SetMesh("square.msh");
     SetTexture("base.png");
+    SetDepth();
+
+    outlineTexobj = ResourceManager::GetInstance().GetResourcePointer<GLuint>("base.png");
 }
 
 SpriteComp::~SpriteComp()
@@ -111,7 +115,6 @@ void SpriteComp::DrawSprite()
 
     glBindTextureUnit(6, *texobj);
     glBindTexture(GL_TEXTURE_2D, *texobj);
-
     glBindVertexArray(mesh->VAO);
     glBindTexture(GL_TEXTURE_2D, 0);
 
@@ -132,6 +135,11 @@ void SpriteComp::DrawOutline()
     {
         glUniform1f(loc, 0);
     }
+
+    glBindTextureUnit(6, *outlineTexobj);
+    glBindTexture(GL_TEXTURE_2D, *outlineTexobj);
+    glBindVertexArray(mesh->VAO);
+    glBindTexture(GL_TEXTURE_2D, 0);
 
     glDrawArrays(GL_LINE_LOOP, 0, mesh->draw_cnt);
 }
@@ -177,6 +185,11 @@ void SpriteComp::SetTexture(const std::string& _name)
 
     textureName = _name;
     texobj = ResourceManager::GetInstance().GetResourcePointer<GLuint>(_name);
+}
+
+void SpriteComp::SetDepth()
+{
+    depth = LayerManager::GetInstance().GetDepth(owner->GetLayerName());
 }
 
 void SpriteComp::UnsetShdrpgm()

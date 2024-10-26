@@ -12,6 +12,7 @@ private:
 
 	std::string name;
 	std::string prefabName;
+	std::string layerName;
 
 	GameObject(std::string _name);
 	//Components in the GO container are ALLOCATED IN THE HEAP, 
@@ -44,6 +45,9 @@ public:
 	
 	const std::string& GetName() { return name; }
 	const std::string& GetPrefabName() { return prefabName; }
+	const std::string& GetLayerName() { return layerName; }
+
+	void SetLayerName(const std::string& _name);
 
 	friend class GameObjectManager;
 };

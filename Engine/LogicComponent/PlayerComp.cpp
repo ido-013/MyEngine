@@ -55,15 +55,14 @@ bool PlayerComp::Edit()
 	{
 		ImGui::InputFloat("Speed", &speed);
 
-		if (ImGui::Button("Delete Component"))
-		{
-			owner->DeleteComponent<PlayerComp>();
-			ImGui::TreePop();
+		if (DeleteCompButton<PlayerComp>())
 			return false;
-		}
 
 		ImGui::TreePop();
 	}
+
+	if (DeleteCompMenuItem<PlayerComp>())
+		return false;
 
 	return true;
 }
@@ -93,7 +92,6 @@ json PlayerComp::SaveToJson()
 
 BaseRTTI* PlayerComp::CreatePlayerComponent(GameObject* _owner)
 {
-	BaseRTTI* p = new PlayerComp(_owner);
-	return _owner->AddComponent<PlayerComp>(static_cast<BaseComponent*>(p));
+	return _owner->AddComponent<PlayerComp>();
 }
 

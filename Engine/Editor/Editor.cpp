@@ -416,6 +416,9 @@ void Editor::SelectLayerCombo()
                 selectedObj->SetLayerName(layer.first);
             }
 
+            if (!layer.first.compare("Default") || !layer.first.compare("UI"))
+                continue;
+
             if (ImGui::BeginPopupContextItem())
             {
                 if (ImGui::MenuItem("Delete")) 

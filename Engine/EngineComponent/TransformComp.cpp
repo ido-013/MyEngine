@@ -72,17 +72,16 @@ bool TransformComp::Edit()
 
 		ImGui::DragFloat("Rot", &rot, 1, 0, 360);
 
-		if (ImGui::Button("Delete Component"))
-		{
-			owner->DeleteComponent<TransformComp>();
-			ImGui::TreePop();
+		if (DeleteCompButton<TransformComp>())
 			return false;
-		}
 
 		CalculateMatrix();
 
 		ImGui::TreePop();
 	}
+
+	if (DeleteCompMenuItem<TransformComp>())
+		return false;
 
 	return true;
 }
@@ -155,6 +154,5 @@ json TransformComp::SaveToJson()
 
 BaseRTTI* TransformComp::CreateTransformComponent(GameObject* _owner)
 {
-	BaseRTTI* p = new TransformComp(_owner);
-	return _owner->AddComponent<TransformComp>(static_cast<BaseComponent*>(p));
+	return _owner->AddComponent<TransformComp>();
 }

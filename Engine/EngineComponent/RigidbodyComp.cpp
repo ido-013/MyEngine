@@ -162,15 +162,14 @@ bool RigidbodyComp::Edit()
 
 		ImGui::InputFloat("Drag", &drag);
 
-		if (ImGui::Button("Delete Component"))
-		{
-			owner->DeleteComponent<RigidbodyComp>();
-			ImGui::TreePop();
+		if (DeleteCompButton<RigidbodyComp>())
 			return false;
-		}
 
 		ImGui::TreePop();
 	}
+
+	if (DeleteCompMenuItem<RigidbodyComp>())
+		return false;
 
 	return true;
 }
@@ -221,6 +220,5 @@ json RigidbodyComp::SaveToJson()
 
 BaseRTTI* RigidbodyComp::CreateRigidBodyComponent(GameObject* _owner)
 {
-	BaseRTTI* p = new RigidbodyComp(_owner);
-	return _owner->AddComponent<RigidbodyComp>(static_cast<BaseComponent*>(p));
+	return _owner->AddComponent<RigidbodyComp>();
 }

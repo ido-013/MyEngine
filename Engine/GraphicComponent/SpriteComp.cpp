@@ -71,15 +71,14 @@ bool SpriteComp::Edit()
             SetTexture(filename);
         }
 
-        if (ImGui::Button("Delete Component"))
-        {
-            owner->DeleteComponent<SpriteComp>();
-            ImGui::TreePop();
+        if (DeleteCompButton<SpriteComp>())
             return false;
-        }
 
         ImGui::TreePop();
     }
+
+    if (DeleteCompMenuItem<SpriteComp>())
+        return false;
 
     return true;
 }
@@ -245,6 +244,5 @@ json SpriteComp::SaveToJson()
 
 BaseRTTI* SpriteComp::CreateSpriteComponent(GameObject* _owner)
 {
-    BaseRTTI* p = new SpriteComp(_owner);
-    return _owner->AddComponent<SpriteComp>(static_cast<SpriteComp*>(p));
+    return _owner->AddComponent<SpriteComp>();
 }

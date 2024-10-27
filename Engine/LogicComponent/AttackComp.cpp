@@ -35,15 +35,14 @@ bool AttackComp::Edit()
 	{
 		FileSelectComboOnce(prefabName, "Prefab", prefabName, "Assets/Prefab", ".prefab");
 
-		if (ImGui::Button("Delete Component"))
-		{
-			owner->DeleteComponent<AttackComp>();
-			ImGui::TreePop();
+		if (DeleteCompButton<AttackComp>())
 			return false;
-		}
 
 		ImGui::TreePop();
 	}
+
+	if (DeleteCompMenuItem<AttackComp>())
+		return false;
 
 	return true;
 }
@@ -73,6 +72,5 @@ json AttackComp::SaveToJson()
 
 BaseRTTI* AttackComp::CreateAttackComponent(GameObject* _owner)
 {
-	BaseRTTI* p = new AttackComp(_owner);
-	return _owner->AddComponent<AttackComp>(static_cast<BaseComponent*>(p));
+	return _owner->AddComponent<AttackComp>();
 }

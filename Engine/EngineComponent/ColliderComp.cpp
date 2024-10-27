@@ -28,15 +28,14 @@ bool ColliderComp::Edit()
 {
 	if (ImGui::TreeNode(TypeName))
 	{
-		if (ImGui::Button("Delete Component"))
-		{
-			owner->DeleteComponent<ColliderComp>();
-			ImGui::TreePop();
+		if (DeleteCompButton<ColliderComp>())
 			return false;
-		}
 
 		ImGui::TreePop();
 	}
+
+	if (DeleteCompMenuItem<ColliderComp>())
+		return false; 
 
 	return true;
 }
@@ -121,7 +120,6 @@ json ColliderComp::SaveToJson()
 
 BaseRTTI* ColliderComp::CreateColliderComponent(GameObject* _owner)
 {
-	BaseRTTI* p = new ColliderComp(_owner);
-	return _owner->AddComponent<ColliderComp>(static_cast<BaseComponent*>(p));
+	return _owner->AddComponent<ColliderComp>();
 }
 

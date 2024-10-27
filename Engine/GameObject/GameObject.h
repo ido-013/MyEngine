@@ -27,9 +27,6 @@ public:
 	template <typename T>
 	T* AddComponent();
 
-	template <typename T>
-	T* AddComponent(BaseComponent* _comp);
-
 	//GO will have a function to find if it already has a component of ANY TYPE
 	template <typename T>
 	T* GetComponent();

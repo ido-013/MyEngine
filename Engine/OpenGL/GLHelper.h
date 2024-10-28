@@ -4,6 +4,7 @@
 #include <glm/glm.hpp>
 #include <string>
 #include <vector>
+#include <stack>
 #include <map>
 
 struct GLHelper
@@ -30,6 +31,8 @@ struct GLHelper
 	static GLFWwindow* ptr_window;
 
 	static std::map<int, GLboolean> keyState;
+	static std::stack<int> keyStateStack;
+	static std::map<int, GLboolean> ctrlKeyState;
 
 	static glm::vec2 mousePos;
 	static GLboolean mousestateLeft;

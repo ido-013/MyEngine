@@ -17,6 +17,8 @@
 
 #include "../Level/BaseLevel.h"
 
+#include "../Profiler/Profiler.h"
+
 GameStateManager::GameStateManager() : previousLevel(nullptr), currentLevel(nullptr) {}
 
 GameStateManager::~GameStateManager()
@@ -40,6 +42,8 @@ void GameStateManager::Init()
 
 void GameStateManager::Update()
 {
+    DEBUG_PROFILER_START(__FUNCTION_NAME__);
+
     if (currentLevel)
     {
         Editor::EditorMode editorMode = Editor::GetInstance().GetMode();
@@ -60,6 +64,8 @@ void GameStateManager::Update()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         ComponentManager<GraphicComponent>::GetInstance().Update();
     }
+
+    DEBUG_PROFILER_END;
 }
 
 void GameStateManager::Exit()

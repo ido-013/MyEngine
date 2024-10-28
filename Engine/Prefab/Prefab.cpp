@@ -17,7 +17,7 @@ Prefab::~Prefab()
 {
 }
 
-void Prefab::SavePrefab(const std::string& _name, GameObject* _obj, std::map<std::string, bool>& _isSaveComp)
+void Prefab::SavePrefab(const std::string& _name, GameObject* _obj, std::map<std::string, bool>& _isSaveComp, bool _isTemp)
 {
 	std::string filename = "./Assets/Prefab/" + _name + ".prefab";
 
@@ -26,7 +26,7 @@ void Prefab::SavePrefab(const std::string& _name, GameObject* _obj, std::map<std
 	json components;
 	for (auto comp : _obj->GetAllComponent())
 	{
-		if (!_isSaveComp[comp.first])
+		if (!_isSaveComp[comp.first] && !_isTemp)
 			continue;
 
 		BaseComponent* c = comp.second;
@@ -70,4 +70,9 @@ GameObject* Prefab::NewGameObject(const std::string& _name, const std::string& _
 	}
 
 	return obj;
+}
+
+void Prefab::DeletePrefab(const std::string& _name)
+{
+	std::filesystem::remove("Assets/Prefab/" + _name + ".prefab");
 }

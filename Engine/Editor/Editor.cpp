@@ -1,8 +1,8 @@
 ﻿#include "Editor.h"
 
-#include <format>
-
 #include "../OpenGL/GLHelper.h"
+
+#include "../Imgui/implot.h"
 
 #include "../GameObjectManager/GameObjectManager.h"
 #include "../LayerManager/LayerManager.h"
@@ -10,13 +10,14 @@
 #include "../RTTI/Registry.h"
 #include "../Camera/Camera.h"
 #include "../Prefab/Prefab.h"
+#include "../Profiler/Profiler.h"
 
 #include "Util.h"
 #include "../collisionManager/CollisionUtil.h"
 
 #include "../Components.h"
 
-Editor::Editor() : selectedObj(nullptr), mode(EDIT), isDrag(false), mouseOffset(), outlineColor{1.f, 1.f, 0.f, 1.f}
+Editor::Editor() : selectedObj(nullptr), mode(EDIT), isDrag(false), mouseOffset(), outlineColor{1.f, 1.f, 0.f, 1.f}, viewProfiler(false), copyObjectName()
 {
     comps =
     {
@@ -386,6 +387,8 @@ void Editor::SelectedGameObjectWindow()
     SavePrefabPopup();
     DeleteObjectButton();
 
+    CopyObject();
+
     if (ImGui::IsWindowFocused() && GLHelper::keyState[GLFW_KEY_ESCAPE])
     {
         ChangeSelectedObject(nullptr); 
@@ -548,8 +551,6 @@ void Editor::SavePrefabPopup()
 
     if (ImGui::BeginPopupModal("Save as Prefab", NULL, ImGuiWindowFlags_AlwaysAutoResize))
     {
-        static std::map<std::string, bool> isSaveComp;
-
         if (ImGui::BeginChild("##", ImVec2(-FLT_MIN, ImGui::GetFontSize() * 10), ImGuiChildFlags_Borders))
         {
             for (auto& compType : comps)
@@ -595,6 +596,16 @@ void Editor::DeleteObjectButton()
     }
 }
 
+void Editor::CopyObject()
+{
+    if (GLHelper::ctrlKeyState[GLFW_KEY_C])
+    {
+        GLHelper::ctrlKeyState[GLFW_KEY_C] = GL_FALSE;
+        copyObjectName = selectedObj->GetName();
+        Prefab::SavePrefab("temp", selectedObj, isSaveComp, true);
+    }
+}
+
 void Editor::UtilsWindow()
 {
     ImGui::Begin("Utils");
@@ -602,6 +613,7 @@ void Editor::UtilsWindow()
     Camera::GetInstance().Edit();
     OutlineColorTree();
     PrefabCompTree();
+    ProfilerCheckbox();
 
     ImGui::End();
 }
@@ -629,6 +641,43 @@ void Editor::PrefabCompTree()
     }
 }
 
+void Editor::ProfilerCheckbox()
+{
+    ImGui::Checkbox("View Profiler", &viewProfiler);
+}
+
+void Editor::PasteObject()
+{
+    if (copyObjectName.empty())
+        return;
+
+    if (GLHelper::ctrlKeyState[GLFW_KEY_V])
+    {
+        GLHelper::ctrlKeyState[GLFW_KEY_V] = GL_FALSE;
+        Prefab::NewGameObject(copyObjectName, "temp.prefab");
+    }
+}
+
+void Editor::ProfilerWindow()
+{
+    if (!viewProfiler)
+        return;
+
+    ImGui::Begin("Profiler");
+
+    fpsText();
+    ImGui::Separator();
+
+    DEBUG_PROFILER_DUMP;
+
+    ImGui::End();
+}
+
+void Editor::fpsText()
+{
+    ImGui::Text("fps: %.2f", GLHelper::fps);
+}
+
 void Editor::AddTfComp(TransformComp* _tf)
 {
     tfComps.push_back(_tf);
@@ -651,6 +700,7 @@ void Editor::Init()
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
+    ImPlot::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
 
@@ -668,7 +718,8 @@ void Editor::Update()
 
     if (mode == EDIT)
     {
-        ImGui::ShowDemoWindow(); // Show demo window! :)
+        //ImGui::ShowDemoWindow(); // Show demo window! :)
+        ImPlot::ShowDemoWindow();
 
         UpdateTfComps();
 
@@ -679,6 +730,13 @@ void Editor::Update()
         SelectedGameObjectWindow();
 
         UtilsWindow();
+
+        PasteObject();
+    }
+
+    else
+    {
+        ProfilerWindow();
     }
 
     ChangeModeWindow();
@@ -695,7 +753,10 @@ void Editor::Exit()
         Serializer::GetInstance().DeleteLevel("temp");
     }
 
+    Prefab::DeletePrefab("temp");
+
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
+    ImPlot::DestroyContext();
     ImGui::DestroyContext();
 }

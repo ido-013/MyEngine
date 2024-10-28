@@ -13,6 +13,8 @@ std::string GLHelper::title;
 GLFWwindow* GLHelper::ptr_window;
 
 std::map<int, GLboolean> GLHelper::keyState;
+std::stack<int> GLHelper::keyStateStack;
+std::map<int, GLboolean> GLHelper::ctrlKeyState;
 
 glm::vec2 GLHelper::mousePos;
 GLboolean GLHelper::mousestateLeft;
@@ -93,10 +95,27 @@ void GLHelper::key_cb(GLFWwindow* _pwin, int _key, int _scancode, int _action, i
         }
 
         keyState[_key] = GL_TRUE;
+
+        if (keyStateStack.size() == 1 && keyStateStack.top() == GLFW_KEY_LEFT_CONTROL)
+        {
+            ctrlKeyState[_key] = GL_TRUE;
+        }
+
+        keyStateStack.push(_key);
     }
     else if (_action == GLFW_RELEASE) 
     {
         keyState[_key] = GL_FALSE;
+        
+        while (!keyStateStack.empty() && !keyState[keyStateStack.top()])
+        {
+            if (ctrlKeyState[keyStateStack.top()])
+            {
+                ctrlKeyState[keyStateStack.top()] = GL_FALSE;
+            }
+
+            keyStateStack.pop();
+        }
     }
 }
 

@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <list>
+#include <stack>
 #include <glm/glm.hpp>
 
 #include "../Imgui/imgui_inc.h"
@@ -34,13 +35,18 @@ private:
     std::list<TransformComp*> tfComps;
     float outlineColor[4];
 
-    std::map<std::string, bool> isSaveLevelPrefabComp;
+    bool viewProfiler;
 
-    void ChangeSelectedObject(GameObject* _obj);
-    void UpdateTfComps();
+    std::map<std::string, bool> isSaveComp;
+    std::map<std::string, bool> isSaveLevelPrefabComp;
 
     bool isDrag;
     glm::vec2 mouseOffset;
+
+    std::string copyObjectName;
+
+    void ChangeSelectedObject(GameObject* _obj);
+    void UpdateTfComps();
 
     void ObjectMouseInteraction();
         void ObjectPick();
@@ -72,10 +78,17 @@ private:
         void RenameObjectPopup();
         void SavePrefabPopup();
         void DeleteObjectButton();
+        void CopyObject();
 
     void UtilsWindow();
         void OutlineColorTree();
         void PrefabCompTree();
+        void ProfilerCheckbox();
+
+    void PasteObject();
+
+    void ProfilerWindow();
+        void fpsText();
 
     //extra
         //function key

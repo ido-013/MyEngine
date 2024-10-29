@@ -30,6 +30,7 @@ Editor::Editor() : selectedObj(nullptr), mode(EDIT), isDrag(false), mouseOffset(
         TransformComp::TypeName,
         RigidbodyComp::TypeName,
         ColliderComp::TypeName,
+        BombComp::TypeName,
 
         SpriteComp::TypeName,
     };

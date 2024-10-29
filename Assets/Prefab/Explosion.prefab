@@ -1,0 +1,32 @@
+{
+  "components": [
+    {
+      "type": "SpriteComp",
+      "compData": {
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "shaderName": "base.shd",
+        "meshName": "square.msh",
+        "textureName": "explosion.jpg"
+      }
+    },
+    {
+      "type": "TransformComp",
+      "compData": {
+        "position": [
+          -161.0,
+          -54.0
+        ],
+        "scale": [
+          100.0,
+          100.0
+        ],
+        "rotation": 0.0
+      }
+    }
+  ]
+}

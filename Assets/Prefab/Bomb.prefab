@@ -1,9 +1,11 @@
 {
   "components": [
     {
-      "type": "AttackComp",
+      "type": "BombComp",
       "compData": {
-        "prefabName": ""
+        "length": 1,
+        "maxTimer": 1.5,
+        "effectName": "Explosion.prefab"
       }
     },
     {
@@ -17,21 +19,21 @@
         ],
         "shaderName": "base.shd",
         "meshName": "square.msh",
-        "textureName": "base.png"
+        "textureName": "bomb.png"
       }
     },
     {
       "type": "TransformComp",
       "compData": {
         "position": [
-          0.0,
-          0.0
+          -161.0,
+          -54.0
         ],
         "scale": [
           100.0,
           100.0
         ],
-        "rotation": 209.58900451660156
+        "rotation": 0.0
       }
     }
   ]

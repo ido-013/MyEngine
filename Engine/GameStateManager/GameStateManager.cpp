@@ -63,6 +63,8 @@ void GameStateManager::Update()
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         ComponentManager<GraphicComponent>::GetInstance().Update();
+
+        GameObjectManager::GetInstance().Update();
     }
 
     DEBUG_PROFILER_END;

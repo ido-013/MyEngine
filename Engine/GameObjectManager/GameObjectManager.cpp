@@ -64,6 +64,11 @@ GameObject* GameObjectManager::RenameObject(const std::string& _preName, const s
 	return nullptr;
 }
 
+void GameObjectManager::ReservationRemoveObject(const std::string& _name)
+{
+	removeQueue.push(_name);
+}
+
 void GameObjectManager::RemoveObject(const std::string& _name)
 {
 	for (auto listIt = orderList.begin(); listIt != orderList.end(); listIt++)
@@ -95,4 +100,13 @@ void GameObjectManager::RemoveAllObject()
 	}
 
 	objects.clear();
+}
+
+void GameObjectManager::Update()
+{
+	while (!removeQueue.empty())
+	{
+		RemoveObject(removeQueue.front());
+		removeQueue.pop();
+	}
 }

@@ -125,16 +125,16 @@ void ColliderComp::LoadFromJson(const json& _data)
 
 	if (compData != _data.end())
 	{
-		auto p = compData->find("position");
-		pos.x = p->begin().value();
-		pos.y = (p->begin() + 1).value();
+		auto it = compData->find("position");
+		pos.x = it->begin().value();
+		pos.y = (it->begin() + 1).value();
 
-		auto s = compData->find("scale");
-		scale.x = s->begin().value();
-		scale.y = (s->begin() + 1).value();
+		it = compData->find("scale");
+		scale.x = it->begin().value();
+		scale.y = (it->begin() + 1).value();
 
-		auto r = compData->find("rotation");
-		rot = r.value();
+		it = compData->find("rotation");
+		rot = it.value();
 	}
 }
 

@@ -45,6 +45,7 @@ namespace MyProfiler
 		std::string s;
 
 		_blockTime[name][_n] += GetSeconds();
+		_blockCount[name][_n]++;
 
 		for (const auto* c : children)
 		{
@@ -107,13 +108,13 @@ namespace MyProfiler
 			id++;
 		}
 
-		/*for (auto& it : blockTime)
+		for (auto& it : blockTime)
 		{
 			for (int i = 0; i < 600; i++)
 			{
 				it.second[i] /= blockCount[it.first][i];
 			}
-		}*/
+		}
 
 		if (ImPlot::BeginPlot("dump"))
 		{

@@ -159,6 +159,9 @@
     <ClCompile Include="Imgui\implot_items.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="EngineComponent\BombComp.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameObject\GameObject.h">
@@ -327,6 +330,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Imgui\implot_internal.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineComponent\BombComp.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

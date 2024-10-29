@@ -144,6 +144,7 @@
     <ClCompile Include="CollisionManager\CollisionUtil.cpp" />
     <ClCompile Include="Editor\Editor.cpp" />
     <ClCompile Include="Editor\Util.cpp" />
+    <ClCompile Include="EngineComponent\BombComp.cpp" />
     <ClCompile Include="EngineComponent\ColliderComp.cpp" />
     <ClCompile Include="EngineComponent\EngineComponent.cpp" />
     <ClCompile Include="EngineComponent\RigidbodyComp.cpp" />
@@ -197,6 +198,7 @@
     <ClInclude Include="Components.h" />
     <ClInclude Include="Editor\Editor.h" />
     <ClInclude Include="Editor\Util.h" />
+    <ClInclude Include="EngineComponent\BombComp.h" />
     <ClInclude Include="EngineComponent\ColliderComp.h" />
     <ClInclude Include="EngineComponent\EngineComponent.h" />
     <ClInclude Include="EngineComponent\RigidbodyComp.h" />

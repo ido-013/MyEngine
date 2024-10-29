@@ -20,7 +20,7 @@ private:
 	GLuint* texobj;
 	std::string textureName;
 
-	GLuint* outlineTexobj;
+	GLuint* lineTexobj;
 
 	float depth;
 
@@ -34,6 +34,7 @@ public:
 
 	void DrawSprite();
 	void DrawOutline();
+	void DrawColliderLine();
 
 	// Gettors/Settors
 	void SetColor(const float& _r, const float& _g, const float& _b);

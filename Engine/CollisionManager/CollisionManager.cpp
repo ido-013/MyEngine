@@ -1,8 +1,12 @@
 #include "CollisionManager.h"
 
 #include "CollisionUtil.h"
+
 #include "../EventManager/EventManager.h"
+#include "../Profiler/Profiler.h"
+
 #include "../Event/CollisionEvent.h"
+
 
 CollisionManager::CollisionManager()
 {
@@ -33,9 +37,15 @@ void CollisionManager::DeleteCollider(ColliderComp* _col)
 
 void CollisionManager::Update()
 {
-	if (colliders.empty())
-		return;
+	std::string s = "CollisionManager " + std::string(__FUNCTION_NAME__);
+	DEBUG_PROFILER_START(s);
 
+	if (colliders.empty())
+	{
+		DEBUG_PROFILER_END;
+		return;
+	}
+	
 	EventManager& em = EventManager::GetInstance();
 
 	for (int i = 0; i < colliders.size() - 1; i++)
@@ -52,4 +62,6 @@ void CollisionManager::Update()
 			}
 		}
 	}
+
+	DEBUG_PROFILER_END;
 }

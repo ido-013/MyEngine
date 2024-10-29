@@ -12,6 +12,10 @@ private:
 	glm::vec2 scale;
 	float rot;
 
+	glm::mat4 colliderMatrix;
+
+	void CalculateMatrix();
+
 public:
 	ColliderComp(GameObject* _owner);
 	~ColliderComp();
@@ -25,6 +29,7 @@ public:
 	const glm::vec2& GetPos() const { return pos; }
 	const glm::vec2& GetScale() const { return scale; }
 	const float& GetRot() const { return rot; }
+	const glm::mat4& GetMatrix() const { return colliderMatrix; }
 
 	//Mutators
 	void SetPos(const glm::vec2& _otherPos);

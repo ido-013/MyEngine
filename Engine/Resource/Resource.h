@@ -16,9 +16,11 @@ protected:
 public:
 	//pure virtual fn to LOAD data
 	Resource() = default;
-	virtual ~Resource() = default;//Otherwise you would NOT be deleting the specialized classes
+	virtual ~Resource() = default; //Otherwise you would NOT be deleting the specialized classes
 
 	virtual void LoadData(const std::string& _filename) = 0;
+	virtual void ReloadData(const std::string& _filename) = 0;
+	virtual void UnloadData() = 0;
 
 	//fn to return the data
 	void* GetData();

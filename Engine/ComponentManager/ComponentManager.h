@@ -2,6 +2,8 @@
 #include <vector>
 #include <list>
 
+#include "../Profiler/Profiler.h"
+
 template <typename T>
 class ComponentManager
 {

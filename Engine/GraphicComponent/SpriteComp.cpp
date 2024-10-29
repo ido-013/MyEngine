@@ -9,6 +9,7 @@
 
 #include "../Editor/Util.h"
 #include "../EngineComponent/TransformComp.h"
+#include "../EngineComponent/ColliderComp.h"
 
 SpriteComp::SpriteComp(GameObject* _owner) : GraphicComponent(_owner), 
                                              color{ 1.f, 1.f, 1.f, 1.f }, texobj(nullptr)
@@ -18,7 +19,7 @@ SpriteComp::SpriteComp(GameObject* _owner) : GraphicComponent(_owner),
     SetTexture("base.png");
     SetDepth();
 
-    outlineTexobj = ResourceManager::GetInstance().GetResourcePointer<GLuint>("base.png");
+    lineTexobj = ResourceManager::GetInstance().GetResourcePointer<GLuint>("base.png");
 }
 
 SpriteComp::~SpriteComp()
@@ -37,6 +38,11 @@ void SpriteComp::Update()
     if (owner->selected)
     {
         DrawOutline();
+    }
+
+    if (Editor::GetInstance().GetViewColliderLine() && Editor::GetInstance().GetMode() == Editor::PLAY)
+    {
+        DrawColliderLine();
     }
 
     glUseProgram(0);
@@ -135,8 +141,40 @@ void SpriteComp::DrawOutline()
         glUniform1f(loc, 0);
     }
 
-    glBindTextureUnit(6, *outlineTexobj);
-    glBindTexture(GL_TEXTURE_2D, *outlineTexobj);
+    glBindTextureUnit(6, *lineTexobj);
+    glBindTexture(GL_TEXTURE_2D, *lineTexobj);
+    glBindVertexArray(mesh->VAO);
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    glDrawArrays(GL_LINE_LOOP, 0, mesh->draw_cnt);
+}
+
+void SpriteComp::DrawColliderLine()
+{
+    ColliderComp* c = owner->GetComponent<ColliderComp>();
+    if (!c) return;
+
+    GLuint loc = glGetUniformLocation(*shaderProgram, "uColor");
+    if (loc >= 0)
+    {
+        const float* colliderLineColor = Editor::GetInstance().GetColliderLineColor();
+        glUniform4fv(loc, 1, colliderLineColor);
+    }
+
+    loc = glGetUniformLocation(*shaderProgram, "uModel_to_NDC");
+    if (loc >= 0)
+    {
+        glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(Camera::GetInstance().GetMatrix() * c->GetMatrix()));
+    }
+
+    loc = glGetUniformLocation(*shaderProgram, "uCoordZ");
+    if (loc >= 0)
+    {
+        glUniform1f(loc, 0.01f);
+    }
+
+    glBindTextureUnit(6, *lineTexobj);
+    glBindTexture(GL_TEXTURE_2D, *lineTexobj);
     glBindVertexArray(mesh->VAO);
     glBindTexture(GL_TEXTURE_2D, 0);
 

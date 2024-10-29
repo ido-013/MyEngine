@@ -8,12 +8,7 @@ using json = nlohmann::ordered_json;
 
 PrefabResource::~PrefabResource()
 {
-	if (data)
-	{
-		delete static_cast<json*>(data);
-	}
-
-	data = nullptr;
+	UnloadData();
 }
 
 void PrefabResource::LoadData(const std::string& _filename)
@@ -25,4 +20,20 @@ void PrefabResource::LoadData(const std::string& _filename)
 	file >> *pJson;
 
 	data = pJson;
+}
+
+void PrefabResource::ReloadData(const std::string& _filename)
+{
+	UnloadData();
+	LoadData(_filename);
+}
+
+void PrefabResource::UnloadData()
+{
+	if (data)
+	{
+		delete static_cast<json*>(data);
+	}
+
+	data = nullptr;
 }

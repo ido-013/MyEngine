@@ -26,8 +26,10 @@ ComponentManager<T>::~ComponentManager() {}
 template <typename T>
 void ComponentManager<T>::Update()
 {
+    DEBUG_PROFILER_START(typeid(T).name());
     for (auto it = component.begin(); it != component.end(); it++)
     {
         (*it)->Update();
     }
+    DEBUG_PROFILER_END;
 }

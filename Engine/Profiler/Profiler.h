@@ -16,6 +16,9 @@ namespace MyProfiler
 		std::list<Block*> children;
 		Block* parent;
 
+		/*int count;
+		float second;*/
+
 	public:
 		Block(const std::string& _name, Block* _parent = nullptr);
 		~Block();
@@ -41,7 +44,7 @@ namespace MyProfiler
 
 		Block* current = nullptr;
 
-		std::list<Block*> fullyFinishedBlocks;
+		Block* fullyFinishedBlocks = nullptr;
 
 	public:
 		static Profiler& GetInstance()

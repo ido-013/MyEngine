@@ -43,6 +43,11 @@ void Prefab::SavePrefab(const std::string& _name, GameObject* _obj, std::map<std
 	file << std::setw(2) << prefab;
 
 	file.close();
+
+	if (_isTemp)
+	{
+		ResourceManager::GetInstance().ReloadResource("temp.prefab");
+	}
 }
 
 GameObject* Prefab::NewGameObject(const std::string& _name, const std::string& _prefabName)

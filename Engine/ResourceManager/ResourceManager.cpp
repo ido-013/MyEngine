@@ -5,12 +5,25 @@ ResourceManager::~ResourceManager()
     UnloadAllResource();
 }
 
-void ResourceManager::UnloadResource(const std::string& filename)
+void ResourceManager::ReloadResource(const std::string& _filename)
 {
     if (resources.empty())
         return;
 
-    auto it = resources.find(filename);
+    auto it = resources.find(_filename);
+    
+    if (it != resources.end())
+    {
+        it->second->ReloadData(_filename);
+    }
+}
+
+void ResourceManager::UnloadResource(const std::string& _filename)
+{
+    if (resources.empty())
+        return;
+
+    auto it = resources.find(_filename);
 
     if (it != resources.end())
     {

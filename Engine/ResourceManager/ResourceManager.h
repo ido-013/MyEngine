@@ -19,6 +19,8 @@ public:
 	template <typename T>
 	T* GetResourcePointer(const std::string& _filename);
 
+	void ReloadResource(const std::string& _filename);
+
 	//Unload(name) fn that removes 1 from the counter of the resource.
 		//If the counter is 0, unload the resource, delete it, and remove from map
 	void UnloadResource(const std::string& _filename);

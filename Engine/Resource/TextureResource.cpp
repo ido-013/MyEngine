@@ -8,13 +8,7 @@
 
 TextureResource::~TextureResource()
 {
-    if (data != nullptr)
-    {
-        glDeleteTextures(1, static_cast<GLuint*>(data));
-        delete data;
-    }
-
-    data = nullptr;
+    UnloadData();
 }
 
 void TextureResource::LoadData(const std::string& _filename)
@@ -48,4 +42,21 @@ void TextureResource::LoadData(const std::string& _filename)
         stbi_image_free(ptr_texels);
 
     data = texobj;
+}
+
+void TextureResource::ReloadData(const std::string& _filename)
+{
+    UnloadData();
+    LoadData(_filename);
+}
+
+void TextureResource::UnloadData()
+{
+    if (data != nullptr)
+    {
+        glDeleteTextures(1, static_cast<GLuint*>(data));
+        delete data;
+    }
+
+    data = nullptr;
 }

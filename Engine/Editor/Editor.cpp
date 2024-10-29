@@ -17,7 +17,10 @@
 
 #include "../Components.h"
 
-Editor::Editor() : selectedObj(nullptr), mode(EDIT), isDrag(false), mouseOffset(), outlineColor{1.f, 1.f, 0.f, 1.f}, viewProfiler(false), copyObjectName()
+Editor::Editor() : selectedObj(nullptr), mode(EDIT), isDrag(false), mouseOffset(), 
+                   outlineColor{1.f, 1.f, 0.f, 1.f}, colliderLineColor{1.f, 0.f, 0.f, 1.f},
+                   viewProfiler(false), viewColliderLine(false), 
+                   copyObjectName()
 {
     comps =
     {
@@ -613,6 +616,7 @@ void Editor::UtilsWindow()
     Camera::GetInstance().Edit();
     OutlineColorTree();
     PrefabCompTree();
+    ColliderLineTree();
     ProfilerCheckbox();
 
     ImGui::End();
@@ -641,6 +645,18 @@ void Editor::PrefabCompTree()
     }
 }
 
+void Editor::ColliderLineTree()
+{
+    if (ImGui::TreeNode("Collider Line"))
+    {
+        ImGui::Checkbox("View Collider Line", &viewColliderLine);
+
+        ImGui::ColorEdit4("Color", colliderLineColor);
+
+        ImGui::TreePop();
+    }
+}
+
 void Editor::ProfilerCheckbox()
 {
     ImGui::Checkbox("View Profiler", &viewProfiler);
@@ -654,7 +670,7 @@ void Editor::PasteObject()
     if (GLHelper::ctrlKeyState[GLFW_KEY_V])
     {
         GLHelper::ctrlKeyState[GLFW_KEY_V] = GL_FALSE;
-        Prefab::NewGameObject(copyObjectName, "temp.prefab");
+        ChangeSelectedObject(Prefab::NewGameObject(copyObjectName, "temp.prefab"));
     }
 }
 

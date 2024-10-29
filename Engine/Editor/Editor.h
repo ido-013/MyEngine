@@ -34,8 +34,10 @@ private:
     std::vector<std::string> comps;
     std::list<TransformComp*> tfComps;
     float outlineColor[4];
+    float colliderLineColor[4];
 
     bool viewProfiler;
+    bool viewColliderLine;
 
     std::map<std::string, bool> isSaveComp;
     std::map<std::string, bool> isSaveLevelPrefabComp;
@@ -83,6 +85,7 @@ private:
     void UtilsWindow();
         void OutlineColorTree();
         void PrefabCompTree();
+        void ColliderLineTree();
         void ProfilerCheckbox();
 
     void PasteObject();
@@ -103,6 +106,8 @@ public:
 
     const EditorMode& GetMode() const { return mode; }
     const float* GetOutlineColor() const { return outlineColor; }
+    const bool GetViewColliderLine() const { return viewColliderLine; }
+    const float* GetColliderLineColor() const { return colliderLineColor; }
 
     void AddTfComp(TransformComp* _tf);
     void DeleteTfComp(const TransformComp* _tf);

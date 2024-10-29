@@ -50,8 +50,11 @@ namespace MyProfiler
 		}
 
 		//print name and seconds
-		std::cout << name << " in " << GetSeconds() << " seconds" << std::endl;
+		//std::cout << name << " in " << GetSeconds() << " seconds" << std::endl;
+		s += name + ": " + std::to_string(GetSeconds()) + " seconds";
 
+		ImGui::Text(s.c_str());
+		
 		//print children
 		for (const auto* c : children)
 		{
@@ -87,7 +90,8 @@ namespace MyProfiler
 		//if no parent. Push current to fullyFinished
 		if (!parent)
 		{
-			fullyFinishedBlocks.push_back(current);
+			Clear();
+			fullyFinishedBlocks = current;
 		}
 
 		current = parent;
@@ -97,9 +101,9 @@ namespace MyProfiler
 	{
 		if (ImGui::TreeNode("Dump"))
 		{
-			for (const auto* b : fullyFinishedBlocks)
+			if (fullyFinishedBlocks != nullptr)
 			{
-				b->Dump();
+				fullyFinishedBlocks->Dump();
 			}
 
 			ImGui::TreePop();
@@ -108,18 +112,10 @@ namespace MyProfiler
 
 	void Profiler::Clear()
 	{
-		//iterate end() UNTIL current in nullptr
-		while (current)
-		{
-			End();
-		}
-
 		//delete all the finished nodes
-		for (auto it : fullyFinishedBlocks)
+		if (fullyFinishedBlocks != nullptr)
 		{
-			delete it;
+			delete fullyFinishedBlocks;
 		}
-
-		fullyFinishedBlocks.clear();
 	}
 }

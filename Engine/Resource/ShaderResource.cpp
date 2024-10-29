@@ -9,14 +9,7 @@
 
 ShaderResource::~ShaderResource()
 {
-    if (data)
-    {
-        GLuint* pShaderProgram = static_cast<GLuint*>(data);
-        glDeleteProgram(*pShaderProgram);
-        delete pShaderProgram;
-    }
-
-    data = nullptr;
+    UnloadData();
 }
 
 void ShaderResource::LoadData(const std::string& _filename)
@@ -105,4 +98,22 @@ void ShaderResource::LoadData(const std::string& _filename)
     glDeleteShader(fragmentShader);
 
     data = pShaderProgram;
+}
+
+void ShaderResource::ReloadData(const std::string& _filename)
+{
+    UnloadData();
+    LoadData(_filename);
+}
+
+void ShaderResource::UnloadData()
+{
+    if (data)
+    {
+        GLuint* pShaderProgram = static_cast<GLuint*>(data);
+        glDeleteProgram(*pShaderProgram);
+        delete pShaderProgram;
+    }
+
+    data = nullptr;
 }

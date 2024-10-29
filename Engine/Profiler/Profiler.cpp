@@ -7,6 +7,8 @@
 
 namespace MyProfiler
 {
+	std::map<std::string, float[600]> Profiler::blockTime;
+
 	Block::Block(const std::string& _name, Block* _parent) : name(_name), parent(_parent)
 	{
 		start = std::chrono::steady_clock::now();
@@ -38,27 +40,15 @@ namespace MyProfiler
 		return nBlock;
 	}
 
-	void Block::Dump(int _n) const
+	void Block::Dump(int _n, std::map<std::string, float[600]>& _blockTime, std::map<std::string, int[600]>& _blockCount) const
 	{
 		std::string s;
 
-		//print correct ammount of tabs
-		for (int i = 0; i < _n; i++)
-		{
-			//std::cout << "\t";
-			s += "\t";
-		}
+		_blockTime[name][_n] += GetSeconds();
 
-		//print name and seconds
-		//std::cout << name << " in " << GetSeconds() << " seconds" << std::endl;
-		s += name + ": " + std::to_string(GetSeconds()) + " seconds";
-
-		ImGui::Text(s.c_str());
-		
-		//print children
 		for (const auto* c : children)
 		{
-			c->Dump(_n + 1);
+			c->Dump(_n, _blockTime, _blockCount);
 		}
 	}
 
@@ -90,8 +80,13 @@ namespace MyProfiler
 		//if no parent. Push current to fullyFinished
 		if (!parent)
 		{
-			Clear();
-			fullyFinishedBlocks = current;
+			fullyFinishedBlocks.push_back(current);
+
+			if (fullyFinishedBlocks.size() > 600)
+			{
+				delete fullyFinishedBlocks.front();
+				fullyFinishedBlocks.pop_front();
+			}
 		}
 
 		current = parent;
@@ -99,23 +94,52 @@ namespace MyProfiler
 
 	void Profiler::Dump()
 	{
-		if (ImGui::TreeNode("Dump"))
+		int id = 0;
+		float arr[600];
+		
+		std::map<std::string, float[600]> blockTime;
+		std::map<std::string, int[600]> blockCount;
+
+		for (const auto* b : fullyFinishedBlocks)
 		{
-			if (fullyFinishedBlocks != nullptr)
+			b->Dump(id, blockTime, blockCount);
+			arr[id] = id;
+			id++;
+		}
+
+		/*for (auto& it : blockTime)
+		{
+			for (int i = 0; i < 600; i++)
 			{
-				fullyFinishedBlocks->Dump();
+				it.second[i] /= blockCount[it.first][i];
+			}
+		}*/
+
+		if (ImPlot::BeginPlot("dump"))
+		{
+			ImPlot::SetupAxes("frame", "ms");
+			ImPlot::SetupLegend(ImPlotLocation_SouthEast);
+			ImPlot::SetupAxesLimits(0, 600, -0.005, 0.02);
+
+			for (auto& it : blockTime)
+			{
+				ImPlot::PlotLine(it.first.c_str(), arr, it.second, fullyFinishedBlocks.size());
 			}
 
-			ImGui::TreePop();
+			ImPlot::EndPlot();
 		}
 	}
 
 	void Profiler::Clear()
 	{
+		//iterate end() UNTIL current in nullptr
+		while (current)
+			End();
+
 		//delete all the finished nodes
-		if (fullyFinishedBlocks != nullptr)
-		{
-			delete fullyFinishedBlocks;
-		}
+		for (auto it : fullyFinishedBlocks)
+			delete it;
+
+		fullyFinishedBlocks.clear();
 	}
 }

@@ -11,6 +11,8 @@
 #include "../EngineComponent/TransformComp.h"
 #include "../EngineComponent/ColliderComp.h"
 
+#include "../Profiler/Profiler.h"
+
 SpriteComp::SpriteComp(GameObject* _owner) : GraphicComponent(_owner), 
                                              color{ 1.f, 1.f, 1.f, 1.f }, texobj(nullptr)
 {
@@ -31,6 +33,8 @@ SpriteComp::~SpriteComp()
 
 void SpriteComp::Update()
 {
+    DEBUG_PROFILER_START("SpriteComp");
+
     glUseProgram(*shaderProgram);
 
     DrawSprite();
@@ -46,6 +50,8 @@ void SpriteComp::Update()
     }
 
     glUseProgram(0);
+
+    DEBUG_PROFILER_END;
 }
 
 bool SpriteComp::Edit()
@@ -170,7 +176,7 @@ void SpriteComp::DrawColliderLine()
     loc = glGetUniformLocation(*shaderProgram, "uCoordZ");
     if (loc >= 0)
     {
-        glUniform1f(loc, 0.01f);
+        glUniform1f(loc, 0);
     }
 
     glBindTextureUnit(6, *lineTexobj);

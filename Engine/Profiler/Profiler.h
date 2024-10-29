@@ -3,6 +3,7 @@
 #include <string>
 #include <chrono>
 #include <list>
+#include <map>
 
 namespace MyProfiler
 {
@@ -31,7 +32,7 @@ namespace MyProfiler
 
 		Block* AddChild(const std::string& _name);
 
-		void Dump(int _n = 0) const;
+		void Dump(int _n, std::map<std::string, float[600]>& _blockTime, std::map<std::string, int[600]>& _blockCount) const;
 	};
 
 	class Profiler
@@ -44,7 +45,7 @@ namespace MyProfiler
 
 		Block* current = nullptr;
 
-		Block* fullyFinishedBlocks = nullptr;
+		std::list<Block*> fullyFinishedBlocks;
 
 	public:
 		static Profiler& GetInstance()
@@ -52,6 +53,9 @@ namespace MyProfiler
 			static Profiler instance;
 			return instance;
 		}
+
+		static std::map<std::string, float[600]> blockTime;
+		static std::map<std::string, int[600]> blockCount;
 
 		void StartBlock(std::string _name);
 		void End();

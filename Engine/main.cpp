@@ -27,10 +27,11 @@ int main()
 
         GLHelper::update_time();
         gsm.Update();
-
         glfwPollEvents();
 
+        DEBUG_PROFILER_START("Editor Update");
         Editor::GetInstance().Update();
+        DEBUG_PROFILER_END;
 
         glfwSwapBuffers(GLHelper::ptr_window);
 

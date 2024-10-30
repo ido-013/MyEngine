@@ -19,6 +19,9 @@ bool FileSelectComboOnce(
 	{
 		for (const auto& entry : std::filesystem::directory_iterator(_filePath))
 		{
+			if (entry.path().stem().string().compare("temp") == 0)
+				continue;
+
 			std::string filename = entry.path().filename().string();
 			std::string extension = entry.path().extension().string();
 

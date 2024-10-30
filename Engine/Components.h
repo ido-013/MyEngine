@@ -9,3 +9,4 @@
 #include "EngineComponent/BombComp.h"
 
 #include "GraphicComponent/SpriteComp.h"
+#include "GraphicComponent/AnimatorComp.h"

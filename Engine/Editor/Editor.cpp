@@ -736,7 +736,7 @@ void Editor::Update()
     if (mode == EDIT)
     {
         //ImGui::ShowDemoWindow(); // Show demo window! :)
-        ImPlot::ShowDemoWindow();
+        //ImPlot::ShowDemoWindow();
 
         UpdateTfComps();
 

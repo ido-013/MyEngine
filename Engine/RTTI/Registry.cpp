@@ -13,6 +13,7 @@ Registry::Registry()
     rttiMap.insert({ BombComp::TypeName, &BombComp::CreateBombComponent });
 
     rttiMap.insert({ SpriteComp::TypeName, &SpriteComp::CreateSpriteComponent });
+    rttiMap.insert({ AnimatorComp::TypeName, &AnimatorComp::CreateAnimatorComponent });
 }
 
 BaseRTTI* Registry::FindAndCreate(const std::string& _type, GameObject* _owner)

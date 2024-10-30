@@ -7,8 +7,6 @@
 
 namespace MyProfiler
 {
-	std::map<std::string, float[600]> Profiler::blockTime;
-
 	Block::Block(const std::string& _name, Block* _parent) : name(_name), parent(_parent)
 	{
 		start = std::chrono::steady_clock::now();
@@ -40,7 +38,7 @@ namespace MyProfiler
 		return nBlock;
 	}
 
-	void Block::Dump(int _n, std::map<std::string, float[600]>& _blockTime, std::map<std::string, int[600]>& _blockCount) const
+	void Block::Dump(int _n, std::map<std::string, float[300]>& _blockTime, std::map<std::string, float[300]>& _blockCount) const
 	{
 		std::string s;
 
@@ -83,7 +81,7 @@ namespace MyProfiler
 		{
 			fullyFinishedBlocks.push_back(current);
 
-			if (fullyFinishedBlocks.size() > 600)
+			if (fullyFinishedBlocks.size() > 300)
 			{
 				delete fullyFinishedBlocks.front();
 				fullyFinishedBlocks.pop_front();
@@ -96,10 +94,10 @@ namespace MyProfiler
 	void Profiler::Dump()
 	{
 		int id = 0;
-		float arr[600];
+		float arr[300];
 		
-		std::map<std::string, float[600]> blockTime;
-		std::map<std::string, int[600]> blockCount;
+		std::map<std::string, float[300]> blockTime;
+		std::map<std::string, float[300]> blockCount;
 
 		for (const auto* b : fullyFinishedBlocks)
 		{
@@ -110,7 +108,7 @@ namespace MyProfiler
 
 		for (auto& it : blockTime)
 		{
-			for (int i = 0; i < 600; i++)
+			for (int i = 0; i < 300; i++)
 			{
 				it.second[i] /= blockCount[it.first][i];
 			}
@@ -119,12 +117,21 @@ namespace MyProfiler
 		if (ImPlot::BeginPlot("dump"))
 		{
 			ImPlot::SetupAxes("frame", "ms");
-			ImPlot::SetupLegend(ImPlotLocation_SouthEast);
-			ImPlot::SetupAxesLimits(0, 600, -0.005, 0.02);
+			ImPlot::SetupLegend(ImPlotLocation_East, ImPlotLegendFlags_Outside);
+			ImPlot::SetupAxesLimits(0, 300, -0.02, 0.02);
+			ImPlot::SetupAxis(ImAxis_Y2, "count", ImPlotAxisFlags_AuxDefault);
+			ImPlot::SetupAxisLimits(ImAxis_Y2, 0, 20);
 
 			for (auto& it : blockTime)
 			{
+				ImPlot::SetAxes(ImAxis_X1, ImAxis_Y1);
 				ImPlot::PlotLine(it.first.c_str(), arr, it.second, fullyFinishedBlocks.size());
+			}
+
+			for (auto& it : blockCount)
+			{
+				ImPlot::SetAxes(ImAxis_X1, ImAxis_Y2);
+				ImPlot::PlotBars(it.first.c_str(), arr, it.second, fullyFinishedBlocks.size(), 0.01);
 			}
 
 			ImPlot::EndPlot();

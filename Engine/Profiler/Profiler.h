@@ -17,9 +17,6 @@ namespace MyProfiler
 		std::list<Block*> children;
 		Block* parent;
 
-		/*int count;
-		float second;*/
-
 	public:
 		Block(const std::string& _name, Block* _parent = nullptr);
 		~Block();
@@ -32,7 +29,7 @@ namespace MyProfiler
 
 		Block* AddChild(const std::string& _name);
 
-		void Dump(int _n, std::map<std::string, float[600]>& _blockTime, std::map<std::string, int[600]>& _blockCount) const;
+		void Dump(int _n, std::map<std::string, float[300]>& _blockTime, std::map<std::string, float[300]>& _blockCount) const;
 	};
 
 	class Profiler
@@ -53,9 +50,6 @@ namespace MyProfiler
 			static Profiler instance;
 			return instance;
 		}
-
-		static std::map<std::string, float[600]> blockTime;
-		static std::map<std::string, int[600]> blockCount;
 
 		void StartBlock(std::string _name);
 		void End();

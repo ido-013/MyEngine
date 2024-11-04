@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <glm/glm.hpp>
 
 #include "EngineComponent.h"
 
@@ -10,9 +11,9 @@ private:
 	int dx[4] = { 0, -1, 1, 0 };
 	int dy[4] = { -1, 0, 0, 1 };
 
+	glm::vec2 pos;
+	glm::vec2 scale;
 	int length;
-	float timer;
-	float maxTimer;
 
 	std::string effectName;
 

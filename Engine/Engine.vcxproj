@@ -148,6 +148,7 @@
     <ClCompile Include="EngineComponent\BombComp.cpp" />
     <ClCompile Include="EngineComponent\ColliderComp.cpp" />
     <ClCompile Include="EngineComponent\EngineComponent.cpp" />
+    <ClCompile Include="EngineComponent\LifetimeComp.cpp" />
     <ClCompile Include="EngineComponent\RigidbodyComp.cpp" />
     <ClCompile Include="EngineComponent\TransformComp.cpp" />
     <ClCompile Include="EventManager\EventManager.cpp" />
@@ -173,6 +174,7 @@
     <ClCompile Include="Imgui\implot_items.cpp" />
     <ClCompile Include="LayerManager\LayerManager.cpp" />
     <ClCompile Include="Level\TestLevel.cpp" />
+    <ClCompile Include="LogicComponent\LifeComp.cpp" />
     <ClCompile Include="LogicComponent\LogicComponent.cpp" />
     <ClCompile Include="LogicComponent\PlayerComp.cpp" />
     <ClCompile Include="main.cpp" />
@@ -204,6 +206,7 @@
     <ClInclude Include="EngineComponent\BombComp.h" />
     <ClInclude Include="EngineComponent\ColliderComp.h" />
     <ClInclude Include="EngineComponent\EngineComponent.h" />
+    <ClInclude Include="EngineComponent\LifetimeComp.h" />
     <ClInclude Include="EngineComponent\RigidbodyComp.h" />
     <ClInclude Include="EngineComponent\TransformComp.h" />
     <ClInclude Include="EventManager\EventManager.h" />
@@ -232,6 +235,7 @@
     <ClInclude Include="LayerManager\LayerManager.h" />
     <ClInclude Include="Level\BaseLevel.h" />
     <ClInclude Include="Level\TestLevel.h" />
+    <ClInclude Include="LogicComponent\LifeComp.h" />
     <ClInclude Include="LogicComponent\LogicComponent.h" />
     <ClInclude Include="LogicComponent\PlayerComp.h" />
     <ClInclude Include="OpenGL\GLHelper.h" />

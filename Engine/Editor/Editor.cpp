@@ -6,6 +6,7 @@
 
 #include "../GameObjectManager/GameObjectManager.h"
 #include "../LayerManager/LayerManager.h"
+#include "../ResourceManager/ResourceManager.h"
 #include "../Serializer/Serializer.h"
 #include "../RTTI/Registry.h"
 #include "../Camera/Camera.h"
@@ -25,11 +26,13 @@ Editor::Editor() : selectedObj(nullptr), mode(EDIT), isDrag(false), mouseOffset(
     comps =
     {
         PlayerComp::TypeName,
+        LifeComp::TypeName,
 
         TransformComp::TypeName,
         RigidbodyComp::TypeName,
         ColliderComp::TypeName,
         BombComp::TypeName,
+        LifetimeComp::TypeName,
 
         SpriteComp::TypeName,
     };
@@ -406,7 +409,9 @@ void Editor::GameObjectInfoText()
     
     std::string prefabName = selectedObj->GetPrefabName();
     if (!prefabName.empty())
+    {
         ImGui::BulletText(("Prefab: " + prefabName.substr(0, prefabName.find_last_of('.'))).c_str());
+    }
 }
 
 void Editor::SelectLayerCombo()
@@ -573,6 +578,7 @@ void Editor::SavePrefabPopup()
         if (ImGui::Button("Save"))
         {
             Prefab::SavePrefab(buffer, selectedObj, isSaveComp);
+            ResourceManager::GetInstance().ReloadResource(buffer);
 
             isSaveComp.clear();
             ClearBuffer(buffer, 100);

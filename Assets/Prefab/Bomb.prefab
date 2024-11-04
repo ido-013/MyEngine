@@ -4,8 +4,13 @@
       "type": "BombComp",
       "compData": {
         "length": 1,
-        "maxTimer": 1.5,
         "effectName": "Explosion.prefab"
+      }
+    },
+    {
+      "type": "LifetimeComp",
+      "compData": {
+        "lifetime": 1.5
       }
     },
     {

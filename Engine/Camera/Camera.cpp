@@ -34,9 +34,9 @@ void Camera::Edit()
 
 void Camera::Move()
 {
-	if (ImGui::IsPopupOpen(nullptr, ImGuiPopupFlags_AnyPopupId))
+	if (ImGui::IsPopupOpen(nullptr, ImGuiPopupFlags_AnyPopupId) || ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow) || ImGui::IsWindowFocused(ImGuiFocusedFlags_AnyWindow))
 		return;
-
+	
 	float dt = (float)GLHelper::delta_time;
 
 	if (GLHelper::keyState[GLFW_KEY_W])

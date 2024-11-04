@@ -141,9 +141,6 @@
     <ClCompile Include="Event\Entity.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="LogicComponent\AttackComp.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="LayerManager\LayerManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -318,9 +315,6 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="CollisionManager\CollisionUtil.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="LogicComponent\AttackComp.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="ResourceManager\ResourceManager.h">

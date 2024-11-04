@@ -24,3 +24,6 @@ bool SameLineButton(const char* _label);
 
 bool ClosePopupButton();
 bool ClosePopupSameLineButton();
+
+const char* GetKeyName(int _key);
+void KeyChangePopup(const char* _text, int& _key);

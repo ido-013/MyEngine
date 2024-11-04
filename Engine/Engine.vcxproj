@@ -173,7 +173,6 @@
     <ClCompile Include="Imgui\implot_items.cpp" />
     <ClCompile Include="LayerManager\LayerManager.cpp" />
     <ClCompile Include="Level\TestLevel.cpp" />
-    <ClCompile Include="LogicComponent\AttackComp.cpp" />
     <ClCompile Include="LogicComponent\LogicComponent.cpp" />
     <ClCompile Include="LogicComponent\PlayerComp.cpp" />
     <ClCompile Include="main.cpp" />
@@ -233,7 +232,6 @@
     <ClInclude Include="LayerManager\LayerManager.h" />
     <ClInclude Include="Level\BaseLevel.h" />
     <ClInclude Include="Level\TestLevel.h" />
-    <ClInclude Include="LogicComponent\AttackComp.h" />
     <ClInclude Include="LogicComponent\LogicComponent.h" />
     <ClInclude Include="LogicComponent\PlayerComp.h" />
     <ClInclude Include="OpenGL\GLHelper.h" />

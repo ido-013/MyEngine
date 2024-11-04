@@ -25,7 +25,6 @@ Editor::Editor() : selectedObj(nullptr), mode(EDIT), isDrag(false), mouseOffset(
     comps =
     {
         PlayerComp::TypeName,
-        AttackComp::TypeName,
 
         TransformComp::TypeName,
         RigidbodyComp::TypeName,
@@ -735,7 +734,7 @@ void Editor::Update()
 
     if (mode == EDIT)
     {
-        //ImGui::ShowDemoWindow(); // Show demo window! :)
+        ImGui::ShowDemoWindow(); // Show demo window! :)
         //ImPlot::ShowDemoWindow();
 
         UpdateTfComps();

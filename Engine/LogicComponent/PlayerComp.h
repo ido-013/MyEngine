@@ -4,7 +4,20 @@
 class PlayerComp : public LogicComponent
 {
 private:
-	float speed = 100;
+	enum KeyTag
+	{
+		UP,
+		DOWN,
+		RIGHT,
+		LEFT,
+		BOMB,
+		BULLET,
+	};
+
+	float speed;
+	int keyCode[6];
+	std::string bombName;
+	std::string bulletName;
 
 public:
 	PlayerComp(GameObject* _owner);

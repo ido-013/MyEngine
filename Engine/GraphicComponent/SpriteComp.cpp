@@ -257,7 +257,10 @@ void SpriteComp::LoadFromJson(const json& _data)
     if (compData != _data.end())
     {
         auto it = compData->find("color");
-        color[0] = it->begin().value();
+        for (int i = 0; i < 4; i++)
+        {
+            color[i] = (it->begin() + i).value();
+        }
 
         it = compData->find("shaderName");
         SetShdrpgm(it.value());

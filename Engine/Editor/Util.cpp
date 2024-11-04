@@ -76,3 +76,64 @@ bool ClosePopupSameLineButton()
 	GLHelper::keyState[GLFW_KEY_ESCAPE] = GL_FALSE;
 	return ret;
 }
+
+const char* GetKeyName(int _key)
+{
+	const char* keyName = glfwGetKeyName(_key, 0);
+	
+	if (keyName != NULL)
+	{
+		return keyName;
+	}
+
+	else
+	{
+		switch (_key)
+		{
+		case GLFW_KEY_UP:
+			return "up";
+
+		case GLFW_KEY_DOWN:
+			return "down";
+
+		case GLFW_KEY_RIGHT:
+			return "right";
+
+		case GLFW_KEY_LEFT:
+			return "left";
+
+		default:
+			return "##";
+		}
+	}
+}
+
+void KeyChangePopup(const char* _text, int& _key)
+{
+	ImGui::Text(_text);
+
+	if (SameLineButton((std::string(GetKeyName(_key)) + "##" + _text).c_str()))
+	{
+		ImGui::OpenPopup(_text);
+	}
+
+	ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter());
+
+	if (ImGui::BeginPopupModal(_text, NULL, ImGuiWindowFlags_AlwaysAutoResize))
+	{
+		ImGui::Text("Press the key...");
+
+		if (GLHelper::currentKey != -1)
+		{
+			_key = GLHelper::currentKey;
+			ImGui::CloseCurrentPopup();
+		}
+
+		if (ClosePopupButton())
+		{
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::EndPopup();
+	}
+}

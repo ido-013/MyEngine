@@ -33,6 +33,7 @@ struct GLHelper
 	static std::map<int, GLboolean> keyState;
 	static std::stack<int> keyStateStack;
 	static std::map<int, GLboolean> ctrlKeyState;
+	static int currentKey;
 
 	static glm::vec2 mousePos;
 	static GLboolean mousestateLeft;

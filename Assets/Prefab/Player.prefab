@@ -1,15 +1,33 @@
 {
   "components": [
     {
-      "type": "AttackComp",
+      "type": "ColliderComp",
       "compData": {
-        "prefabName": "Bomb.prefab"
+        "position": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          100.0,
+          100.0
+        ],
+        "rotation": 0.0
       }
     },
     {
       "type": "PlayerComp",
       "compData": {
-        "speed": 100.0
+        "speed": 100.0,
+        "keyCode": [
+          265,
+          264,
+          262,
+          263,
+          90,
+          88
+        ],
+        "bombName": "Bomb.prefab",
+        "bulletName": ""
       }
     },
     {
@@ -52,8 +70,8 @@
       "type": "TransformComp",
       "compData": {
         "position": [
-          -288.0,
-          31.0
+          0.0,
+          0.0
         ],
         "scale": [
           100.0,

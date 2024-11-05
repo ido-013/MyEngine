@@ -15,9 +15,25 @@ private:
 	};
 
 	float speed;
+
 	int keyCode[6];
+
 	std::string bombName;
+	bool isBombCooldown;	
+	float bombCooldown;
+	float maxBombCooldown;
+
 	std::string bulletName;
+	bool isBulletCooldown;
+	float bulletCooldown;
+	float maxBulletCooldown;
+
+	void Move();
+
+	void AttackBomb();
+	void AttackBullet();
+
+	void CheckCooldown(bool& _isCooldown, float& _cooldown, const float& _maxCooldown);
 
 public:
 	PlayerComp(GameObject* _owner);

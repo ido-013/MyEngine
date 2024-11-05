@@ -6,11 +6,14 @@
 #include "../Editor/Util.h"
 #include "../Prefab/Prefab.h"
 
+#include "BulletComp.h"
 #include "../EngineComponent/TransformComp.h"
 #include "../EngineComponent/RigidbodyComp.h"
 #include "../GraphicComponent/SpriteComp.h"
 
-PlayerComp::PlayerComp(GameObject* _owner) : LogicComponent(_owner), speed(100)
+PlayerComp::PlayerComp(GameObject* _owner) : LogicComponent(_owner), speed(100),
+											 isBombCooldown(false), bombCooldown(0), maxBombCooldown(3.f),
+											 isBulletCooldown(false), bulletCooldown(0), maxBulletCooldown(0.2f)
 {
 	keyCode[UP] = GLFW_KEY_UP;
 	keyCode[DOWN] = GLFW_KEY_DOWN;
@@ -27,53 +30,13 @@ PlayerComp::~PlayerComp()
 
 void PlayerComp::Update()
 {
-	TransformComp* t = owner->GetComponent<TransformComp>();
-	if (!t) return;
+	Move();
 
-	RigidbodyComp* r = owner->GetComponent<RigidbodyComp>();
-	if (!r) return;
+	AttackBomb();
+	AttackBullet();
 
-	r->ClearVelocity();
-
-	if (GLHelper::keyState[keyCode[UP]])
-	{
-		r->AddVelocity(0, speed);
-	}
-
-	if (GLHelper::keyState[keyCode[LEFT]])
-	{
-		r->AddVelocity(-speed, 0);
-	}
-
-	if (GLHelper::keyState[keyCode[DOWN]])
-	{
-		r->AddVelocity(0, -speed);
-	}
-
-	if (GLHelper::keyState[keyCode[RIGHT]])
-	{
-		r->AddVelocity(speed, 0);
-	}
-
-	if (GLHelper::keyState[keyCode[BOMB]])
-	{
-		if (!bombName.empty())
-		{
-			GameObject* obj = Prefab::NewGameObject("Bomb", bombName);
-			obj->GetComponent<TransformComp>()->SetPos(t->GetPos());
-			GLHelper::keyState[keyCode[BOMB]] = GL_FALSE;
-		}
-	}
-	
-	if (GLHelper::keyState[keyCode[BULLET]])
-	{
-		if (!bulletName.empty())
-		{
-			GameObject* obj = Prefab::NewGameObject("Bullet", bulletName);
-			obj->GetComponent<TransformComp>()->SetPos(t->GetPos());
-			GLHelper::keyState[keyCode[BULLET]] = GL_FALSE;
-		}
-	}
+	CheckCooldown(isBombCooldown, bombCooldown, maxBombCooldown);
+	CheckCooldown(isBulletCooldown, bulletCooldown, maxBulletCooldown);
 }
 
 bool PlayerComp::Edit()
@@ -81,9 +44,10 @@ bool PlayerComp::Edit()
 	if (ImGui::TreeNode(TypeName))
 	{
 		ImGui::InputFloat("Speed", &speed);
+		ImGui::InputFloat("Bomb Cooldown", &maxBombCooldown);
+		ImGui::InputFloat("Bullet Cooldown", &maxBulletCooldown);
 
 		FileSelectComboOnce(bombName, "Bomb", bombName, "Assets/Prefab", ".prefab");
-
 		FileSelectComboOnce(bulletName, "Bullet", bulletName, "Assets/Prefab", ".prefab");
 
 		if (ImGui::TreeNode("Key Setting"))
@@ -98,6 +62,8 @@ bool PlayerComp::Edit()
 			ImGui::TreePop();
 		}
 
+		ImGui::Separator();
+
 		if (DeleteCompButton<PlayerComp>())
 			return false;
 
@@ -108,6 +74,91 @@ bool PlayerComp::Edit()
 		return false;
 
 	return true;
+}
+
+void PlayerComp::Move()
+{
+	TransformComp* t = owner->GetComponent<TransformComp>();
+	if (!t) return;
+
+	RigidbodyComp* r = owner->GetComponent<RigidbodyComp>();
+	if (!r) return;
+
+	float rot = t->GetRot();
+	
+
+	r->ClearVelocity();
+
+	if (GLHelper::keyState[keyCode[UP]])
+	{
+		float angle = glm::radians(rot);
+		r->AddVelocity(cos(angle) * speed, sin(angle) * speed);
+	}
+
+	if (GLHelper::keyState[keyCode[LEFT]])
+	{
+		t->SetRot(rot + 0.5f);
+	}
+
+	if (GLHelper::keyState[keyCode[DOWN]])
+	{
+		float angle = glm::radians(rot);
+		r->AddVelocity(-cos(angle) * speed, -sin(angle) * speed);
+	}
+
+	if (GLHelper::keyState[keyCode[RIGHT]])
+	{
+		t->SetRot(rot - 0.5f);
+	}
+}
+
+void PlayerComp::AttackBomb()
+{
+	TransformComp* t = owner->GetComponent<TransformComp>();
+	if (!t) return;
+
+	if (!isBombCooldown && GLHelper::keyState[keyCode[BOMB]])
+	{
+		isBombCooldown = true;
+
+		if (!bombName.empty())
+		{
+			GameObject* obj = Prefab::NewGameObject("Bomb", bombName);
+			obj->GetComponent<TransformComp>()->SetPos(t->GetPos());
+		}
+	}
+}
+
+void PlayerComp::AttackBullet()
+{
+	TransformComp* t = owner->GetComponent<TransformComp>();
+	if (!t) return;
+
+	if (!isBulletCooldown && GLHelper::keyState[keyCode[BULLET]])
+	{
+		isBulletCooldown = true;
+
+		if (!bulletName.empty())
+		{
+			GameObject* obj = Prefab::NewGameObject("Bullet", bulletName);
+			obj->GetComponent<TransformComp>()->SetPos(t->GetPos());
+			obj->GetComponent<BulletComp>()->Fire(glm::radians(t->GetRot()));
+		}
+	}
+}
+
+void PlayerComp::CheckCooldown(bool& _isCooldown, float& _cooldown, const float& _maxCooldown)
+{
+	if (_isCooldown)
+	{
+		_cooldown += (float)GLHelper::delta_time;
+
+		if (_cooldown > _maxCooldown)
+		{
+			_cooldown = 0;
+			_isCooldown = false;
+		}
+	}
 }
 
 void PlayerComp::LoadFromJson(const json& _data)
@@ -128,8 +179,14 @@ void PlayerComp::LoadFromJson(const json& _data)
 		it = compData->find("bombName");
 		bombName = it.value();
 
+		it = compData->find("bombCooldown");
+		maxBombCooldown = it.value();
+
 		it = compData->find("bulletName");
 		bulletName = it.value();
+		
+		it = compData->find("bulletCooldown");
+		maxBulletCooldown = it.value();
 	}
 }
 
@@ -140,9 +197,14 @@ json PlayerComp::SaveToJson()
 
 	json compData;
 	compData["speed"] = speed;
+
 	compData["keyCode"] = keyCode;
+
 	compData["bombName"] = bombName;
+	compData["bombCooldown"] = maxBombCooldown;
+
 	compData["bulletName"] = bulletName;
+	compData["bulletCooldown"] = maxBulletCooldown;
 
 	data["compData"] = compData;
 

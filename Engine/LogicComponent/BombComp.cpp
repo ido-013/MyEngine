@@ -10,7 +10,7 @@
 
 #include "../EngineComponent/TransformComp.h"
 
-BombComp::BombComp(GameObject* _owner) : EngineComponent(_owner), length(1), pos(), scale()
+BombComp::BombComp(GameObject* _owner) : LogicComponent(_owner), length(1), pos(), scale()
 {
 }
 
@@ -51,6 +51,8 @@ bool BombComp::Edit()
 		ImGui::InputInt("length", &length);
 
 		FileSelectComboOnce(effectName, "Effect Name", effectName, "Assets/Prefab", ".prefab");
+
+		ImGui::Separator();
 
 		if (DeleteCompButton<BombComp>())
 			return false;

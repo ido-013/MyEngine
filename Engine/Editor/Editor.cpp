@@ -27,11 +27,12 @@ Editor::Editor() : selectedObj(nullptr), mode(EDIT), isDrag(false), mouseOffset(
     {
         PlayerComp::TypeName,
         LifeComp::TypeName,
+        BombComp::TypeName,
+        BulletComp::TypeName,
 
         TransformComp::TypeName,
         RigidbodyComp::TypeName,
         ColliderComp::TypeName,
-        BombComp::TypeName,
         LifetimeComp::TypeName,
 
         SpriteComp::TypeName,

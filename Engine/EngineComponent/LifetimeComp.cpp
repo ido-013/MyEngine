@@ -28,6 +28,8 @@ bool LifetimeComp::Edit()
 	{
 		ImGui::InputFloat("lifetime", &lifetime);
 
+		ImGui::Separator();
+
 		if (DeleteCompButton<LifetimeComp>())
 			return false;
 

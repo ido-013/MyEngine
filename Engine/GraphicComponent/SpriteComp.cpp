@@ -81,6 +81,8 @@ bool SpriteComp::Edit()
             SetTexture(filename);
         }
 
+        ImGui::Separator();
+
         if (DeleteCompButton<SpriteComp>())
             return false;
 

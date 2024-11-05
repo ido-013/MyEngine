@@ -72,6 +72,8 @@ bool TransformComp::Edit()
 
 		ImGui::DragFloat("Rot", &rot, 1, 0, 360);
 
+		ImGui::Separator();
+
 		if (DeleteCompButton<TransformComp>())
 			return false;
 

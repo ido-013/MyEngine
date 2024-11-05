@@ -10,7 +10,8 @@ class ColliderComp;
 class RigidbodyComp : public EngineComponent
 {
 private:
-	float drag = 1.01f;
+	float drag;
+	bool onDrag;
 
 	glm::vec2 velocity;
 	glm::vec2 maxVelocity;

@@ -41,6 +41,8 @@ bool LifeComp::Edit()
 
 		ImGui::InputFloat("Immune Time", &immuneTime);
 
+		ImGui::Separator();
+
 		if (DeleteCompButton<LifeComp>())
 			return false;
 

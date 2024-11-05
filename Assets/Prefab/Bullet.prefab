@@ -1,44 +1,11 @@
 {
-  "layer": "Player",
+  "layer": "Default",
   "components": [
     {
-      "type": "ColliderComp",
+      "type": "BulletComp",
       "compData": {
-        "position": [
-          0.0,
-          0.0
-        ],
-        "scale": [
-          100.0,
-          100.0
-        ],
-        "rotation": 0.0
-      }
-    },
-    {
-      "type": "LifeComp",
-      "compData": {
-        "life": 3,
-        "maxLife": 3,
-        "immuneTime": 1.5
-      }
-    },
-    {
-      "type": "PlayerComp",
-      "compData": {
-        "speed": 100.0,
-        "keyCode": [
-          265,
-          264,
-          262,
-          263,
-          90,
-          88
-        ],
-        "bombName": "Bomb.prefab",
-        "bombCooldown": 3.0,
-        "bulletName": "Bullet.prefab",
-        "bulletCooldown": 0.20000000298023224
+        "speed": 150.0,
+        "maxBounce": 1
       }
     },
     {
@@ -68,9 +35,9 @@
       "type": "SpriteComp",
       "compData": {
         "color": [
-          1.0,
-          1.0,
-          1.0,
+          0.9049997925758362,
+          0.9950980544090271,
+          0.22926278412342072,
           1.0
         ],
         "shaderName": "base.shd",
@@ -82,12 +49,12 @@
       "type": "TransformComp",
       "compData": {
         "position": [
-          29.0,
-          124.0
+          0.0,
+          0.0
         ],
         "scale": [
-          100.0,
-          100.0
+          10.0,
+          10.0
         ],
         "rotation": 0.0
       }

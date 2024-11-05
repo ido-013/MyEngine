@@ -55,7 +55,7 @@ void RigidbodyComp::CorrectPosByAABB(const ColliderComp* _col, const ColliderCom
 	}
 }
 
-RigidbodyComp::RigidbodyComp(GameObject* _owner) : EngineComponent(_owner), velocity(), maxVelocity()
+RigidbodyComp::RigidbodyComp(GameObject* _owner) : EngineComponent(_owner), drag(1.01f), onDrag(false), velocity(), maxVelocity()
 {
 	velocity.x = 0;
 	velocity.y = 0;
@@ -124,8 +124,11 @@ void RigidbodyComp::Update()
 	float x = tf->GetPos().x + velocity.x * dt;
 	float y = tf->GetPos().y + velocity.y * dt;
 
-	velocity.x /= drag;
-	velocity.y /= drag;
+	if (onDrag)
+	{
+		velocity.x /= drag;
+		velocity.y /= drag;
+	}
 
 	//If im too low, just set to 0
 	if (CheckEpsilon(velocity.x))
@@ -161,6 +164,10 @@ bool RigidbodyComp::Edit()
 		ImGui::InputFloat2("MaxAcceleration", &maxAcceleration[0], "%.3f", ImGuiInputTextFlags_EnterReturnsTrue);
 
 		ImGui::InputFloat("Drag", &drag);
+
+		ImGui::Checkbox("On Drag", &onDrag);
+
+		ImGui::Separator();
 
 		if (DeleteCompButton<RigidbodyComp>())
 			return false;
@@ -198,6 +205,9 @@ void RigidbodyComp::LoadFromJson(const json& _data)
 
 		it = compData->find("drag");
 		drag = it.value();
+		
+		it = compData->find("onDrag");
+		onDrag = it.value();
 	}
 }
 
@@ -212,6 +222,7 @@ json RigidbodyComp::SaveToJson()
 	compData["acceleration"] = { acceleration.x, acceleration.y };
 	compData["maxAcceleration"] = { maxAcceleration.x, maxAcceleration.y };
 	compData["drag"] = drag;
+	compData["onDrag"] = onDrag;
 
 	data["compData"] = compData;
 

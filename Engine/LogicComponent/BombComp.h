@@ -3,9 +3,9 @@
 #include <string>
 #include <glm/glm.hpp>
 
-#include "EngineComponent.h"
+#include "LogicComponent.h"
 
-class BombComp : public EngineComponent
+class BombComp : public LogicComponent
 {
 private:
 	int dx[4] = { 0, -1, 1, 0 };

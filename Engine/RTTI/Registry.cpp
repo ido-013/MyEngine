@@ -6,11 +6,12 @@ Registry::Registry()
     // Register ALL the functions
     rttiMap.insert({ PlayerComp::TypeName, &PlayerComp::CreatePlayerComponent });
     rttiMap.insert({ LifeComp::TypeName, &LifeComp::CreateLifeComponent });
+    rttiMap.insert({ BombComp::TypeName, &BombComp::CreateBombComponent });
+    rttiMap.insert({ BulletComp::TypeName, &BulletComp::CreateBulletComponent });
 
     rttiMap.insert({ TransformComp::TypeName, &TransformComp::CreateTransformComponent });
     rttiMap.insert({ RigidbodyComp::TypeName, &RigidbodyComp::CreateRigidBodyComponent });
     rttiMap.insert({ ColliderComp::TypeName, &ColliderComp::CreateColliderComponent });
-    rttiMap.insert({ BombComp::TypeName, &BombComp::CreateBombComponent });
     rttiMap.insert({ LifetimeComp::TypeName, &LifetimeComp::CreateLifetimeComponent });
 
     rttiMap.insert({ SpriteComp::TypeName, &SpriteComp::CreateSpriteComponent });

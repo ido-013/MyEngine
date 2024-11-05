@@ -4,7 +4,19 @@
     "depth": 1.0
   },
   {
+    "name": "Explosion",
+    "depth": 0.949999988079071
+  },
+  {
+    "name": "Player",
+    "depth": 0.8999999761581421
+  },
+  {
     "name": "UI",
     "depth": 0.0
+  },
+  {
+    "name": "Wall",
+    "depth": 0.800000011920929
   }
 ]

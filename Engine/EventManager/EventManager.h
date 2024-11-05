@@ -1,4 +1,5 @@
 #pragma once
+
 #include <queue>
 #include <vector>
 
@@ -28,6 +29,8 @@ public:
 	// Add an event (event*) this are pointers to dynamic memory, called as the following: AddEvent(new Event);
 	template <typename T>
 	void AddEvent(Entity* _src, Entity* _dst);
+	
+	void AddEvent(Event* _event);
 
 	void AddEntity(Entity* _entity);
 	void DeleteEntity(Entity* _entity);

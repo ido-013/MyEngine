@@ -578,7 +578,7 @@ void Editor::SavePrefabPopup()
         if (ImGui::Button("Save"))
         {
             Prefab::SavePrefab(buffer, selectedObj, isSaveComp);
-            ResourceManager::GetInstance().ReloadResource(buffer);
+            ResourceManager::GetInstance().ReloadResource(std::string(buffer) + ".prefab");
 
             isSaveComp.clear();
             ClearBuffer(buffer, 100);

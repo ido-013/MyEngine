@@ -3,6 +3,7 @@
 #include "../CollisionManager/CollisionManager.h"
 #include "../EventManager/EventManager.h"
 
+#include "../LogicComponent/LifeComp.h"
 #include "../EngineComponent/TransformComp.h"
 #include "../EngineComponent/RigidbodyComp.h"
 #include "../GraphicComponent/SpriteComp.h"
@@ -81,10 +82,21 @@ void ColliderComp::OnEvent(Event* _event)
 	
 	if (colEvent != nullptr)
 	{
-		RigidbodyComp* r = owner->GetComponent<RigidbodyComp>();
-		if (r != nullptr)
+		if (!colEvent->isPass)
 		{
-			r->colliders.push(static_cast<ColliderComp*>(_event->src));
+			RigidbodyComp* r = owner->GetComponent<RigidbodyComp>();
+			if (r != nullptr)
+			{
+				r->colliders.push(static_cast<ColliderComp*>(colEvent->src));
+			}
+		}
+		else if (colEvent->enter)
+		{
+			LifeComp* l = owner->GetComponent<LifeComp>();
+			if (l != nullptr)
+			{
+				l->AddLife(-1);
+			}
 		}
 	}
 }

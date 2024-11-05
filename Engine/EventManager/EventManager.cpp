@@ -8,6 +8,11 @@ EventManager::~EventManager()
     DeleteUndispahchEvent();
 }
 
+void EventManager::AddEvent(Event* _event)
+{
+    events.push(_event);
+}
+
 void EventManager::AddEntity(Entity* _entity)
 {
     entities.push_back(_entity);

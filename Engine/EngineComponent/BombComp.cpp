@@ -2,10 +2,10 @@
 
 #include "../OpenGL/GLHelper.h"
 #include "../Editor/Util.h"
+#include "../CollisionManager/CollisionUtil.h"
 
 #include "../GameObjectManager/GameObjectManager.h"
 #include "../Prefab/Prefab.h"
-
 #include "../Editor/Editor.h"
 
 #include "../EngineComponent/TransformComp.h"
@@ -24,12 +24,12 @@ BombComp::~BombComp()
 		GameObject* obj = Prefab::NewGameObject("Explosion", effectName);
 		obj->GetComponent<TransformComp>()->SetPos(pos);
 
-		for (int i = 0; i < length; i++)
+		for (int i = 1; i <= length; i++)
 		{
 			for (int j = 0; j < 4; j++)
 			{
 				obj = Prefab::NewGameObject("Explosion", effectName);
-				obj->GetComponent<TransformComp>()->SetPos({pos.x + (scale.x * dx[j]), pos.y + (scale.y * dy[j])});
+				obj->GetComponent<TransformComp>()->SetPos({pos.x + (scale.x * dx[j] * i), pos.y + (scale.y * dy[j] * i)});
 			}
 		}
 	}

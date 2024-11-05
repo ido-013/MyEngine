@@ -23,8 +23,10 @@ void Prefab::SavePrefab(const std::string& _name, GameObject* _obj, std::map<std
 
 	json prefab;
 
+	prefab["layer"] = _obj->GetLayerName();
+
 	json components;
-	for (auto comp : _obj->GetAllComponent())
+	for (auto& comp : _obj->GetAllComponent())
 	{
 		if (!_isSaveComp[comp.first] && !_isTemp)
 			continue;
@@ -55,6 +57,12 @@ GameObject* Prefab::NewGameObject(const std::string& _name, const std::string& _
 	GameObject* obj = GameObjectManager::GetInstance().CreateObject(_name, _prefabName);
 
 	json* data = ResourceManager::GetInstance().GetResourcePointer<json>(_prefabName);
+
+	auto layerIt = data->find("layer");
+	if (layerIt != data->end())
+	{
+		obj->SetLayerName(layerIt.value());
+	}
 
 	auto compIt = data->find("components");
 	if (compIt == data->end())

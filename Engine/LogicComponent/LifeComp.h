@@ -7,6 +7,10 @@ private:
 	int life;
 	int maxLife;
 
+	bool isImmune;
+	float immuneTime;
+	float timer;
+
 public:
 	LifeComp(GameObject* _owner);
 	~LifeComp();

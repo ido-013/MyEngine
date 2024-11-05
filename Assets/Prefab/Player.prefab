@@ -1,4 +1,5 @@
 {
+  "layer": "Player",
   "components": [
     {
       "type": "ColliderComp",
@@ -12,6 +13,14 @@
           100.0
         ],
         "rotation": 0.0
+      }
+    },
+    {
+      "type": "LifeComp",
+      "compData": {
+        "life": 3,
+        "maxLife": 3,
+        "immuneTime": 1.5
       }
     },
     {

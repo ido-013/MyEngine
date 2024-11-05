@@ -1,46 +1,48 @@
 {
-  "layer": "Explosion",
+  "layer": "Wall",
   "components": [
     {
       "type": "ColliderComp",
       "compData": {
         "position": [
-          -161.0,
-          -54.0
+          0.0,
+          0.0
         ],
         "scale": [
-          100.0,
-          100.0
+          1.0,
+          1.0
         ],
         "rotation": 0.0
       }
     },
     {
-      "type": "LifetimeComp",
+      "type": "LifeComp",
       "compData": {
-        "lifetime": 0.5
+        "life": 1,
+        "maxLife": 1,
+        "immuneTime": 1.5
       }
     },
     {
       "type": "SpriteComp",
       "compData": {
         "color": [
-          1.0,
-          1.0,
-          1.0,
-          0.5647059082984924
+          0.5196078419685364,
+          0.5196078419685364,
+          0.5196078419685364,
+          1.0
         ],
         "shaderName": "base.shd",
         "meshName": "square.msh",
-        "textureName": "explosion.png"
+        "textureName": "base.png"
       }
     },
     {
       "type": "TransformComp",
       "compData": {
         "position": [
-          -161.0,
-          -54.0
+          -182.0,
+          9.0
         ],
         "scale": [
           100.0,

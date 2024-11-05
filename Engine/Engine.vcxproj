@@ -204,6 +204,7 @@
     <ClInclude Include="Editor\Editor.h" />
     <ClInclude Include="Editor\Util.h" />
     <ClInclude Include="EngineComponent\BombComp.h" />
+    <ClInclude Include="EngineComponent\BulletComp.h" />
     <ClInclude Include="EngineComponent\ColliderComp.h" />
     <ClInclude Include="EngineComponent\EngineComponent.h" />
     <ClInclude Include="EngineComponent\LifetimeComp.h" />

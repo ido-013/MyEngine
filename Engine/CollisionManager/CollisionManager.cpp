@@ -8,7 +8,7 @@
 #include "../Event/CollisionEvent.h"
 
 
-CollisionManager::CollisionManager()
+CollisionManager::CollisionManager() : flag(false)
 {
 
 }
@@ -48,6 +48,8 @@ void CollisionManager::Update()
 	
 	EventManager& em = EventManager::GetInstance();
 
+	flag = !flag;
+
 	for (int i = 0; i < colliders.size() - 1; i++)
 	{
 		for (int j = i + 1; j < colliders.size(); j++)
@@ -57,9 +59,38 @@ void CollisionManager::Update()
 
 			if (IsCollisionAABB(a->GetPos(), a->GetScale(), b->GetPos(), b->GetScale()))
 			{
-				em.AddEvent<CollisionEvent>(a, b);
-				em.AddEvent<CollisionEvent>(b, a);
+				bool isPass = false;
+
+				if (!a->GetOwner()->GetLayerName().compare("Explosion") || !b->GetOwner()->GetLayerName().compare("Explosion"))
+				{
+					isPass = true;
+				}
+
+				if (currentCollisionMap.find({ a, b }) == currentCollisionMap.end())
+				{
+					em.AddEvent(new CollisionEvent(a, b, isPass, true));
+					em.AddEvent(new CollisionEvent(b, a, isPass, true));
+				}
+				else
+				{
+					em.AddEvent(new CollisionEvent(a, b, isPass));
+					em.AddEvent(new CollisionEvent(b, a, isPass));
+				}
+
+				currentCollisionMap[{a, b}] = flag;
 			}
+		}
+	}
+
+	for (auto it = currentCollisionMap.begin(); it != currentCollisionMap.end();)
+	{
+		if (it->second != flag)
+		{
+			currentCollisionMap.erase(it++);
+		}
+		else
+		{
+			it++;
 		}
 	}
 

@@ -61,8 +61,6 @@ bool SpriteComp::Edit()
         //Edit Color
         ImGui::ColorEdit4("Color", color);
 
-        ImGui::InputFloat("Depth", &depth);
-
         std::string filename;
 
         //Edit Shader

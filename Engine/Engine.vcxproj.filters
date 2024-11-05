@@ -359,6 +359,9 @@
     <ClInclude Include="LogicComponent\LifeComp.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="EngineComponent\BulletComp.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="GameObject\GameObject.inl">

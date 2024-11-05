@@ -1,8 +1,12 @@
 #include "LifeComp.h"
 
+#include "../OpenGL/GLHelper.h"
+
 #include "../GameObjectManager/GameObjectManager.h"
 
-LifeComp::LifeComp(GameObject* _owner) : LogicComponent(_owner), life(3), maxLife(3)
+#include "../GraphicComponent/SpriteComp.h"
+
+LifeComp::LifeComp(GameObject* _owner) : LogicComponent(_owner), life(3), maxLife(3), isImmune(false), immuneTime(1.5f), timer(0)
 {
 }
 
@@ -12,7 +16,17 @@ LifeComp::~LifeComp()
 
 void LifeComp::Update()
 {
+	if (isImmune)
+	{
+		timer += (float)GLHelper::delta_time;
 
+		if (timer > immuneTime)
+		{
+			timer = 0;
+			isImmune = false;
+			owner->GetComponent<SpriteComp>()->SetColor(255, 255, 255);
+		}
+	}
 }
 
 bool LifeComp::Edit()
@@ -24,6 +38,8 @@ bool LifeComp::Edit()
 
 		ImGui::SliderInt("Life", &life, 1, maxLife);
 		life = std::min(life, maxLife);
+
+		ImGui::InputFloat("Immune Time", &immuneTime);
 
 		if (DeleteCompButton<LifeComp>())
 			return false;
@@ -39,9 +55,18 @@ bool LifeComp::Edit()
 
 void LifeComp::AddLife(const int& _value)
 {
-	life += _value;
+	if (isImmune)
+		return;
 
-	std::cout << life << std::endl; //
+	if (_value < 0)
+	{
+		isImmune = true;
+
+		//animator update after
+		owner->GetComponent<SpriteComp>()->SetColor(100, 0, 0);
+	}
+
+	life += _value;
 
 	if (life > maxLife)
 	{
@@ -63,6 +88,12 @@ void LifeComp::LoadFromJson(const json& _data)
 	{
 		auto it = compData->find("life");
 		life = it.value();
+
+		it = compData->find("maxLife");
+		maxLife = it.value();
+		
+		it = compData->find("immuneTime");
+		immuneTime = it.value();
 	}
 }
 
@@ -73,6 +104,8 @@ json LifeComp::SaveToJson()
 
 	json compData;
 	compData["life"] = life;
+	compData["maxLife"] = maxLife;
+	compData["immuneTime"] = immuneTime;
 
 	data["compData"] = compData;
 

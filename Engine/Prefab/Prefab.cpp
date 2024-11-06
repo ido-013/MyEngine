@@ -54,7 +54,16 @@ void Prefab::SavePrefab(const std::string& _name, GameObject* _obj, std::map<std
 
 GameObject* Prefab::NewGameObject(const std::string& _name, const std::string& _prefabName)
 {
-	GameObject* obj = GameObjectManager::GetInstance().CreateObject(_name, _prefabName);
+	GameObject* obj = nullptr;
+
+	if (_prefabName.compare("temp.prefab") != 0)
+	{
+		obj = GameObjectManager::GetInstance().CreateObject(_name, _prefabName);
+	}
+	else
+	{
+		obj = GameObjectManager::GetInstance().CreateObject(_name);
+	}
 
 	json* data = ResourceManager::GetInstance().GetResourcePointer<json>(_prefabName);
 

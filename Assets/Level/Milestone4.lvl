@@ -1,0 +1,388 @@
+[
+  {
+    "object": "Player1",
+    "prefab": "Player.prefab",
+    "components": [
+      {
+        "type": "LifeComp",
+        "compData": {
+          "life": 3,
+          "maxLife": 3,
+          "immuneTime": 1.5,
+          "onEffect": true,
+          "effectName": "2pWin.prefab"
+        }
+      },
+      {
+        "type": "PlayerComp",
+        "compData": {
+          "speed": 100.0,
+          "keyCode": [
+            87,
+            65,
+            68,
+            83,
+            90,
+            88
+          ],
+          "bombName": "Bomb.prefab",
+          "bombCooldown": 3.0,
+          "bulletName": "Bullet.prefab",
+          "bulletCooldown": 0.20000000298023224
+        }
+      },
+      {
+        "type": "TransformComp",
+        "compData": {
+          "position": [
+            -132.0,
+            -7.0
+          ],
+          "scale": [
+            100.0,
+            100.0
+          ],
+          "rotation": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "object": "Wall",
+    "prefab": "Wall.prefab",
+    "components": [
+      {
+        "type": "TransformComp",
+        "compData": {
+          "position": [
+            15.0,
+            -82.0
+          ],
+          "scale": [
+            100.0,
+            100.0
+          ],
+          "rotation": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "object": "Wall_breakable",
+    "prefab": "Wall_breakable.prefab",
+    "components": [
+      {
+        "type": "LifeComp",
+        "compData": {
+          "life": 1,
+          "maxLife": 1,
+          "immuneTime": 1.5,
+          "onEffect": false,
+          "effectName": ""
+        }
+      },
+      {
+        "type": "TransformComp",
+        "compData": {
+          "position": [
+            14.0,
+            49.0
+          ],
+          "scale": [
+            100.0,
+            100.0
+          ],
+          "rotation": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "object": "Player2",
+    "prefab": "Player.prefab",
+    "components": [
+      {
+        "type": "LifeComp",
+        "compData": {
+          "life": 3,
+          "maxLife": 3,
+          "immuneTime": 1.5,
+          "onEffect": true,
+          "effectName": "1pWin.prefab"
+        }
+      },
+      {
+        "type": "PlayerComp",
+        "compData": {
+          "speed": 100.0,
+          "keyCode": [
+            265,
+            264,
+            262,
+            263,
+            78,
+            77
+          ],
+          "bombName": "Bomb.prefab",
+          "bombCooldown": 3.0,
+          "bulletName": "Bullet.prefab",
+          "bulletCooldown": 0.20000000298023224
+        }
+      },
+      {
+        "type": "TransformComp",
+        "compData": {
+          "position": [
+            147.0,
+            -12.0
+          ],
+          "scale": [
+            100.0,
+            100.0
+          ],
+          "rotation": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "object": "Wall0",
+    "prefab": "Wall.prefab",
+    "components": [
+      {
+        "type": "TransformComp",
+        "compData": {
+          "position": [
+            -110.0,
+            -321.0
+          ],
+          "scale": [
+            100.0,
+            100.0
+          ],
+          "rotation": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "object": "Wall00",
+    "prefab": "Wall.prefab",
+    "components": [
+      {
+        "type": "TransformComp",
+        "compData": {
+          "position": [
+            171.0,
+            -325.0
+          ],
+          "scale": [
+            100.0,
+            100.0
+          ],
+          "rotation": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "object": "Wall000",
+    "prefab": "Wall.prefab",
+    "components": [
+      {
+        "type": "TransformComp",
+        "compData": {
+          "position": [
+            -276.0,
+            -253.0
+          ],
+          "scale": [
+            100.0,
+            100.0
+          ],
+          "rotation": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "object": "Wall0000",
+    "prefab": "Wall.prefab",
+    "components": [
+      {
+        "type": "TransformComp",
+        "compData": {
+          "position": [
+            336.0,
+            -249.0
+          ],
+          "scale": [
+            100.0,
+            100.0
+          ],
+          "rotation": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "object": "Wall0001",
+    "prefab": "Wall.prefab",
+    "components": [
+      {
+        "type": "TransformComp",
+        "compData": {
+          "position": [
+            -321.0,
+            -114.0
+          ],
+          "scale": [
+            100.0,
+            100.0
+          ],
+          "rotation": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "object": "Wall00010",
+    "prefab": "Wall.prefab",
+    "components": [
+      {
+        "type": "TransformComp",
+        "compData": {
+          "position": [
+            -323.0,
+            5.0
+          ],
+          "scale": [
+            100.0,
+            100.0
+          ],
+          "rotation": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "object": "Wall000100",
+    "prefab": "Wall.prefab",
+    "components": [
+      {
+        "type": "TransformComp",
+        "compData": {
+          "position": [
+            -266.0,
+            140.0
+          ],
+          "scale": [
+            100.0,
+            100.0
+          ],
+          "rotation": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "object": "Wall0001000",
+    "prefab": "Wall.prefab",
+    "components": [
+      {
+        "type": "TransformComp",
+        "compData": {
+          "position": [
+            -129.0,
+            209.0
+          ],
+          "scale": [
+            100.0,
+            100.0
+          ],
+          "rotation": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "object": "Wall00010000",
+    "prefab": "Wall.prefab",
+    "components": [
+      {
+        "type": "TransformComp",
+        "compData": {
+          "position": [
+            5.0,
+            231.0
+          ],
+          "scale": [
+            100.0,
+            100.0
+          ],
+          "rotation": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "object": "Wall000100000",
+    "prefab": "Wall.prefab",
+    "components": [
+      {
+        "type": "TransformComp",
+        "compData": {
+          "position": [
+            162.0,
+            195.0
+          ],
+          "scale": [
+            100.0,
+            100.0
+          ],
+          "rotation": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "object": "Wall0001000000",
+    "prefab": "Wall.prefab",
+    "components": [
+      {
+        "type": "TransformComp",
+        "compData": {
+          "position": [
+            297.0,
+            90.0
+          ],
+          "scale": [
+            100.0,
+            100.0
+          ],
+          "rotation": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "object": "Wall00010000000",
+    "prefab": "Wall.prefab",
+    "components": [
+      {
+        "type": "TransformComp",
+        "compData": {
+          "position": [
+            359.0,
+            -36.0
+          ],
+          "scale": [
+            100.0,
+            100.0
+          ],
+          "rotation": 0.0
+        }
+      }
+    ]
+  }
+]

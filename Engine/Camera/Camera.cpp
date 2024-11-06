@@ -39,22 +39,22 @@ void Camera::Move()
 	
 	float dt = (float)GLHelper::delta_time;
 
-	if (GLHelper::keyState[GLFW_KEY_W])
+	if (GLHelper::keyState[GLFW_KEY_I])
 	{
 		pos[mode].y += speed * dt;
 	}
 
-	if (GLHelper::keyState[GLFW_KEY_A])
+	if (GLHelper::keyState[GLFW_KEY_J])
 	{
 		pos[mode].x -= speed * dt;
 	}
 
-	if (GLHelper::keyState[GLFW_KEY_S])
+	if (GLHelper::keyState[GLFW_KEY_K])
 	{
 		pos[mode].y -= speed * dt;
 	}
 
-	if (GLHelper::keyState[GLFW_KEY_D])
+	if (GLHelper::keyState[GLFW_KEY_L])
 	{
 		pos[mode].x += speed * dt;
 	}

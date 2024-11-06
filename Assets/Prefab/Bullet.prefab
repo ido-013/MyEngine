@@ -5,7 +5,7 @@
       "type": "BulletComp",
       "compData": {
         "speed": 150.0,
-        "bounce": 0
+        "bounce": 2
       }
     },
     {
@@ -27,7 +27,15 @@
       "compData": {
         "life": 1,
         "maxLife": 1,
-        "immuneTime": 1.5
+        "immuneTime": 1.5,
+        "onEffect": false,
+        "effectName": ""
+      }
+    },
+    {
+      "type": "LifetimeComp",
+      "compData": {
+        "lifetime": 50.0
       }
     },
     {

@@ -11,6 +11,9 @@ private:
 	float immuneTime;
 	float timer;
 
+	bool onEffect;
+	std::string effectName;
+
 public:
 	LifeComp(GameObject* _owner);
 	~LifeComp();

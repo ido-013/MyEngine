@@ -20,7 +20,9 @@
       "compData": {
         "life": 3,
         "maxLife": 3,
-        "immuneTime": 1.5
+        "immuneTime": 1.5,
+        "onEffect": true,
+        "effectName": "1pWin.prefab"
       }
     },
     {
@@ -82,8 +84,8 @@
       "type": "TransformComp",
       "compData": {
         "position": [
-          29.0,
-          124.0
+          -8.0,
+          42.0
         ],
         "scale": [
           100.0,

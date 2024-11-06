@@ -20,7 +20,9 @@
       "compData": {
         "life": 1,
         "maxLife": 1,
-        "immuneTime": 1.5
+        "immuneTime": 1.5,
+        "onEffect": false,
+        "effectName": ""
       }
     },
     {

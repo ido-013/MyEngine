@@ -146,20 +146,6 @@ void RigidbodyComp::Update()
 	if (CheckEpsilon(velocity.y))
 		velocity.y = 0;
 
-	//ColliderComp* col = owner->GetComponent<ColliderComp>();
-
-	//if (col != nullptr)
-	//{
-	//	//resolution
-	//	while (!colliders.empty())
-	//	{
-	//		ColliderComp* otherCol = colliders.front();
-	//		colliders.pop();
-
-	//		CorrectPosByAABB(col, otherCol, x, y);
-	//	}
-	//}
-
 	tf->SetPos({ x, y });
 }
 

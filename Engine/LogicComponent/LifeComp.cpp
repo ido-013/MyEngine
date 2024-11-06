@@ -1,8 +1,10 @@
 #include "LifeComp.h"
 
 #include "../OpenGL/GLHelper.h"
+#include "../Editor/Util.h"
 
 #include "../GameObjectManager/GameObjectManager.h"
+#include "../Prefab/Prefab.h"
 
 #include "../GraphicComponent/SpriteComp.h"
 
@@ -40,6 +42,10 @@ bool LifeComp::Edit()
 		life = std::min(life, maxLife);
 
 		ImGui::InputFloat("Immune Time", &immuneTime);
+
+		FileSelectComboOnce(effectName, "Effect Name", effectName, "Assets/Prefab", ".prefab");
+
+		ImGui::Checkbox("onEffect", &onEffect);
 
 		ImGui::Separator();
 
@@ -79,6 +85,11 @@ void LifeComp::AddLife(const int& _value)
 	{
 		//death event
 		GameObjectManager::GetInstance().ReservationRemoveObject(owner->GetName());
+
+		if (onEffect)
+		{
+			Prefab::NewGameObject("deathEffect", effectName);
+		}
 	}
 }
 
@@ -96,6 +107,12 @@ void LifeComp::LoadFromJson(const json& _data)
 		
 		it = compData->find("immuneTime");
 		immuneTime = it.value();
+
+		it = compData->find("onEffect");
+		onEffect = it.value();
+
+		it = compData->find("effectName");
+		effectName = it.value();
 	}
 }
 
@@ -108,6 +125,8 @@ json LifeComp::SaveToJson()
 	compData["life"] = life;
 	compData["maxLife"] = maxLife;
 	compData["immuneTime"] = immuneTime;
+	compData["onEffect"] = onEffect;
+	compData["effectName"] = effectName;
 
 	data["compData"] = compData;
 

@@ -1,5 +1,5 @@
 {
-  "layer": "Wall",
+  "layer": 3,
   "components": [
     {
       "type": "ColliderComp",

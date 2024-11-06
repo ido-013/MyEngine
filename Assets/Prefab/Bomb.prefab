@@ -1,5 +1,5 @@
 {
-  "layer": "Default",
+  "layer": 15,
   "components": [
     {
       "type": "BombComp",

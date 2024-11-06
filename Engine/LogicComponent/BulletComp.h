@@ -1,6 +1,7 @@
 #pragma once
 
 #include "LogicComponent.h"
+#include "../Direction/Direction.h"
 
 class BulletComp : public LogicComponent
 {
@@ -8,11 +9,12 @@ private:
 	float speed;
 
 	int bounce;
-	int maxBounce;
 
 	float angle;
 
 public:
+	bool onAttack;
+
 	BulletComp(GameObject* _owner);
 	~BulletComp();
 
@@ -20,6 +22,9 @@ public:
 	bool Edit() override;
 
 	void Fire(const float& _angle);
+	void Reflection(const Direction& _dir);
+
+	const float& GetAngle() const { return angle; }
 
 	void LoadFromJson(const json& _data) override;
 	json SaveToJson() override;

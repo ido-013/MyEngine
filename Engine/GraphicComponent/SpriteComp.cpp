@@ -232,7 +232,7 @@ void SpriteComp::SetTexture(const std::string& _name)
 
 void SpriteComp::SetDepth()
 {
-    depth = LayerManager::GetInstance().GetDepth(owner->GetLayerName());
+    depth = (float)owner->GetLayer() / LayerManager::maxLayerInd;
 }
 
 void SpriteComp::UnsetShdrpgm()

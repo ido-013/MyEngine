@@ -1,25 +1,37 @@
 #pragma once
+
 #include <map>
+#include <array>
 #include <string>
+#include <functional>
+
+#include "../Event/Entity.h"
+#include "../LayerManager/LayerManager.h"
 
 class BaseComponent;
 
-class GameObject
+class GameObject : public Entity
 {
 private:
-	//GO now will have a container of BaseComponent*
-	std::map<std::string, BaseComponent*> component;
-
-	std::string name;
-	std::string prefabName;
-	std::string layerName;
-
 	GameObject(std::string _name);
 	//Components in the GO container are ALLOCATED IN THE HEAP, 
 	//so. When to GO is destroyed, the GO must be as well
 	~GameObject();
 
+	//GO now will have a container of BaseComponent*
+	std::map<std::string, BaseComponent*> component;
+
+	//std::array<std::array<std::function<void(void)>, LayerManager::maxLayerInd>, LayerManager::maxLayerInd> collisionFunc;
+
+	int layer;
+
+	std::string name;
+	std::string prefabName;
+	std::string layerName;
+
 public:
+	bool selected;
+
 	GameObject(const GameObject&) = delete;
 	GameObject& operator=(const GameObject&) = delete;
 
@@ -35,16 +47,18 @@ public:
 	template <typename T>
 	void DeleteComponent();
 
+	void OnEvent(Event* _event) override;
+
 	bool IsHaveComponent(const std::string& _typeName);
-	bool selected;
 
 	const std::map<std::string, BaseComponent*>& GetAllComponent() { return component; }
 	
 	const std::string& GetName() { return name; }
 	const std::string& GetPrefabName() { return prefabName; }
+	const int& GetLayer() const { return layer; }
 	const std::string& GetLayerName() { return layerName; }
 
-	void SetLayerName(const std::string& _name);
+	void SetLayer(const int& _layer);
 
 	friend class GameObjectManager;
 };

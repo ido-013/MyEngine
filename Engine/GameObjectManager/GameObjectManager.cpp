@@ -9,7 +9,9 @@ GameObjectManager::~GameObjectManager()
 	for (auto& it : objects)
 	{
 		if (it.second)
+		{
 			delete it.second;
+		}
 	}
 }
 

@@ -56,28 +56,30 @@ void CollisionManager::Update()
 		{
 			ColliderComp* a = colliders[i];
 			ColliderComp* b = colliders[j];
+			GameObject* objA = a->GetOwner();
+			GameObject* objB = b->GetOwner();
 
 			if (IsCollisionAABB(a->GetPos(), a->GetScale(), b->GetPos(), b->GetScale()))
 			{
 				bool isPass = false;
 
-				if (!a->GetOwner()->GetLayerName().compare("Explosion") || !b->GetOwner()->GetLayerName().compare("Explosion"))
+				if (!objA->GetLayerName().compare("Explosion") || !objB->GetLayerName().compare("Explosion"))
 				{
 					isPass = true;
 				}
 
 				if (currentCollisionMap.find({ a, b }) == currentCollisionMap.end())
 				{
-					em.AddEvent(new CollisionEvent(a, b, isPass, true));
-					em.AddEvent(new CollisionEvent(b, a, isPass, true));
+					em.AddEvent(new CollisionEvent(objA, objB, true));
+					em.AddEvent(new CollisionEvent(objB, objA, true));
 				}
 				else
 				{
-					em.AddEvent(new CollisionEvent(a, b, isPass));
-					em.AddEvent(new CollisionEvent(b, a, isPass));
+					em.AddEvent(new CollisionEvent(objA, objB));
+					em.AddEvent(new CollisionEvent(objB, objA));
 				}
 
-				currentCollisionMap[{a, b}] = flag;
+				currentCollisionMap[{ a, b }] = flag;
 			}
 		}
 	}
@@ -86,6 +88,31 @@ void CollisionManager::Update()
 	{
 		if (it->second != flag)
 		{
+			ColliderComp* a = it->first.first;
+			ColliderComp* b = it->first.second;
+
+			bool findColliderA = false;
+			bool findColliderB = false;
+
+			for (auto colIt = colliders.begin(); colIt != colliders.end(); colIt++)
+			{
+				if (*colIt == a)
+				{
+					findColliderA = true;
+				}
+
+				if (*colIt == b)
+				{
+					findColliderB = true;
+				}
+			}
+
+			if (findColliderA && findColliderB)
+			{
+				em.AddEvent(new CollisionEvent(a->GetOwner(), b->GetOwner(), false, true));
+				em.AddEvent(new CollisionEvent(b->GetOwner(), a->GetOwner(), false, true));
+			}
+
 			currentCollisionMap.erase(it++);
 		}
 		else

@@ -73,8 +73,8 @@ private:
     void SelectedGameObjectWindow();
         void GameObjectInfoText();
         void SelectLayerCombo();
-            void AddLayerMenuItem(bool& _popup);
-            void AddLayerPopup(bool& _popup);
+            void AddLayerMenuItem(bool& _popup, int& _layerInd, const int& _ind);
+            void AddLayerPopup(bool& _popup, int& _layerInd);
         void AddComponentTree();
         void ComponentListTree();
         void RenameObjectPopup();

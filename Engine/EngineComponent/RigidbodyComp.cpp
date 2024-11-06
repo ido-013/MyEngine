@@ -1,22 +1,29 @@
 #include "RigidbodyComp.h"
 
-#include "TransformComp.h"
-#include "ColliderComp.h"
+#include <iostream>
+
 #include "../OpenGL/GLHelper.h"
 
-#include <iostream>
+#include "TransformComp.h"
+#include "ColliderComp.h"
 
 bool RigidbodyComp::CheckEpsilon(float value)
 {
 	return abs(value) < 0.001;
 }
 
-void RigidbodyComp::CorrectPosByAABB(const ColliderComp* _col, const ColliderComp* _otherCol, float& _x, float& _y)
+void RigidbodyComp::CorrectPosByAABB(const ColliderComp* _col, const ColliderComp* _otherCol)
 {
+	TransformComp* t = owner->GetComponent<TransformComp>();
+	if (!t) return;
+
 	glm::vec2 otherColPos = _otherCol->GetPos();
 	glm::vec2 otherColScale = _otherCol->GetScale();
 	glm::vec2 colPos = _col->GetPos();
 	glm::vec2 colScale = _col->GetScale();
+
+	float x = t->GetPos().x;
+	float y = t->GetPos().y;
 
 	float dis[4] =
 	{
@@ -27,35 +34,37 @@ void RigidbodyComp::CorrectPosByAABB(const ColliderComp* _col, const ColliderCom
 	};
 
 	float minDis = dis[0];
-	enum Dir { LEFT, RIGHT, UP, DOWN, } minInd = LEFT;
+	colDir = LEFT;
 
 	for (int i = 1; i < 4; i++)
 	{
 		if (minDis > dis[i])
 		{
 			minDis = dis[i];
-			minInd = Dir(i);
+			colDir = Direction(i);
 		}
 	}
 
-	switch (minInd)
+	switch (colDir)
 	{
 	case LEFT:
-		_x = otherColPos.x + otherColScale.x / 2 + colScale.x / 2 + 0.1f;
+		x = otherColPos.x + otherColScale.x / 2 + colScale.x / 2 + 0.1f;
 		break;
 	case RIGHT:
-		_x = otherColPos.x - otherColScale.x / 2 - colScale.x / 2 - 0.1f;
+		x = otherColPos.x - otherColScale.x / 2 - colScale.x / 2 - 0.1f;
 		break;
 	case UP:
-		_y = otherColPos.y + otherColScale.y / 2 + colScale.y / 2 + 0.1f;
+		y = otherColPos.y + otherColScale.y / 2 + colScale.y / 2 + 0.1f;
 		break;
 	case DOWN:
-		_y = otherColPos.y - otherColScale.y / 2 - colScale.y / 2 - 0.1f;
+		y = otherColPos.y - otherColScale.y / 2 - colScale.y / 2 - 0.1f;
 		break;
 	}
+
+	t->SetPos({ x, y });
 }
 
-RigidbodyComp::RigidbodyComp(GameObject* _owner) : EngineComponent(_owner), drag(1.01f), onDrag(false), velocity(), maxVelocity()
+RigidbodyComp::RigidbodyComp(GameObject* _owner) : EngineComponent(_owner), drag(1.01f), onDrag(false), velocity(), maxVelocity(), colDir()
 {
 	velocity.x = 0;
 	velocity.y = 0;
@@ -137,16 +146,19 @@ void RigidbodyComp::Update()
 	if (CheckEpsilon(velocity.y))
 		velocity.y = 0;
 
-	ColliderComp* col = owner->GetComponent<ColliderComp>();
+	//ColliderComp* col = owner->GetComponent<ColliderComp>();
 
-	//resolution
-	while (!colliders.empty())
-	{
-		ColliderComp* otherCol = colliders.front();
-		colliders.pop();
+	//if (col != nullptr)
+	//{
+	//	//resolution
+	//	while (!colliders.empty())
+	//	{
+	//		ColliderComp* otherCol = colliders.front();
+	//		colliders.pop();
 
-		CorrectPosByAABB(col, otherCol, x, y);
-	}
+	//		CorrectPosByAABB(col, otherCol, x, y);
+	//	}
+	//}
 
 	tf->SetPos({ x, y });
 }

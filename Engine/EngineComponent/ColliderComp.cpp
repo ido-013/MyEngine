@@ -76,31 +76,6 @@ bool ColliderComp::Edit()
 	return true;
 }
 
-void ColliderComp::OnEvent(Event* _event)
-{
-	CollisionEvent* colEvent = dynamic_cast<CollisionEvent*>(_event);
-	
-	if (colEvent != nullptr)
-	{
-		if (!colEvent->isPass)
-		{
-			RigidbodyComp* r = owner->GetComponent<RigidbodyComp>();
-			if (r != nullptr)
-			{
-				r->colliders.push(static_cast<ColliderComp*>(colEvent->src));
-			}
-		}
-		else if (colEvent->enter)
-		{
-			LifeComp* l = owner->GetComponent<LifeComp>();
-			if (l != nullptr)
-			{
-				l->AddLife(-1);
-			}
-		}
-	}
-}
-
 void ColliderComp::SetPos(const glm::vec2& _otherPos)
 {
 	this->pos = _otherPos;

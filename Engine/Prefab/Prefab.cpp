@@ -23,7 +23,7 @@ void Prefab::SavePrefab(const std::string& _name, GameObject* _obj, std::map<std
 
 	json prefab;
 
-	prefab["layer"] = _obj->GetLayerName();
+	prefab["layer"] = _obj->GetLayer();
 
 	json components;
 	for (auto& comp : _obj->GetAllComponent())
@@ -61,7 +61,7 @@ GameObject* Prefab::NewGameObject(const std::string& _name, const std::string& _
 	auto layerIt = data->find("layer");
 	if (layerIt != data->end())
 	{
-		obj->SetLayerName(layerIt.value());
+		obj->SetLayer(layerIt.value());
 	}
 
 	auto compIt = data->find("components");

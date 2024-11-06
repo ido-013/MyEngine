@@ -1,5 +1,5 @@
 {
-  "layer": "Player",
+  "layer": 4,
   "components": [
     {
       "type": "ColliderComp",

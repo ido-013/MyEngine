@@ -418,47 +418,60 @@ void Editor::GameObjectInfoText()
 void Editor::SelectLayerCombo()
 {
     static bool isAddLayer = false;
+    static int layerInd = 0;
+
+    LayerManager& layerManager = LayerManager::GetInstance();
 
     if (ImGui::BeginCombo("Layer", selectedObj->GetLayerName().c_str()))
     {
-        for (auto& layer : LayerManager::GetInstance().GetAllLayer())
+        for (int i = 0; i <= LayerManager::maxLayerInd; i++)
         {
-            if (ImGui::MenuItem((layer.first + " (Depth: " + std::to_string(layer.second).substr(0, 4) + ")").c_str()))
+            if (layerManager.GetName(i).empty())
             {
-                selectedObj->SetLayerName(layer.first);
+                AddLayerMenuItem(isAddLayer, layerInd, i);
             }
 
-            if (!layer.first.compare("Default") || !layer.first.compare("UI"))
-                continue;
-
-            if (ImGui::BeginPopupContextItem())
+            else
             {
-                if (ImGui::MenuItem("Delete")) 
+                if (ImGui::MenuItem(((std::to_string(i) + (i < 10 ? "  " : " ") + layerManager.GetName(i)).c_str())))
                 {
-                    LayerManager::GetInstance().DeleteLayer(layer.first);
+                    selectedObj->SetLayer(i);
                 }
-                ImGui::EndPopup();
+
+                if (i == 0 || i == LayerManager::maxLayerInd)
+                    continue;
+
+                if (ImGui::BeginPopupContextItem())
+                {
+                    if (ImGui::MenuItem("Delete"))
+                    {
+                        LayerManager::GetInstance().DeleteLayer(i);
+                    }
+                    ImGui::EndPopup();
+                }
             }
         }
-        ImGui::Separator();
-
-        AddLayerMenuItem(isAddLayer);
 
         ImGui::EndCombo();
     }
     
-    AddLayerPopup(isAddLayer);
+    AddLayerPopup(isAddLayer, layerInd);
 }
 
-void Editor::AddLayerMenuItem(bool& _popup)
+void Editor::AddLayerMenuItem(bool& _popup, int& _layerInd, const int& _ind)
 {
-    if (ImGui::MenuItem("Add Layer..."))
+    ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
+
+    if (ImGui::MenuItem((std::to_string(_ind) + (_ind < 10 ? "  " : " ") + "Add Layer...").c_str()))
     {
         _popup = true;
+        _layerInd = _ind;
     }
+
+    ImGui::PopStyleVar();
 }
 
-void Editor::AddLayerPopup(bool& _popup)
+void Editor::AddLayerPopup(bool& _popup, int& _layerInd)
 {
     if (_popup)
     {
@@ -469,14 +482,12 @@ void Editor::AddLayerPopup(bool& _popup)
     if (ImGui::BeginPopupModal("Add Layer", NULL, ImGuiWindowFlags_AlwaysAutoResize))
     {
         static char buffer[100] = { '\0' };
-        static float depth = 0;
 
         ImGui::InputText("Name", buffer, 100);
-        ImGui::DragFloat("Depth", &depth, 0.01f, 0, 1, "%.2f");
 
         if (ImGui::Button("Add Layer"))
         {
-            LayerManager::GetInstance().AddLayer(buffer, depth);
+            LayerManager::GetInstance().AddLayer(_layerInd, buffer);
 
             ClearBuffer(buffer, 100);
             ImGui::CloseCurrentPopup();

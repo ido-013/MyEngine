@@ -3,7 +3,6 @@
 
 Event::Event(Entity* _src, Entity* _dst) : src(_src), dst(_dst)
 {
-
 }
 
 void Event::DispatchEvent()

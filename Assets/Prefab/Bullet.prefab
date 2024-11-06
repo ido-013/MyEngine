@@ -1,11 +1,33 @@
 {
-  "layer": "Default",
+  "layer": 1,
   "components": [
     {
       "type": "BulletComp",
       "compData": {
         "speed": 150.0,
-        "maxBounce": 1
+        "bounce": 0
+      }
+    },
+    {
+      "type": "ColliderComp",
+      "compData": {
+        "position": [
+          0.0,
+          0.0
+        ],
+        "scale": [
+          10.0,
+          10.0
+        ],
+        "rotation": 0.0
+      }
+    },
+    {
+      "type": "LifeComp",
+      "compData": {
+        "life": 1,
+        "maxLife": 1,
+        "immuneTime": 1.5
       }
     },
     {

@@ -8,6 +8,7 @@
 #include "../GameObjectManager/GameObjectManager.h"
 #include "../EventManager/EventManager.h"
 #include "../ResourceManager/ResourceManager.h"
+#include "../LayerManager/LayerManager.h"
 #include "../Editor/Editor.h"
 #include "../Camera/Camera.h"
 
@@ -33,6 +34,7 @@ GameStateManager::~GameStateManager()
 void GameStateManager::Init()
 {
     Camera::GetInstance();
+    LayerManager::GetInstance();
 
     if (currentLevel)
     {

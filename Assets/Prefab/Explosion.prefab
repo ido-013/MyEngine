@@ -1,5 +1,5 @@
 {
-  "layer": "Explosion",
+  "layer": 2,
   "components": [
     {
       "type": "ColliderComp",

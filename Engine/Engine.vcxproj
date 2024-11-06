@@ -202,8 +202,10 @@
     <ClInclude Include="CollisionManager\CollisionUtil.h" />
     <ClInclude Include="ComponentManager\ComponentManager.h" />
     <ClInclude Include="Components.h" />
+    <ClInclude Include="Direction\Direction.h" />
     <ClInclude Include="Editor\Editor.h" />
     <ClInclude Include="Editor\Util.h" />
+    <ClInclude Include="Event\Events.h" />
     <ClInclude Include="LogicComponent\BombComp.h" />
     <ClInclude Include="LogicComponent\BulletComp.h" />
     <ClInclude Include="EngineComponent\ColliderComp.h" />

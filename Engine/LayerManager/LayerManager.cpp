@@ -5,10 +5,10 @@
 
 using json = nlohmann::ordered_json;
 
-LayerManager::LayerManager()
+LayerManager::LayerManager() : layers({std::string()})
 {
-	/*layers.insert({ "Default", 1 });
-	layers.insert({ "UI", 0 });*/
+	layers[0] = "UI";
+	layers[maxLayerInd] = "Default";
 
 	LoadLayer();
 }
@@ -18,49 +18,30 @@ LayerManager::~LayerManager()
 	SaveLayer();
 }
 
-const float& LayerManager::GetDepth(const std::string& _name)
+const std::string& LayerManager::GetName(const int& _ind)
 {
-	auto it = layers.find(_name);
-	
-	if (it != layers.end())
-	{
-		return it->second;
-	}
-
-	return layers["Default"];
+	return layers[_ind];
 }
 
-void LayerManager::AddLayer(const std::string& _name, const float& _value)
+void LayerManager::AddLayer(const int& _ind, const std::string& _name)
 {
-	layers.insert({ _name, _value });
+	layers[_ind] = _name;
 }
 
-void LayerManager::DeleteLayer(const std::string& _name)
+void LayerManager::DeleteLayer(const int& _ind)
 {
-	if (!_name.compare("Default") || !_name.compare("UI"))
-		return;
-
-	auto it = layers.find(_name);
-
-	if (it != layers.end())
-	{
-		layers.erase(it);
-	}
+	layers[_ind] = std::string();
 }
 
 void LayerManager::SaveLayer()
 {
 	json allDataJson;
 
-	for (const auto& layer : layers)
+	for (int i = 1; i < maxLayerInd; i++)
 	{
-		json layerJson;
-		layerJson["name"] = layer.first;
-		layerJson["depth"] = layer.second;
-
-		allDataJson.push_back(layerJson);
+		allDataJson[i] = layers[i];
 	}
-
+	
 	// Open file
 	std::fstream file;
 	file.open("Assets/Layer/layer", std::fstream::out);
@@ -86,11 +67,8 @@ void LayerManager::LoadLayer()
 	json allDataJson;
 	file >> allDataJson; // the json has all the file data
 
-	for (auto& item : allDataJson)
+	for (int i = 1; i < maxLayerInd; i++)
 	{
-		std::string name = item.find("name").value();
-		float depth = item.find("depth").value();
-
-		AddLayer(name, depth);
+		layers[i] = allDataJson[i];
 	}
 }

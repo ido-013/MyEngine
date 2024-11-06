@@ -5,7 +5,7 @@
 #include "EngineComponent.h"
 #include "../Event/Entity.h"
 
-class ColliderComp : public EngineComponent, public Entity
+class ColliderComp : public EngineComponent
 {
 private:
 	glm::vec2 pos;
@@ -22,8 +22,6 @@ public:
 
 	void Update() override;
 	bool Edit() override;
-
-	void OnEvent(Event* _event) override;
 
 	//Gettors
 	const glm::vec2& GetPos() const { return pos; }

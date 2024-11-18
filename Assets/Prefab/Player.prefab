@@ -77,7 +77,7 @@
         ],
         "shaderName": "base.shd",
         "meshName": "square.msh",
-        "textureName": "base.png"
+        "textureName": "Tank.png"
       }
     },
     {

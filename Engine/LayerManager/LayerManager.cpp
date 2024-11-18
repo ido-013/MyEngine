@@ -7,8 +7,8 @@ using json = nlohmann::ordered_json;
 
 LayerManager::LayerManager() : layers({std::string()})
 {
-	layers[0] = "UI";
-	layers[maxLayerInd] = "Default";
+	AddLayer(0, "UI");
+	AddLayer(maxLayerInd, "Default");
 
 	LoadLayer();
 }
@@ -23,13 +23,26 @@ const std::string& LayerManager::GetName(const int& _ind)
 	return layers[_ind];
 }
 
+const int& LayerManager::GetLayerInd(const std::string& _name)
+{
+	return layerInds[_name];
+}
+
 void LayerManager::AddLayer(const int& _ind, const std::string& _name)
 {
 	layers[_ind] = _name;
+	layerInds[_name] = _ind;
 }
 
 void LayerManager::DeleteLayer(const int& _ind)
 {
+	auto it = layerInds.find(layers[_ind]);
+
+	if (it != layerInds.end())
+	{
+		layerInds.erase(it);
+	}
+
 	layers[_ind] = std::string();
 }
 
@@ -69,6 +82,6 @@ void LayerManager::LoadLayer()
 
 	for (int i = 1; i < maxLayerInd; i++)
 	{
-		layers[i] = allDataJson[i];
+		AddLayer(i, allDataJson[i]);
 	}
 }

@@ -1,16 +1,17 @@
 #pragma once
 
 #include <queue>
-#include <vector>
+#include <list>
+
+#include "../GameObjectManager/GameObjectManager.h"
 
 #include "../Event/Event.h"
-#include "../Event/Entity.h"
+#include "../GameObject/GameObject.h"
 
 class EventManager
 {
 private:
 	std::queue<Event*> events;
-	std::vector<Entity*> entities;
 
 	EventManager();
 
@@ -28,12 +29,9 @@ public:
 
 	// Add an event (event*) this are pointers to dynamic memory, called as the following: AddEvent(new Event);
 	template <typename T>
-	void AddEvent(Entity* _src, Entity* _dst);
+	void AddEvent(GameObject* _src, GameObject* _dst = nullptr);
 	
 	void AddEvent(Event* _event);
-
-	void AddEntity(Entity* _entity);
-	void DeleteEntity(Entity* _entity);
 
 	// DispatchAllEvents
 	void DispatchAllEvents();

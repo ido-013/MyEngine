@@ -3,7 +3,6 @@
 #include <glm/glm.hpp>
 
 #include "EngineComponent.h"
-#include "../Event/Entity.h"
 
 class ColliderComp : public EngineComponent
 {

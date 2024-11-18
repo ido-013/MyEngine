@@ -26,7 +26,7 @@ void LifeComp::Update()
 		{
 			timer = 0;
 			isImmune = false;
-			owner->GetComponent<SpriteComp>()->SetColor(255, 255, 255);
+			owner->GetComponent<SpriteComp>()->SetColor(1.f, 1.f, 1.f);
 		}
 	}
 }
@@ -71,7 +71,7 @@ void LifeComp::AddLife(const int& _value)
 		isImmune = true;
 
 		//animator update after
-		owner->GetComponent<SpriteComp>()->SetColor(100, 0, 0);
+		owner->GetComponent<SpriteComp>()->SetColor(0.5f, 0.f, 0.f);
 	}
 
 	life += _value;

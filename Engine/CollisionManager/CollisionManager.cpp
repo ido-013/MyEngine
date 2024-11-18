@@ -61,13 +61,6 @@ void CollisionManager::Update()
 
 			if (IsCollisionAABB(a->GetPos(), a->GetScale(), b->GetPos(), b->GetScale()))
 			{
-				bool isPass = false;
-
-				if (!objA->GetLayerName().compare("Explosion") || !objB->GetLayerName().compare("Explosion"))
-				{
-					isPass = true;
-				}
-
 				if (currentCollisionMap.find({ a, b }) == currentCollisionMap.end())
 				{
 					em.AddEvent(new CollisionEvent(objA, objB, true));

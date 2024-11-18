@@ -1,15 +1,14 @@
 #pragma once
+
 #include <string>
 
-class Entity;
+#include "../GameObject/GameObject.h"
 
 struct Event
 {
-	Event(Entity* _src, Entity* _des);
+	Event(GameObject* _src, GameObject* _des);
 	virtual ~Event() = default;
 
-	void DispatchEvent();
-
-	Entity* src;
-	Entity* dst;
+	GameObject* src;
+	GameObject* dst;
 };

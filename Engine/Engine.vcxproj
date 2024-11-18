@@ -145,6 +145,7 @@
     <ClCompile Include="CollisionManager\CollisionUtil.cpp" />
     <ClCompile Include="Editor\Editor.cpp" />
     <ClCompile Include="Editor\Util.cpp" />
+    <ClCompile Include="Event\EventHandler.cpp" />
     <ClCompile Include="LogicComponent\BombComp.cpp" />
     <ClCompile Include="EngineComponent\ColliderComp.cpp" />
     <ClCompile Include="EngineComponent\EngineComponent.cpp" />
@@ -152,7 +153,6 @@
     <ClCompile Include="EngineComponent\RigidbodyComp.cpp" />
     <ClCompile Include="EngineComponent\TransformComp.cpp" />
     <ClCompile Include="EventManager\EventManager.cpp" />
-    <ClCompile Include="Event\Entity.cpp" />
     <ClCompile Include="Event\Event.cpp" />
     <ClCompile Include="GameObjectManager\GameObjectManager.cpp" />
     <ClCompile Include="GameObject\GameObject.cpp" />
@@ -205,6 +205,7 @@
     <ClInclude Include="Direction\Direction.h" />
     <ClInclude Include="Editor\Editor.h" />
     <ClInclude Include="Editor\Util.h" />
+    <ClInclude Include="Event\EventHandler.h" />
     <ClInclude Include="Event\Events.h" />
     <ClInclude Include="LogicComponent\BombComp.h" />
     <ClInclude Include="LogicComponent\BulletComp.h" />
@@ -215,7 +216,6 @@
     <ClInclude Include="EngineComponent\TransformComp.h" />
     <ClInclude Include="EventManager\EventManager.h" />
     <ClInclude Include="Event\CollisionEvent.h" />
-    <ClInclude Include="Event\Entity.h" />
     <ClInclude Include="Event\Event.h" />
     <ClInclude Include="GameObjectManager\GameObjectManager.h" />
     <ClInclude Include="GameObject\GameObject.h" />

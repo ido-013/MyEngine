@@ -1,16 +1,13 @@
 #pragma once
 
 #include <map>
-#include <array>
 #include <string>
-#include <functional>
 
-#include "../Event/Entity.h"
 #include "../LayerManager/LayerManager.h"
 
 class BaseComponent;
 
-class GameObject : public Entity
+class GameObject
 {
 private:
 	GameObject(std::string _name);
@@ -20,8 +17,6 @@ private:
 
 	//GO now will have a container of BaseComponent*
 	std::map<std::string, BaseComponent*> component;
-
-	//std::array<std::array<std::function<void(void)>, LayerManager::maxLayerInd>, LayerManager::maxLayerInd> collisionFunc;
 
 	int layer;
 
@@ -46,8 +41,6 @@ public:
 	//GO will have a function to delete ANY TYPE of component
 	template <typename T>
 	void DeleteComponent();
-
-	void OnEvent(Event* _event) override;
 
 	bool IsHaveComponent(const std::string& _typeName);
 

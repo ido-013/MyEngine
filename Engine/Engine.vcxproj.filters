@@ -138,9 +138,6 @@
     <ClCompile Include="CollisionManager\CollisionUtil.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Event\Entity.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="LayerManager\LayerManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -175,6 +172,9 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="LogicComponent\BulletComp.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Event\EventHandler.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -314,9 +314,6 @@
     <ClInclude Include="Event\Event.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Event\Entity.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Event\CollisionEvent.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -369,6 +366,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Direction\Direction.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Event\EventHandler.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

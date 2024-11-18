@@ -1,5 +1,5 @@
 template<typename T>
-inline void EventManager::AddEvent(Entity* _src, Entity* _dst)
+inline void EventManager::AddEvent(GameObject* _src, GameObject* _dst)
 {
 	if (_dst != nullptr)
 	{
@@ -8,7 +8,7 @@ inline void EventManager::AddEvent(Entity* _src, Entity* _dst)
 	}
 	else
 	{
-		for (auto& it : entities)
+		for (auto& it : GameObjectManager::GetInstance().GetAllObject())
 		{
 			Event* event = new T(_src, it);
 			events.push(event);

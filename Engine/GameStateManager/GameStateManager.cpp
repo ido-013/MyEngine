@@ -36,6 +36,8 @@ void GameStateManager::Init()
     Camera::GetInstance();
     LayerManager::GetInstance();
 
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+
     if (currentLevel)
     {
         currentLevel->Init();

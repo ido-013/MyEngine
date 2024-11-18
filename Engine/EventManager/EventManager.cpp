@@ -1,5 +1,8 @@
 #include "EventManager.h"
+
 #include <iostream>
+
+#include "../Event/EventHandler.h"
 
 EventManager::EventManager() {}
 
@@ -13,28 +16,11 @@ void EventManager::AddEvent(Event* _event)
     events.push(_event);
 }
 
-void EventManager::AddEntity(Entity* _entity)
-{
-    entities.push_back(_entity);
-}
-
-void EventManager::DeleteEntity(Entity* _entity)
-{
-    for (auto it = entities.begin(); it != entities.end(); it++)
-    {
-        if (*it == _entity)
-        {
-            entities.erase(it);
-            return;
-        }
-    }
-}
-
 void EventManager::DispatchAllEvents()
 {
     while (!events.empty())
     {
-        events.front()->DispatchEvent();
+        EventHandler::GetInstance().OnEvent(events.front());
 
         if (events.empty())
             break;

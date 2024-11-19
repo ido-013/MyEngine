@@ -12,6 +12,7 @@
 #include "../Camera/Camera.h"
 #include "../Prefab/Prefab.h"
 #include "../Profiler/Profiler.h"
+#include "Grid.h"
 
 #include "Util.h"
 #include "../collisionManager/CollisionUtil.h"
@@ -19,8 +20,9 @@
 #include "../Components.h"
 
 Editor::Editor() : selectedObj(nullptr), mode(EDIT), isDrag(false), mouseOffset(), 
-                   outlineColor{1.f, 1.f, 0.f, 1.f}, colliderLineColor{1.f, 0.f, 0.f, 1.f},
-                   viewProfiler(false), viewColliderLine(false), 
+                   outlineColor{1.f, 1.f, 0.f, 1.f}, colliderLineColor{1.f, 0.f, 0.f, 1.f}, 
+                   viewColliderLine(false), viewProfiler(false),
+                   gridMode(false),
                    copyObjectName()
 {
     comps =
@@ -67,9 +69,28 @@ void Editor::UpdateTfComps()
     }
 }
 
+GameObject* Editor::GetObjectFromMouse()
+{
+    GameObject* obj = nullptr;
+
+    for (auto& tf : tfComps)
+    {
+        if (IsCollisionPointSquare(GLHelper::mousePos, tf->GetPos(), tf->GetScale()))
+        {
+            obj = tf->GetOwner();
+            if (selectedObj != nullptr && selectedObj == obj) break;
+        }
+    }
+
+    return obj;
+}
+
 void Editor::ObjectMouseInteraction()
 {
     if (ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow) || ImGui::IsWindowFocused(ImGuiFocusedFlags_AnyWindow))
+        return;
+
+    if (gridMode)
         return;
 
     ObjectPick();
@@ -81,18 +102,9 @@ void Editor::ObjectPick()
     if (isDrag)
         return;
 
-    GameObject* obj = nullptr;
-
     if (GLHelper::mousestateLeft)
     {
-        for (auto& tf : tfComps)
-        {
-            if (IsCollisionPointSquare(GLHelper::mousePos, tf->GetPos(), tf->GetScale()))
-            {
-                obj = tf->GetOwner();
-                if (selectedObj != nullptr && selectedObj == obj) break;
-            }
-        }
+        GameObject* obj = GetObjectFromMouse();
 
         ChangeSelectedObject(obj);
 
@@ -610,7 +622,7 @@ void Editor::SavePrefabPopup()
 
 void Editor::DeleteObjectButton()
 {
-    if (SameLineButton("Delete Object"))
+    if (SameLineButton("Delete Object") || GLHelper::keyState[GLFW_KEY_DELETE])
     {
         GameObjectManager::GetInstance().RemoveObject(selectedObj->GetName());
         ChangeSelectedObject(nullptr);
@@ -619,11 +631,36 @@ void Editor::DeleteObjectButton()
 
 void Editor::CopyObject()
 {
+    if (gridMode)
+        return;
+
     if (GLHelper::ctrlKeyState[GLFW_KEY_C])
     {
         GLHelper::ctrlKeyState[GLFW_KEY_C] = GL_FALSE;
         copyObjectName = selectedObj->GetName();
         Prefab::SavePrefab("temp", selectedObj, isSaveComp, true);
+    }
+}
+
+void Editor::PasteObject()
+{
+    if (gridMode)
+        return;
+
+    if (copyObjectName.empty())
+        return;
+
+    if (GLHelper::ctrlKeyState[GLFW_KEY_V])
+    {
+        GLHelper::ctrlKeyState[GLFW_KEY_V] = GL_FALSE;
+        ChangeSelectedObject(Prefab::NewGameObject(copyObjectName, "temp.prefab"));
+        
+        TransformComp* t = selectedObj->GetComponent<TransformComp>();
+
+        if (t != nullptr)
+        {
+            t->SetPos(GLHelper::mousePos);
+        }
     }
 }
 
@@ -633,9 +670,10 @@ void Editor::UtilsWindow()
 
     Camera::GetInstance().Edit();
     OutlineColorTree();
-    PrefabCompTree();
     ColliderLineTree();
+    PrefabCompTree();
     ProfilerCheckbox();
+    GridCheckbox();
 
     ImGui::End();
 }
@@ -645,6 +683,18 @@ void Editor::OutlineColorTree()
     if (ImGui::TreeNode("Outline Color"))
     {
         ImGui::ColorEdit4("Color", outlineColor);
+
+        ImGui::TreePop();
+    }
+}
+
+void Editor::ColliderLineTree()
+{
+    if (ImGui::TreeNode("Collider Line"))
+    {
+        ImGui::Checkbox("View Collider Line", &viewColliderLine);
+
+        ImGui::ColorEdit4("Color", colliderLineColor);
 
         ImGui::TreePop();
     }
@@ -663,32 +713,105 @@ void Editor::PrefabCompTree()
     }
 }
 
-void Editor::ColliderLineTree()
-{
-    if (ImGui::TreeNode("Collider Line"))
-    {
-        ImGui::Checkbox("View Collider Line", &viewColliderLine);
-
-        ImGui::ColorEdit4("Color", colliderLineColor);
-
-        ImGui::TreePop();
-    }
-}
-
 void Editor::ProfilerCheckbox()
 {
     ImGui::Checkbox("View Profiler", &viewProfiler);
 }
 
-void Editor::PasteObject()
+void Editor::GridCheckbox()
 {
-    if (copyObjectName.empty())
+    ImGui::Checkbox("Grid Mode (Ctrl+G)", &gridMode);
+
+    if (GLHelper::ctrlKeyState[GLFW_KEY_G])
+    {
+        GLHelper::ctrlKeyState[GLFW_KEY_G] = GL_FALSE;
+        gridMode = !gridMode;
+    }
+}
+
+void Editor::Grid()
+{
+    if (!gridMode)
         return;
 
-    if (GLHelper::ctrlKeyState[GLFW_KEY_V])
+    GridWindow();  
+    DrawGrid();
+}
+
+void Editor::GridWindow()
+{
+    ImGui::Begin("Grid");
+
+    SelectPrefabCombo();
+    Grid::GetInstance().Edit();
+
+    CreateObjectGrid();
+    DeleteObjectGrid();
+
+    ImGui::End();
+}
+
+void Editor::SelectPrefabCombo()
+{
+    FileSelectCombo(selectedPrefabNameGrid, "Prefab", selectedPrefabNameGrid, "Assets/Prefab", ".prefab");
+}
+
+void Editor::DrawGrid()
+{
+    Grid::GetInstance().Draw();
+}
+
+void Editor::CreateObjectGrid()
+{
+    if (ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow) || ImGui::IsWindowFocused(ImGuiFocusedFlags_AnyWindow))
+        return;
+
+    if (GLHelper::mousestateLeft)
     {
-        GLHelper::ctrlKeyState[GLFW_KEY_V] = GL_FALSE;
-        ChangeSelectedObject(Prefab::NewGameObject(copyObjectName, "temp.prefab"));
+        GameObject* obj = GetObjectFromMouse();
+
+        if (obj != nullptr)
+        {
+            ChangeSelectedObject(obj);
+        }
+        else
+        {
+            ChangeSelectedObject(Prefab::NewGameObject(selectedPrefabNameGrid.substr(0, selectedPrefabNameGrid.find_last_not_of('.')), selectedPrefabNameGrid));
+            
+            if (selectedObj != nullptr)
+            {
+                TransformComp* t = selectedObj->GetComponent<TransformComp>();
+
+                if (t != nullptr)
+                {
+                    int size = Grid::GetInstance().GetSize();
+
+                    t->SetScale({ size, size });
+                    t->SetPos(Grid::GetInstance().GetMousePos());
+                }
+            }
+        }
+    }
+}
+
+void Editor::DeleteObjectGrid()
+{
+    if (ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow) || ImGui::IsWindowFocused(ImGuiFocusedFlags_AnyWindow))
+        return;
+
+    if (GLHelper::mousestateRight)
+    {
+        GameObject* obj = GetObjectFromMouse();
+
+        if (obj != nullptr)
+        {
+            if (selectedObj == obj)
+            {
+                ChangeSelectedObject(nullptr);
+            }
+
+            GameObjectManager::GetInstance().RemoveObject(obj->GetName());
+        }
     }
 }
 
@@ -752,7 +875,7 @@ void Editor::Update()
 
     if (mode == EDIT)
     {
-        ImGui::ShowDemoWindow(); // Show demo window! :)
+        //ImGui::ShowDemoWindow(); // Show demo window! :)
         //ImPlot::ShowDemoWindow();
 
         UpdateTfComps();
@@ -763,9 +886,11 @@ void Editor::Update()
         GameObjectWindow();
         SelectedGameObjectWindow();
 
+        PasteObject();
+
         UtilsWindow();
 
-        PasteObject();
+        Grid();
     }
 
     else

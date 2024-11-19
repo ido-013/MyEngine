@@ -20,6 +20,7 @@ int GLHelper::currentKey = -1;
 glm::vec2 GLHelper::mousePos;
 glm::vec2 GLHelper::mouseWindowPos;
 GLboolean GLHelper::mousestateLeft;
+GLboolean GLHelper::mousestateRight;
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
 // ---------------------------------------------------------------------------------------------
@@ -68,7 +69,7 @@ bool GLHelper::Init(GLint _width, GLint _height, std::string _title)
     glDepthFunc(GL_LEQUAL);
     glClearDepth(1.0);
 
-    glLineWidth(5);
+    glViewport(0, 0, width, height);
 
     return true;
 }
@@ -130,10 +131,12 @@ void GLHelper::mousebutton_cb(GLFWwindow* _pwin, int _button, int _action, int _
     if (_action == GLFW_PRESS) 
     {
         mousestateLeft = (_button == GLFW_MOUSE_BUTTON_LEFT) ? GL_TRUE : mousestateLeft;
+        mousestateRight = (_button == GLFW_MOUSE_BUTTON_RIGHT) ? GL_TRUE : mousestateRight;
     }
     else if (_action == GLFW_RELEASE) 
     {
         mousestateLeft = (_button == GLFW_MOUSE_BUTTON_LEFT) ? GL_FALSE : mousestateLeft;
+        mousestateRight = (_button == GLFW_MOUSE_BUTTON_RIGHT) ? GL_FALSE : mousestateRight;
     }
 }
 
@@ -163,11 +166,10 @@ void GLHelper::error_cb(int _error, char const* _description)
 
 void GLHelper::fbsize_cb(GLFWwindow* _ptr_win, int _width, int _height) 
 {
-#ifdef _DEBUG
-    std::cout << "fbsize_cb getting called!!!" << std::endl;
-#endif
-    GLHelper::width = _width;
-    GLHelper::height = _height;
+    width = _width;
+    height = _height;
+
+    glViewport(0, 0, width, height);
 }
 
 void GLHelper::update_time(double _fps_calc_interval) 

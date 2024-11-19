@@ -144,6 +144,7 @@
     <ClCompile Include="CollisionManager\CollisionManager.cpp" />
     <ClCompile Include="CollisionManager\CollisionUtil.cpp" />
     <ClCompile Include="Editor\Editor.cpp" />
+    <ClCompile Include="Editor\Grid.cpp" />
     <ClCompile Include="Editor\Util.cpp" />
     <ClCompile Include="Event\EventHandler.cpp" />
     <ClCompile Include="Event\PlayerCreateBombEvent.h" />
@@ -205,6 +206,7 @@
     <ClInclude Include="Components.h" />
     <ClInclude Include="Direction\Direction.h" />
     <ClInclude Include="Editor\Editor.h" />
+    <ClInclude Include="Editor\Grid.h" />
     <ClInclude Include="Editor\Util.h" />
     <ClInclude Include="Event\EventHandler.h" />
     <ClInclude Include="Event\Events.h" />

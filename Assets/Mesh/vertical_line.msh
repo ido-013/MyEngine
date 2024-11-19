@@ -1,0 +1,3 @@
+n vertical_line
+v 0.0 -1.0 # prefix v indicates vertex position attribute
+v 0.0 1.0

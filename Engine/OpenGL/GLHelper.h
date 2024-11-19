@@ -38,4 +38,5 @@ struct GLHelper
 	static glm::vec2 mousePos;
 	static glm::vec2 mouseWindowPos;
 	static GLboolean mousestateLeft;
+	static GLboolean mousestateRight;
 };

@@ -2,7 +2,7 @@
 
 #include "../OpenGL/GLHelper.h"
 
-Camera::Camera() : pos(), height{ 1, 1 }, speed(300), onMove{false, false}, world_to_ndc_xform()
+Camera::Camera() : pos(), maxHeight(4), height{1, 1}, onMove{false, false}, speed(300), world_to_ndc_xform()
 {
 	CalculateMatrix();
 }
@@ -17,6 +17,8 @@ void Camera::Update()
 	mode = Editor::GetInstance().GetMode();
 
 	Move();
+
+	CalculateMatrix();
 }
 
 void Camera::Edit()
@@ -24,7 +26,7 @@ void Camera::Edit()
 	if (ImGui::TreeNode("Camera"))
 	{
 		ImGui::InputFloat2("Position", &pos[mode][0]);
-		ImGui::SliderFloat("Height", &height[mode], 1, 8);
+		ImGui::SliderFloat("Height", &height[mode], 1, maxHeight);
 		ImGui::Checkbox("Move_Edit", &onMove[Editor::EDIT]);
 		ImGui::Checkbox("Move_Play", &onMove[Editor::PLAY]);
 
@@ -69,8 +71,6 @@ void Camera::Move()
 	{
 		pos[mode] = { 0, 0 };
 	}
-
-	CalculateMatrix();
 }
 
 void Camera::CalculateMatrix()

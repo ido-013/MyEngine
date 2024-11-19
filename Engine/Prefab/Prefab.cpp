@@ -56,6 +56,11 @@ GameObject* Prefab::NewGameObject(const std::string& _name, const std::string& _
 {
 	GameObject* obj = nullptr;
 
+	json* data = ResourceManager::GetInstance().GetResourcePointer<json>(_prefabName);
+
+	if (data == nullptr)
+		return obj;
+
 	if (_prefabName.compare("temp.prefab") != 0)
 	{
 		obj = GameObjectManager::GetInstance().CreateObject(_name, _prefabName);
@@ -64,8 +69,6 @@ GameObject* Prefab::NewGameObject(const std::string& _name, const std::string& _
 	{
 		obj = GameObjectManager::GetInstance().CreateObject(_name);
 	}
-
-	json* data = ResourceManager::GetInstance().GetResourcePointer<json>(_prefabName);
 
 	auto layerIt = data->find("layer");
 	if (layerIt != data->end())

@@ -35,6 +35,8 @@ void SpriteComp::Update()
 {
     DEBUG_PROFILER_START("SpriteComp");
 
+    glLineWidth(5);
+
     glUseProgram(*shaderProgram);
 
     DrawSprite();

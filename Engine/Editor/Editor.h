@@ -36,8 +36,11 @@ private:
     float outlineColor[4];
     float colliderLineColor[4];
 
-    bool viewProfiler;
     bool viewColliderLine;
+    bool viewProfiler;
+
+    bool gridMode;
+    std::string selectedPrefabNameGrid;
 
     std::map<std::string, bool> isSaveComp;
     std::map<std::string, bool> isSaveLevelPrefabComp;
@@ -49,6 +52,7 @@ private:
 
     void ChangeSelectedObject(GameObject* _obj);
     void UpdateTfComps();
+    GameObject* GetObjectFromMouse();
 
     void ObjectMouseInteraction();
         void ObjectPick();
@@ -81,21 +85,25 @@ private:
         void SavePrefabPopup();
         void DeleteObjectButton();
         void CopyObject();
+        
+    void PasteObject();
 
     void UtilsWindow();
         void OutlineColorTree();
-        void PrefabCompTree();
         void ColliderLineTree();
+        void PrefabCompTree();
         void ProfilerCheckbox();
+        void GridCheckbox();
 
-    void PasteObject();
+    void Grid();
+        void GridWindow();
+            void SelectPrefabCombo();
+        void DrawGrid();
+        void CreateObjectGrid();
+        void DeleteObjectGrid();
 
     void ProfilerWindow();
         void fpsText();
-
-    //extra
-        //function key
-            //ctrl + '' -> use stack
 
 public:
     static Editor& GetInstance()

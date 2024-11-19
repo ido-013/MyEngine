@@ -14,7 +14,10 @@ private:
 	const Camera& operator=(const Camera&) = delete;
 
 	glm::vec2 pos[2];
+
+	float maxHeight;
 	float height[2];
+
 	bool onMove[2];
 
 	float speed;
@@ -44,4 +47,5 @@ public:
 	void AddHeight(const float& _value);
 
 	const float& GetHeight();
+	const float& GetMaxHeight() const { return maxHeight; }
 };

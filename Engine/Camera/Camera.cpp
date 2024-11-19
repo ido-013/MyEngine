@@ -2,7 +2,7 @@
 
 #include "../OpenGL/GLHelper.h"
 
-Camera::Camera() : pos(), height{ 1, 1 }, speed(300), world_to_ndc_xform()
+Camera::Camera() : pos(), height{ 1, 1 }, speed(300), onMove{false, false}, world_to_ndc_xform()
 {
 	CalculateMatrix();
 }
@@ -25,6 +25,8 @@ void Camera::Edit()
 	{
 		ImGui::InputFloat2("Position", &pos[mode][0]);
 		ImGui::SliderFloat("Height", &height[mode], 1, 8);
+		ImGui::Checkbox("Move_Edit", &onMove[Editor::EDIT]);
+		ImGui::Checkbox("Move_Play", &onMove[Editor::PLAY]);
 
 		CalculateMatrix();
 
@@ -36,27 +38,36 @@ void Camera::Move()
 {
 	if (ImGui::IsPopupOpen(nullptr, ImGuiPopupFlags_AnyPopupId) || ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow) || ImGui::IsWindowFocused(ImGuiFocusedFlags_AnyWindow))
 		return;
+
+	if (!onMove[mode])
+		return;
 	
 	float dt = (float)GLHelper::delta_time;
+	float padding = 30;
 
-	if (GLHelper::keyState[GLFW_KEY_I])
+	if (GLHelper::mouseWindowPos.y < padding)
 	{
 		pos[mode].y += speed * dt;
 	}
 
-	if (GLHelper::keyState[GLFW_KEY_J])
+	if (GLHelper::mouseWindowPos.x < padding)
 	{
 		pos[mode].x -= speed * dt;
 	}
 
-	if (GLHelper::keyState[GLFW_KEY_K])
+	if (GLHelper::mouseWindowPos.y > GLHelper::height - padding)
 	{
 		pos[mode].y -= speed * dt;
 	}
 
-	if (GLHelper::keyState[GLFW_KEY_L])
+	if (GLHelper::mouseWindowPos.x > GLHelper::width - padding)
 	{
 		pos[mode].x += speed * dt;
+	}
+
+	if (GLHelper::keyState[GLFW_KEY_SPACE])
+	{
+		pos[mode] = { 0, 0 };
 	}
 
 	CalculateMatrix();

@@ -15,6 +15,7 @@ private:
 
 	glm::vec2 pos[2];
 	float height[2];
+	bool onMove[2];
 
 	float speed;
 

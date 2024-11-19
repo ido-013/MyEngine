@@ -36,5 +36,6 @@ struct GLHelper
 	static int currentKey;
 
 	static glm::vec2 mousePos;
+	static glm::vec2 mouseWindowPos;
 	static GLboolean mousestateLeft;
 };

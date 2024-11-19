@@ -18,6 +18,7 @@ std::map<int, GLboolean> GLHelper::ctrlKeyState;
 int GLHelper::currentKey = -1;
 
 glm::vec2 GLHelper::mousePos;
+glm::vec2 GLHelper::mouseWindowPos;
 GLboolean GLHelper::mousestateLeft;
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
@@ -143,6 +144,9 @@ void GLHelper::mousepos_cb(GLFWwindow* _pwin, double _xpos, double _ypos)
 
     mousePos.x = (_xpos - (width / 2.)) * cameraHeight + cameraPos.x;
     mousePos.y = -(_ypos - (height / 2.)) * cameraHeight + cameraPos.y;
+
+    mouseWindowPos.x = _xpos;
+    mouseWindowPos.y = _ypos;
 }
 
 void GLHelper::mousescroll_cb(GLFWwindow* _pwin, double _xoffset, double _yoffset)

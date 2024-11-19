@@ -25,6 +25,11 @@ const std::string& LayerManager::GetName(const int& _ind)
 
 const int& LayerManager::GetLayerInd(const std::string& _name)
 {
+	auto it = layerInds.find(_name);
+
+	if (it == layerInds.end())
+		return -1;
+
 	return layerInds[_name];
 }
 

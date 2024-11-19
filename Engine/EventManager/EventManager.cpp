@@ -13,6 +13,9 @@ EventManager::~EventManager()
 
 void EventManager::AddEvent(Event* _event)
 {
+    if (_event->src == nullptr || _event->dst == nullptr)
+        return;
+
     events.push(_event);
 }
 

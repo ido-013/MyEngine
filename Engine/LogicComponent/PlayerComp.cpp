@@ -2,6 +2,7 @@
 
 #include <string>
 
+#include "../EventManager/EventManager.h"
 #include "../OpenGL/GLHelper.h"
 #include "../Editor/Util.h"
 #include "../Prefab/Prefab.h"
@@ -10,6 +11,8 @@
 #include "../EngineComponent/TransformComp.h"
 #include "../EngineComponent/RigidbodyComp.h"
 #include "../GraphicComponent/SpriteComp.h"
+
+#include "../Event/Events.h"
 
 PlayerComp::PlayerComp(GameObject* _owner) : LogicComponent(_owner), speed(100),
 											 isBombCooldown(false), bombCooldown(0), maxBombCooldown(3.f),
@@ -125,6 +128,7 @@ void PlayerComp::AttackBomb()
 		{
 			GameObject* obj = Prefab::NewGameObject("Bomb", bombName);
 			obj->GetComponent<TransformComp>()->SetPos(t->GetPos());
+			EventManager::GetInstance().AddEvent<PlayerCreateBombEvent>(new PlayerCreateBombEvent(GetOwner(), nullptr, obj), "Enemy");
 		}
 	}
 }
@@ -142,7 +146,8 @@ void PlayerComp::AttackBullet()
 		{
 			GameObject* obj = Prefab::NewGameObject("Bullet", bulletName);
 			obj->GetComponent<TransformComp>()->SetPos(t->GetPos());
-			obj->GetComponent<BulletComp>()->Fire(glm::radians(t->GetRot()));
+			obj->GetComponent<BulletComp>()->Fire(t->GetRot());
+			EventManager::GetInstance().AddEvent<PlayerCreateBulletEvent>(new PlayerCreateBulletEvent(GetOwner(), nullptr, obj), "Enemy");
 		}
 	}
 }

@@ -1,3 +1,4 @@
+#include "EventManager.h"
 template<typename T>
 inline void EventManager::AddEvent(GameObject* _src, GameObject* _dst)
 {
@@ -14,4 +15,21 @@ inline void EventManager::AddEvent(GameObject* _src, GameObject* _dst)
 			events.push(event);
 		}
 	}
+}
+
+template<typename T>
+inline void EventManager::AddEvent(T* _event, const std::string& _layerName)
+{
+	int layer = LayerManager::GetInstance().GetLayerInd(_layerName);
+
+	for (auto& it : GameObjectManager::GetInstance().GetAllObject())
+	{
+		if (layer == it.second->GetLayer())
+		{
+			_event->dst = it.second;
+			AddEvent(new T(*_event));
+		}
+	}
+
+	delete _event;
 }

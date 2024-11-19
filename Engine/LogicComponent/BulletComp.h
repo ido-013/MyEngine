@@ -10,8 +10,6 @@ private:
 
 	int bounce;
 
-	float angle;
-
 public:
 	bool onAttack;
 
@@ -23,8 +21,6 @@ public:
 
 	void Fire(const float& _angle);
 	void Reflection(const Direction& _dir);
-
-	const float& GetAngle() const { return angle; }
 
 	void LoadFromJson(const json& _data) override;
 	json SaveToJson() override;

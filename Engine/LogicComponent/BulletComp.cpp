@@ -1,9 +1,10 @@
 #include "BulletComp.h"
 
 #include "../LogicComponent/LifeComp.h"
+#include "../EngineComponent/TransformComp.h"
 #include "../EngineComponent/RigidbodyComp.h"
 
-BulletComp::BulletComp(GameObject* _owner) : LogicComponent(_owner), speed(150), bounce(1), angle(0), onAttack(false)
+BulletComp::BulletComp(GameObject* _owner) : LogicComponent(_owner), speed(150), bounce(1), onAttack(false)
 {
 }
 
@@ -39,12 +40,16 @@ bool BulletComp::Edit()
 
 void BulletComp::Fire(const float& _angle)
 {
+	TransformComp* t = owner->GetComponent<TransformComp>();
+	if (!t) return;
+
 	RigidbodyComp* r = owner->GetComponent<RigidbodyComp>();
 	if (!r) return;
 
-	angle = _angle;
+	float radAngle = glm::radians(_angle);
 
-	r->SetVelocity(speed * cos(angle), speed * sin(angle));
+	t->SetRot(_angle);
+	r->SetVelocity(speed * cos(radAngle), speed * sin(radAngle));
 }
 
 void BulletComp::Reflection(const Direction& _dir)
@@ -62,6 +67,9 @@ void BulletComp::Reflection(const Direction& _dir)
 	{
 		bounce--;
 
+		TransformComp* t = owner->GetComponent<TransformComp>();
+		if (!t) return;
+
 		RigidbodyComp* r = owner->GetComponent<RigidbodyComp>();
 		if (!r) return;
 
@@ -72,10 +80,12 @@ void BulletComp::Reflection(const Direction& _dir)
 		case UP:
 		case DOWN:
 			r->SetVelocity(vel.x, -vel.y);
+			t->SetRot(glm::degrees(atan2f(-vel.y, vel.x)));
 			break;
 		case RIGHT:
 		case LEFT:
 			r->SetVelocity(-vel.x, vel.y);
+			t->SetRot(glm::degrees(atan2f(vel.y, -vel.x)));
 			break;
 		}	
 	}

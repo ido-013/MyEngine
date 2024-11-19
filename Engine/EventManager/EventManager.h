@@ -30,6 +30,8 @@ public:
 	// Add an event (event*) this are pointers to dynamic memory, called as the following: AddEvent(new Event);
 	template <typename T>
 	void AddEvent(GameObject* _src, GameObject* _dst = nullptr);
+	template <typename T>
+	void AddEvent(T* _event, const std::string& _layerName);
 	
 	void AddEvent(Event* _event);
 

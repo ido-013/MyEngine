@@ -8,6 +8,7 @@
 #include "../Prefab/Prefab.h"
 
 #include "BulletComp.h"
+#include "EnemyComp.h"
 #include "../EngineComponent/TransformComp.h"
 #include "../EngineComponent/RigidbodyComp.h"
 #include "../GraphicComponent/SpriteComp.h"
@@ -28,7 +29,7 @@ PlayerComp::PlayerComp(GameObject* _owner) : LogicComponent(_owner), speed(100),
 
 PlayerComp::~PlayerComp()
 {
-
+	EventManager::GetInstance().AddEvent<PlayerCreateBombEvent>(new PlayerCreateBombEvent(GetOwner(), nullptr, obj), "Enemy");
 }
 
 void PlayerComp::Update()

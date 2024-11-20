@@ -13,6 +13,7 @@
 #include "../Prefab/Prefab.h"
 #include "../Profiler/Profiler.h"
 #include "Grid.h"
+#include "../Pathfinder/Pathfinder.h"
 
 #include "Util.h"
 #include "../collisionManager/CollisionUtil.h"
@@ -31,6 +32,7 @@ Editor::Editor() : selectedObj(nullptr), mode(EDIT), isDrag(false), mouseOffset(
         LifeComp::TypeName,
         BombComp::TypeName,
         BulletComp::TypeName,
+        EnemyComp::TypeName,
 
         TransformComp::TypeName,
         RigidbodyComp::TypeName,
@@ -787,7 +789,10 @@ void Editor::CreateObjectGrid()
                     int size = Grid::GetInstance().GetSize();
 
                     t->SetScale({ size, size });
-                    t->SetPos(Grid::GetInstance().GetMousePos());
+                    t->SetPos(Grid::GetInstance().GetGridPos(GLHelper::mousePos));
+
+                    glm::vec2 gridInd = Grid::GetInstance().GetGridInd(GLHelper::mousePos);
+                    Pathfinder::GetInstance().SetTerrain((int)gridInd.x, (int)gridInd.y, selectedObj->GetLayer());
                 }
             }
         }
@@ -811,6 +816,9 @@ void Editor::DeleteObjectGrid()
             }
 
             GameObjectManager::GetInstance().RemoveObject(obj->GetName());
+
+            glm::vec2 gridInd = Grid::GetInstance().GetGridInd(GLHelper::mousePos);
+            Pathfinder::GetInstance().SetTerrain((int)gridInd.x, (int)gridInd.y);
         }
     }
 }

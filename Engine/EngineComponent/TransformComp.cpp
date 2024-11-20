@@ -102,7 +102,19 @@ void TransformComp::SetScale(const glm::vec2& _otherScale)
 
 void TransformComp::SetRot(const float& _otherRot)
 {
-	this->rot = _otherRot;
+	float targetRot = _otherRot;
+
+	while (targetRot >= 360)
+	{
+		targetRot -= 360;
+	}
+
+	while (targetRot <= -360)
+	{
+		targetRot += 360;
+	}
+
+	this->rot = targetRot;
 	CalculateMatrix();
 }
 

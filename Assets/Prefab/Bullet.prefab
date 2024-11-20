@@ -5,7 +5,7 @@
       "type": "BulletComp",
       "compData": {
         "speed": 150.0,
-        "bounce": 2
+        "bounce": 0
       }
     },
     {

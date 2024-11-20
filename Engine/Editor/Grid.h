@@ -27,6 +27,8 @@ private:
     bool viewGrid;
     float gridLineColor[4];
 
+    
+
 public:
     static Grid& GetInstance()
     {
@@ -35,7 +37,9 @@ public:
     }
 
     const int& GetSize() { return size; }
-    const glm::vec2 GetMousePos();
+    const glm::vec2 GetGridInd(const glm::vec2& _vec);
+    const glm::vec2 GetGridPos(const glm::vec2& _vec);
+    const glm::vec2 GetGridPos(const int& _x, const int& _y);
 
     void Draw();
     void Edit();

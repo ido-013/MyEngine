@@ -11,6 +11,8 @@ EventHandler::EventHandler()
 	SetCollsionEventHandler(CollisionExplosion, "Explosion");
 	SetCollsionEventHandler(CollisionPlayerBullet, "Player", "Bullet");
 	SetCollsionEventHandler(CollisionBulletPlayer, "Bullet", "Player");
+	SetCollsionEventHandler(CollisionEnemyBullet, "Enemy", "Bullet");
+	SetCollsionEventHandler(CollisionBulletEnemy, "Bullet", "Enemy");
 }
 
 EventHandler::~EventHandler()
@@ -103,6 +105,39 @@ void EventHandler::CollisionBulletPlayer(GameObject* _src, GameObject* _dst, Col
 	}
 }
 
+void EventHandler::CollisionEnemyBullet(GameObject* _src, GameObject* _dst, CollisionEvent* _colEvent)
+{
+	BulletComp* b = _dst->GetComponent<BulletComp>();
+	LifeComp* l = _dst->GetComponent<LifeComp>();
+
+	if (!b || !l)
+		return;
+
+	if (b != nullptr && _colEvent->exit && !b->onAttack)
+	{
+		b->onAttack = true;
+	}
+
+	else if (l != nullptr && b->onAttack && _colEvent->enter)
+	{
+		l->AddLife(-1);
+	}
+}
+
+void EventHandler::CollisionBulletEnemy(GameObject* _src, GameObject* _dst, CollisionEvent* _colEvent)
+{
+	LifeComp* l = _dst->GetComponent<LifeComp>();
+	BulletComp* b = _src->GetComponent<BulletComp>();
+
+	if (l == nullptr || b == nullptr)
+		return;
+
+	if (b->onAttack && _colEvent->enter)
+	{
+		l->AddLife(-1);
+	}
+}
+
 void EventHandler::OnEvent(Event* _event)
 {
 	CollisionEvent* colEvent = dynamic_cast<CollisionEvent*>(_event);
@@ -112,5 +147,11 @@ void EventHandler::OnEvent(Event* _event)
 		GameObject* dst = colEvent->dst;
 
 		collisionEventHandler[src->GetLayer()][dst->GetLayer()](src, dst, colEvent);
+	}
+
+	PlayerDeathEvent* pDeathEvent = dynamic_cast<PlayerDeathEvent*>(_event);
+	if (pDeathEvent != nullptr)
+	{
+		colEvent->dst->GetComponent<EnemyComp>()->SetPlayerNull();
 	}
 }

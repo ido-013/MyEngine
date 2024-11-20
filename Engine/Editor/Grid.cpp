@@ -24,13 +24,32 @@ Grid::~Grid()
 	ResourceManager::GetInstance().UnloadResource("base.png");
 }
 
-const glm::vec2 Grid::GetMousePos()
+const glm::vec2 Grid::GetGridInd(const glm::vec2& _vec)
 {
     glm::vec2 res;
-    glm::vec2 mousePos = GLHelper::mousePos;
 
-    res.x = ((int)mousePos.x / size) * size + (size / 2.f) + (mousePos.x < 0 ? -size : 0);
-    res.y = ((int)mousePos.y / size) * size + (size / 2.f) + (mousePos.y < 0 ? -size : 0);
+    res.x = ((int)_vec.x / size) + (_vec.x < 0 ? -1 : 0);
+    res.y = ((int)_vec.y / size) + (_vec.y < 0 ? -1 : 0);
+
+    return res;
+}
+
+const glm::vec2 Grid::GetGridPos(const glm::vec2& _vec)
+{
+    glm::vec2 res = GetGridInd(_vec);
+
+    res.x = res.x * size + (size / 2.f);
+    res.y = res.y * size + (size / 2.f);
+
+    return res;
+}
+
+const glm::vec2 Grid::GetGridPos(const int& _x, const int& _y)
+{
+    glm::vec2 res;
+
+    res.x = _x * size + (size / 2.f);
+    res.y = _y * size + (size / 2.f);
 
     return res;
 }

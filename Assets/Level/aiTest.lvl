@@ -1,0 +1,42 @@
+[
+  {
+    "object": "Player",
+    "prefab": "Player.prefab",
+    "components": [
+      {
+        "type": "TransformComp",
+        "compData": {
+          "position": [
+            2500.0,
+            2500.0
+          ],
+          "scale": [
+            100.0,
+            100.0
+          ],
+          "rotation": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "object": "Enemy",
+    "prefab": "Enemy.prefab",
+    "components": [
+      {
+        "type": "TransformComp",
+        "compData": {
+          "position": [
+            2871.0,
+            2619.0
+          ],
+          "scale": [
+            100.0,
+            100.0
+          ],
+          "rotation": 0.0
+        }
+      }
+    ]
+  }
+]

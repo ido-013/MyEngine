@@ -2,7 +2,7 @@
 
 #include "../OpenGL/GLHelper.h"
 
-Camera::Camera() : pos(), maxHeight(4), height{1, 1}, onMove{false, false}, speed(300), world_to_ndc_xform()
+Camera::Camera() : pos{initPos, initPos}, maxHeight(4), height{1, 1}, onMove{false, false}, speed(300), world_to_ndc_xform()
 {
 	CalculateMatrix();
 }
@@ -69,7 +69,7 @@ void Camera::Move()
 
 	if (GLHelper::keyState[GLFW_KEY_SPACE])
 	{
-		pos[mode] = { 0, 0 };
+		pos[mode] = initPos;
 	}
 }
 

@@ -1,5 +1,5 @@
 {
-  "layer": 4,
+  "layer": 5,
   "components": [
     {
       "type": "ColliderComp",
@@ -16,6 +16,16 @@
       }
     },
     {
+      "type": "EnemyComp",
+      "compData": {
+        "speed": 100.0,
+        "bombName": "Bomb.prefab",
+        "bombCooldown": 10.0,
+        "bulletName": "Bullet.prefab",
+        "bulletCooldown": 0.20000000298023224
+      }
+    },
+    {
       "type": "LifeComp",
       "compData": {
         "life": 3,
@@ -23,24 +33,6 @@
         "immuneTime": 1.5,
         "onEffect": true,
         "effectName": "1pWin.prefab"
-      }
-    },
-    {
-      "type": "PlayerComp",
-      "compData": {
-        "speed": 100.0,
-        "keyCode": [
-          265,
-          264,
-          262,
-          263,
-          90,
-          88
-        ],
-        "bombName": "Bomb.prefab",
-        "bombCooldown": 3.0,
-        "bulletName": "Bullet1.prefab",
-        "bulletCooldown": 0.20000000298023224
       }
     },
     {

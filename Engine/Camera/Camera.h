@@ -13,6 +13,8 @@ private:
 	Camera(const Camera&) = delete;
 	const Camera& operator=(const Camera&) = delete;
 
+	static constexpr glm::vec2 initPos = { 2500, 2500 };
+
 	glm::vec2 pos[2];
 
 	float maxHeight;

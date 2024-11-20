@@ -21,6 +21,8 @@ private:
 	static void CollisionExplosion(GameObject* _src, GameObject* _dst, CollisionEvent* _colEvent);
 	static void CollisionPlayerBullet(GameObject* _src, GameObject* _dst, CollisionEvent* _colEvent);
 	static void CollisionBulletPlayer(GameObject* _src, GameObject* _dst, CollisionEvent* _colEvent);
+	static void CollisionEnemyBullet(GameObject* _src, GameObject* _dst, CollisionEvent* _colEvent);
+	static void CollisionBulletEnemy(GameObject* _src, GameObject* _dst, CollisionEvent* _colEvent);
 
 	void (*collisionEventHandler[LayerManager::maxLayerInd + 1][LayerManager::maxLayerInd + 1])(GameObject*, GameObject*, CollisionEvent*);
 	

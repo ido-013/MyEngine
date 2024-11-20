@@ -1,6 +1,13 @@
 {
-  "layer": 4,
+  "layer": 1,
   "components": [
+    {
+      "type": "BulletComp",
+      "compData": {
+        "speed": 150.0,
+        "bounce": 1
+      }
+    },
     {
       "type": "ColliderComp",
       "compData": {
@@ -9,8 +16,8 @@
           0.0
         ],
         "scale": [
-          100.0,
-          100.0
+          10.0,
+          10.0
         ],
         "rotation": 0.0
       }
@@ -18,29 +25,17 @@
     {
       "type": "LifeComp",
       "compData": {
-        "life": 3,
-        "maxLife": 3,
+        "life": 1,
+        "maxLife": 1,
         "immuneTime": 1.5,
-        "onEffect": true,
-        "effectName": "1pWin.prefab"
+        "onEffect": false,
+        "effectName": ""
       }
     },
     {
-      "type": "PlayerComp",
+      "type": "LifetimeComp",
       "compData": {
-        "speed": 100.0,
-        "keyCode": [
-          265,
-          264,
-          262,
-          263,
-          90,
-          88
-        ],
-        "bombName": "Bomb.prefab",
-        "bombCooldown": 3.0,
-        "bulletName": "Bullet1.prefab",
-        "bulletCooldown": 0.20000000298023224
+        "lifetime": 50.0
       }
     },
     {
@@ -70,26 +65,26 @@
       "type": "SpriteComp",
       "compData": {
         "color": [
-          1.0,
-          1.0,
-          1.0,
+          0.9049997925758362,
+          0.9950980544090271,
+          0.22926278412342072,
           1.0
         ],
         "shaderName": "base.shd",
         "meshName": "square.msh",
-        "textureName": "Tank.png"
+        "textureName": "Bullet.png"
       }
     },
     {
       "type": "TransformComp",
       "compData": {
         "position": [
-          2500.0,
-          2500.0
+          0.0,
+          0.0
         ],
         "scale": [
-          100.0,
-          100.0
+          20.0,
+          10.0
         ],
         "rotation": 0.0
       }

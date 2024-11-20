@@ -177,6 +177,7 @@
     <ClCompile Include="LayerManager\LayerManager.cpp" />
     <ClCompile Include="Level\TestLevel.cpp" />
     <ClCompile Include="LogicComponent\BulletComp.cpp" />
+    <ClCompile Include="LogicComponent\EnemyComp.cpp" />
     <ClCompile Include="LogicComponent\LifeComp.cpp" />
     <ClCompile Include="LogicComponent\LogicComponent.cpp" />
     <ClCompile Include="LogicComponent\PlayerComp.cpp" />
@@ -184,6 +185,7 @@
     <ClCompile Include="OpenGL\GLHelper.cpp" />
     <ClCompile Include="OpenGL\GLModel.cpp" />
     <ClCompile Include="Particle\Particle.cpp" />
+    <ClCompile Include="Pathfinder\Pathfinder.cpp" />
     <ClCompile Include="Prefab\Prefab.cpp" />
     <ClCompile Include="Profiler\Profiler.cpp" />
     <ClCompile Include="ResourceManager\ResourceManager.cpp" />
@@ -211,6 +213,9 @@
     <ClInclude Include="Event\EventHandler.h" />
     <ClInclude Include="Event\Events.h" />
     <ClInclude Include="Event\PlayerCreateBulletEvent.h" />
+    <ClInclude Include="Event\PlayerDeathEvent.h" />
+    <ClInclude Include="LogicComponent\EnemyComp.h" />
+    <ClInclude Include="Pathfinder\Pathfinder.h" />
     <ClInclude Include="LogicComponent\BombComp.h" />
     <ClInclude Include="LogicComponent\BulletComp.h" />
     <ClInclude Include="EngineComponent\ColliderComp.h" />

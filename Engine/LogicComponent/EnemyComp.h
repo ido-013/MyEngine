@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include <queue>
 
 #include "LogicComponent.h"
 
@@ -22,9 +23,11 @@ private:
 	GameObject* player;
 	glm::vec2 playerPos;
 
+	std::queue<glm::vec2> waypoint;
+
 	void Move();
 
-	bool RotationToAttack();
+	bool RotationToTarget(const glm::vec2& _targetPos);
 
 	void AttackBomb();
 	void AttackBullet();
@@ -39,6 +42,7 @@ public:
 	bool Edit() override;
 
 	void SetPlayerNull();
+	void UpdateWaypoint();
 
 	void LoadFromJson(const json& _data) override;
 	json SaveToJson() override;

@@ -8,7 +8,8 @@
 
 #include "../GraphicComponent/SpriteComp.h"
 
-LifeComp::LifeComp(GameObject* _owner) : LogicComponent(_owner), life(3), maxLife(3), isImmune(false), immuneTime(1.5f), timer(0)
+LifeComp::LifeComp(GameObject* _owner) : LogicComponent(_owner), life(3), maxLife(3), isImmune(false), immuneTime(1.5f), timer(0),
+										 onEffect(false), effectName()
 {
 }
 

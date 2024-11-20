@@ -214,6 +214,7 @@
     <ClInclude Include="Event\Events.h" />
     <ClInclude Include="Event\PlayerCreateBulletEvent.h" />
     <ClInclude Include="Event\PlayerDeathEvent.h" />
+    <ClInclude Include="Event\PlayerMoveEvent.h" />
     <ClInclude Include="LogicComponent\EnemyComp.h" />
     <ClInclude Include="Pathfinder\Pathfinder.h" />
     <ClInclude Include="LogicComponent\BombComp.h" />

@@ -778,7 +778,7 @@ void Editor::CreateObjectGrid()
         }
         else
         {
-            ChangeSelectedObject(Prefab::NewGameObject(selectedPrefabNameGrid.substr(0, selectedPrefabNameGrid.find_last_not_of('.')), selectedPrefabNameGrid));
+            ChangeSelectedObject(Prefab::NewGameObject(selectedPrefabNameGrid.substr(0, selectedPrefabNameGrid.find_last_of('.')), selectedPrefabNameGrid));
             
             if (selectedObj != nullptr)
             {

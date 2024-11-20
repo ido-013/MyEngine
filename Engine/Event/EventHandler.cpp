@@ -152,6 +152,12 @@ void EventHandler::OnEvent(Event* _event)
 	PlayerDeathEvent* pDeathEvent = dynamic_cast<PlayerDeathEvent*>(_event);
 	if (pDeathEvent != nullptr)
 	{
-		colEvent->dst->GetComponent<EnemyComp>()->SetPlayerNull();
+		pDeathEvent->dst->GetComponent<EnemyComp>()->SetPlayerNull();
+	}
+
+	PlayerMoveEvent* pMoveEvent = dynamic_cast<PlayerMoveEvent*>(_event);
+	if (pMoveEvent != nullptr)
+	{
+		//pMoveEvent->dst->GetComponent<EnemyComp>()->UpdateWaypoint();
 	}
 }

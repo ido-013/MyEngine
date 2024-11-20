@@ -4,3 +4,4 @@
 #include "PlayerCreateBombEvent.h"
 #include "PlayerCreateBulletEvent.h"
 #include "PlayerDeathEvent.h"
+#include "PlayerMoveEvent.h"

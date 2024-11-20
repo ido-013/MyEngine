@@ -8,8 +8,11 @@
 #include "../ComponentManager/ComponentManager.h"
 #include "../RTTI/Registry.h"
 #include "../Prefab/Prefab.h"
+#include "../Pathfinder/Pathfinder.h"
+#include "../Editor/Grid.h"
 
 #include "../BaseComponent.h"
+#include "../EngineComponent/TransformComp.h"
 
 using json = nlohmann::ordered_json;	// Map. Orders the order the variables were declared in
 
@@ -22,6 +25,8 @@ void Serializer::LoadLevel(const std::string& _filename)
 	// Check the file is valid
 	if (!file.is_open())
 		throw std::invalid_argument("Serializer::LoadLevel Invalid filename " + _filename + ".lvl");
+
+	Pathfinder::GetInstance().ClearTerrain();
 
 	json allDataJson;
 	file >> allDataJson; // the json has all the file data
@@ -63,6 +68,13 @@ void Serializer::LoadLevel(const std::string& _filename)
 					if (p != nullptr)
 						p->LoadFromJson(comp);
 				}
+			}
+
+			TransformComp* t = obj->GetComponent<TransformComp>();
+			if (t != nullptr)
+			{
+				glm::vec2 gridInd = Grid::GetInstance().GetGridInd(t->GetPos());
+				Pathfinder::GetInstance().SetTerrain((int)gridInd.x, (int)gridInd.y, obj->GetLayer());
 			}
 		}
 	}

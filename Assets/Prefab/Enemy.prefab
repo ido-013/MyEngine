@@ -20,9 +20,9 @@
       "compData": {
         "speed": 100.0,
         "bombName": "Bomb.prefab",
-        "bombCooldown": 10.0,
+        "bombCooldown": 20.0,
         "bulletName": "Bullet.prefab",
-        "bulletCooldown": 0.20000000298023224
+        "bulletCooldown": 1.0
       }
     },
     {

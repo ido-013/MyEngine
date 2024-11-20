@@ -1,4 +1,7 @@
 #pragma once
+
+#include <glm/glm.hpp>
+
 #include "LogicComponent.h"
 
 class PlayerComp : public LogicComponent
@@ -27,6 +30,8 @@ private:
 	bool isBulletCooldown;
 	float bulletCooldown;
 	float maxBulletCooldown;
+
+	glm::vec2 preGridInd;
 
 	void Move();
 

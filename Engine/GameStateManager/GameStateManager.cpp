@@ -54,10 +54,10 @@ void GameStateManager::Update()
 
         if (editorMode == Editor::PLAY)
         {
-            ComponentManager<LogicComponent>::GetInstance().Update();
             ComponentManager<EngineComponent>::GetInstance().Update();
             CollisionManager::GetInstance().Update();
             EventManager::GetInstance().DispatchAllEvents();
+            ComponentManager<LogicComponent>::GetInstance().Update();
         }
 
         Camera::GetInstance().Update();

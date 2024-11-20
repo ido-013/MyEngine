@@ -6,6 +6,7 @@
 #include "../OpenGL/GLHelper.h"
 #include "../Editor/Util.h"
 #include "../Prefab/Prefab.h"
+#include "../Editor/Grid.h"
 
 #include "BulletComp.h"
 #include "EnemyComp.h"
@@ -17,7 +18,8 @@
 
 PlayerComp::PlayerComp(GameObject* _owner) : LogicComponent(_owner), speed(100),
 											 isBombCooldown(false), bombCooldown(0), maxBombCooldown(3.f),
-											 isBulletCooldown(false), bulletCooldown(0), maxBulletCooldown(0.2f)
+											 isBulletCooldown(false), bulletCooldown(0), maxBulletCooldown(0.2f),
+											 preGridInd()
 {
 	keyCode[UP] = GLFW_KEY_UP;
 	keyCode[DOWN] = GLFW_KEY_DOWN;
@@ -29,7 +31,7 @@ PlayerComp::PlayerComp(GameObject* _owner) : LogicComponent(_owner), speed(100),
 
 PlayerComp::~PlayerComp()
 {
-	EventManager::GetInstance().AddEvent<PlayerCreateBombEvent>(new PlayerCreateBombEvent(GetOwner(), nullptr, obj), "Enemy");
+	EventManager::GetInstance().AddEvent<PlayerDeathEvent>(new PlayerDeathEvent(owner, nullptr), "Enemy");
 }
 
 void PlayerComp::Update()
@@ -89,7 +91,6 @@ void PlayerComp::Move()
 	if (!r) return;
 
 	float rot = t->GetRot();
-	
 
 	r->ClearVelocity();
 
@@ -113,6 +114,14 @@ void PlayerComp::Move()
 	if (GLHelper::keyState[keyCode[RIGHT]])
 	{
 		t->SetRot(rot - 0.5f);
+	}
+
+	glm::vec2 gridInd = Grid::GetInstance().GetGridInd(t->GetPos());
+	
+	if (preGridInd != gridInd)
+	{ 
+		preGridInd = gridInd;
+		EventManager::GetInstance().AddEvent<PlayerMoveEvent>(new PlayerMoveEvent(GetOwner(), nullptr), "Enemy");
 	}
 }
 

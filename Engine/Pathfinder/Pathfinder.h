@@ -1,6 +1,7 @@
 #pragma once
 
 #include <list>
+#include <queue>
 #include <glm/glm.hpp>
 
 class Pathfinder
@@ -52,10 +53,11 @@ public:
 
     const int& GetWidth() { return width; }
 
+    void ClearTerrain();
     void SetTerrain(const int& _x, const int& _y, const int& _layer = blank);
 
     bool IsWall(const int& _x, const int& _y);
     bool CheckStraightLine(const int& _curX, const int& _curY, const int& _dstX, const int& _dstY);
 
-    std::list<glm::vec2> ComputePath(const int& _curX, const int& _curY, const int& _dstX, const int& _dstY);
+    std::queue<glm::vec2> ComputePath(const int& _curX, const int& _curY, const int& _dstX, const int& _dstY);
 };

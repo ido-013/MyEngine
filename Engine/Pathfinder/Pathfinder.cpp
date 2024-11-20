@@ -7,14 +7,7 @@
 
 Pathfinder::Pathfinder()
 {
-    for (int i = 0; i < width; ++i)
-    {
-        for (int j = 0; j < width; ++j)
-        {
-            terrain[i][j] = blank;
-        }
-    }
-
+	ClearTerrain();
     wallLayer = LayerManager::GetInstance().GetLayerInd("Wall");
 }
 
@@ -83,6 +76,17 @@ void Pathfinder::Rubberbanding(std::list<std::pair<int, int>>& _coordList)
 	}
 }
 
+void Pathfinder::ClearTerrain()
+{
+	for (int i = 0; i < width; ++i)
+	{
+		for (int j = 0; j < width; ++j)
+		{
+			terrain[i][j] = blank;
+		}
+	}
+}
+
 void Pathfinder::SetTerrain(const int& _x, const int& _y, const int& _layer)
 {
     terrain[_x][_y] = _layer;
@@ -93,11 +97,11 @@ bool Pathfinder::IsWall(const int& _x, const int& _y)
     return terrain[_x][_y] == wallLayer;
 }
 
-std::list<glm::vec2> Pathfinder::ComputePath(const int& _curX, const int& _curY, const int& _dstX, const int& _dstY)
+std::queue<glm::vec2> Pathfinder::ComputePath(const int& _curX, const int& _curY, const int& _dstX, const int& _dstY)
 {
 	float weight = 2;
 
-	std::list<glm::vec2> res;
+	std::queue<glm::vec2> res;
 
 	std::priority_queue<Node> openList;
 
@@ -106,7 +110,7 @@ std::list<glm::vec2> Pathfinder::ComputePath(const int& _curX, const int& _curY,
 
 	if (CheckStraightLine(_curX, _curY, _dstX, _dstY))
 	{
-		res.push_back(Grid::GetInstance().GetGridPos(_dstX, _dstY));
+		res.push(Grid::GetInstance().GetGridPos(_dstX, _dstY));
 		return res;
 	}
 
@@ -143,7 +147,7 @@ std::list<glm::vec2> Pathfinder::ComputePath(const int& _curX, const int& _curY,
 
 			for (auto it = coordList.rbegin(); it != coordList.rend(); it++)
 			{
-				res.push_back(Grid::GetInstance().GetGridPos(it->first, it->second));
+				res.push(Grid::GetInstance().GetGridPos(it->first, it->second));
 			}
 			
 			return res;
@@ -177,5 +181,5 @@ std::list<glm::vec2> Pathfinder::ComputePath(const int& _curX, const int& _curY,
 		}
 	}
 
-	return std::list<glm::vec2>();
+	return std::queue<glm::vec2>();
 }

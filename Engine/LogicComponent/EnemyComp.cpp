@@ -10,23 +10,45 @@
 #include "../Editor/Util.h"
 
 #include "../EngineComponent/TransformComp.h"
+#include "../EngineComponent/RigidbodyComp.h"
 #include "BulletComp.h"
 
 void EnemyComp::Move()
 {
+	TransformComp* t = owner->GetComponent<TransformComp>();
+	RigidbodyComp* r = owner->GetComponent<RigidbodyComp>();
+
+	if (waypoint.empty())
+	{
+		UpdateWaypoint();
+	}
+	else
+	{
+		// nearby target -> change pos and pop waypoint
+		if ((abs(waypoint.front().x - t->GetPos().x) + abs(waypoint.front().y - t->GetPos().y)) < 3)
+		{
+			t->SetPos(waypoint.front());
+			waypoint.pop();
+		}
+
+		// rotation and move
+		else if (RotationToTarget(waypoint.front()))
+		{
+			float angle = glm::radians(t->GetRot());
+			r->SetVelocity(cos(angle) * speed, sin(angle) * speed);
+		}
+	}
 }
 
-bool EnemyComp::RotationToAttack()
+bool EnemyComp::RotationToTarget(const glm::vec2& _targetPos)
 {
 	TransformComp* t = owner->GetComponent<TransformComp>();
 
-	float targetRot = glm::degrees(atan2f(playerPos.y - t->GetPos().y, playerPos.x - t->GetPos().x));
+	float targetRot = glm::degrees(atan2f(_targetPos.y - t->GetPos().y, _targetPos.x - t->GetPos().x));
 
 	float rotDiff = abs(targetRot - t->GetRot()) < abs(targetRot - (360 + t->GetRot())) ? targetRot - t->GetRot() : targetRot - (360 + t->GetRot());
 
-	std::cout << t->GetRot() << std::endl;
-
-	if (abs(rotDiff) > 10)
+	if (abs(rotDiff) > 3)
 	{
 		t->SetRot(t->GetRot() + (rotDiff < 0 ? -1 : 1));
 		return false;
@@ -98,9 +120,12 @@ EnemyComp::~EnemyComp()
 void EnemyComp::Update()
 {
 	TransformComp* t = owner->GetComponent<TransformComp>();
+	if (!t) return;
 
-	if (!t)
-		return;
+	RigidbodyComp* r = owner->GetComponent<RigidbodyComp>();
+	if (!r) return;
+
+	r->ClearVelocity();
 
 	if (player == nullptr)
 	{
@@ -117,7 +142,7 @@ void EnemyComp::Update()
 
 	if (Pathfinder::GetInstance().CheckStraightLine((int)gridInd.x, (int)gridInd.y, (int)playerGridInd.x, (int)playerGridInd.y))
 	{
-		if (RotationToAttack())
+		if (RotationToTarget(playerPos))
 		{
 			AttackBullet();
 		}
@@ -125,7 +150,7 @@ void EnemyComp::Update()
 	else
 	{
 		Move();
-		//AttackBomb();
+		AttackBomb();
 	}
 
 	CheckCooldown(isBombCooldown, bombCooldown, maxBombCooldown);
@@ -161,6 +186,16 @@ void EnemyComp::SetPlayerNull()
 {
 	player = nullptr;
 	playerPos = glm::vec2();
+}
+
+void EnemyComp::UpdateWaypoint()
+{
+	TransformComp* t = owner->GetComponent<TransformComp>();
+
+	glm::vec2 gridInd = Grid::GetInstance().GetGridInd(t->GetPos());
+	glm::vec2 playerGridInd = Grid::GetInstance().GetGridInd(playerPos);
+
+	waypoint = Pathfinder::GetInstance().ComputePath((int)gridInd.x, (int)gridInd.y, (int)playerGridInd.x, (int)playerGridInd.y);
 }
 
 void EnemyComp::LoadFromJson(const json& _data)
